@@ -15,7 +15,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public User saveUser(User user) {
-        System.out.println(user);
         return userRepository.save(user);
     }
 
