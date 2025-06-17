@@ -1,4 +1,4 @@
-package com.turbopick.autowise.controller;
+package com.turbopick.autowise.restController;
 
 import com.turbopick.autowise.model.User;
 import com.turbopick.autowise.service.UserService;

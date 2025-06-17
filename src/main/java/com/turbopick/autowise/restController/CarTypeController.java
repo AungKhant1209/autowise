@@ -1,6 +1,5 @@
-package com.turbopick.autowise.controller;
+package com.turbopick.autowise.restController;
 
-import com.turbopick.autowise.model.Car;
 import com.turbopick.autowise.model.CarType;
 import com.turbopick.autowise.service.CarTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
