@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/carTypes")
-public class CarTypeController {
+@RequestMapping("/api/carTypes")
+public class CarTypeApiController {
     @Autowired
     private CarTypeService carTypeService;
 

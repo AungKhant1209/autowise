@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Car Type</title>
+</head>
+<body>
+<h1>Create New Car Type</h1>
+<form th:action="@{/carTypesCreate}" th:object="${carTypeDto}" method="post">
+
+
+  <div>
+    <label>Name:</label>
+    <input type="text" th:field="*{name}">
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+  </div>
+
+  <div>
+    <label>Brand:</label>
+    <input type="text" th:field="*{brand}"/>
+    <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></span>
+  </div>
+
+  <div>
+    <label for="code">Code:</label>
+    <input type="text" th:field="*{code}" id="code" />
+    <span th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></span>
+  </div>
+
+  <div>
+    <label for="description">Description:</label>
+    <textarea th:field="*{description}" id="description"></textarea>
+    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+  </div>
+
+  <div>
+    <button type="submit">Create</button>
+    <a th:href="@{/carTypes}"><button type="button">Cancel</button></a>
+  </div>
+
+
+
+</form>
+</body>
+</html>
+
