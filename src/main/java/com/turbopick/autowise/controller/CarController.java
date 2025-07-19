@@ -14,12 +14,13 @@ public class CarController {
     @Autowired
     private CarService carService;
 
-    @GetMapping("/cars")
+    @GetMapping("/carList")
     public String cars(Model model) {
-        List<Car> cars = carService.getAllCars();
-        model.addAttribute("cars", cars);
-        return "car-list-v-1";
+//        List<Car> cars = carService.getAllCars();
+//        model.addAttribute("cars", cars);
+        return "car-list";
     }
+
 
 
 }

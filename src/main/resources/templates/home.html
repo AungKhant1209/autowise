@@ -1,78 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Home Three || Gorent || Gorent HTML 5 Template </title>
-    <!-- favicons Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/images/favicons/apple-touch-icon.png}" />
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/images/favicons/favicon-32x32.png}" />
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/favicons/favicon-16x16.png}" />
-    <link rel="manifest" href="assets/images/favicons/site.webmanifest" />
-    <meta name="description" content="Gorent HTML 5 Template " />
-
-    <!-- fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-        rel="stylesheet">
-
-
-    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/custom-animate.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/swiper.min.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/font-awesome-all.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/jarallax.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/jquery.magnific-popup.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
-    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/owl.theme.default.min.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/jquery-ui.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/aos.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/odometer.min.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/timePicker.css}" />
-
-
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/slider.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/footer.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/sliding-text.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/services.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/about.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/booking.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/counter.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/listing.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/video.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/pricing.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/popular-car.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/testimonial.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/faq.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/team.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/call.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/download-app.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/brand.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/blog.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/lets-talk.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/process.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/why-choose.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/gallery.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/banner.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/search-car.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/contact.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/feature.css}" />
-
-    <!-- template styles -->
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/responsive.css}" />
-</head>
+<div th:replace="layout/header :: header"></div>
 
 <body class="custom-cursor">
     <div class="custom-cursor__cursor"></div>
@@ -88,83 +17,10 @@
 
 
     <div class="page-wrapper">
-        <header class="main-header-three">
-            <nav class="main-menu main-menu-three">
-                <div class="main-menu-three__wrapper">
-                    <div class="main-menu-three__wrapper-inner">
-                        <div class="main-menu-three__left">
-                            <div class="main-menu-three__logo">
-                                <a href="index.html"><img src="assets/images/resources/logo-1.png" alt=""></a>
-                            </div>
-                        </div>
-                        <div class="main-menu-three__middle-box">
-                            <div class="main-menu-three__main-menu-box">
-                                <a href="#" class="mobile-nav__toggler"><i class="fa fa-bars"></i></a>
-                                <ul class="main-menu__list one-page-scroll-menu">
-                                    <li class="scrollToLink">
-                                        <a href="#home">Home </a>
-                                    </li>
-                                    <li class="scrollToLink">
-                                        <a href="#about">About Us</a>
-                                    </li>
-                                    <li class="scrollToLink">
-                                        <a href="#services">Services</a>
-                                    </li>
-                                    <li><a href="/cars">Cars</a></li>
-
-                                    <li class="scrollToLink">
-                                        <a href="#driver">Driver</a>
-                                    </li>
-                                    <li class="scrollToLink">
-                                        <a href="#contact">Contact</a>
-                                    </li>
-                                    <li class="scrollToLink">
-                                        <a href="#blog">Blog</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="main-menu-three__search-cart-box">
-                                <div class="main-menu-three__search-box">
-                                    <a href="#" class="main-menu-three__search search-toggler icon-search"></a>
-                                </div>
-                                <div class="main-menu-three__cart-box">
-                                    <a href="cart.html" class="main-menu-three__cart">
-                                        <span class="far fa-shopping-cart"></span>
-                                        <span class="main-menu-three__cart-count">02</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="main-menu-three__right">
-                            <div class="main-menu-three__call">
-                                <div class="main-menu-three__call-icon">
-                                    <i class="icon-call-3"></i>
-                                </div>
-                                <div class="main-menu-three__call-content">
-                                    <p class="main-menu-three__call-sub-title">Call Anytime</p>
-                                    <h5 class="main-menu-three__call-number"><a href="tel:23645689622">+236 (456) 896
-                                            22</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="main-menu-three__nav-sidebar-icon">
-                                <a class="navSidebar-button" href="#">
-                                    <span class="icon-dots-menu-one"></span>
-                                    <span class="icon-dots-menu-two"></span>
-                                    <span class="icon-dots-menu-three"></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </header>
-
+        <div th:replace="layout/navbar :: navbar"></div>
         <div class="stricky-header stricked-menu main-menu main-menu-three">
-            <div class="sticky-header__content"></div><!-- /.sticky-header__content -->
-        </div><!-- /.stricky-header -->
-
-
+            <div class="sticky-header__content"></div>
+        </div>
 
         <!-- Banner One Start -->
         <section class="banner-one" id="home">
@@ -1693,7 +1549,7 @@
                                     class="fas fa-arrow-right"></span></a>
                         </div>
                         <div class="lets-talk__btn-2">
-                            <a href="car-list-v-1.html" class="thm-btn">Rent Now<span
+                            <a href="car-list.html" class="thm-btn">Rent Now<span
                                     class="fas fa-arrow-right"></span></a>
                         </div>
                     </div>
@@ -2030,7 +1886,7 @@
                                 <p class="feature-one__inner-text">Lorem ipsum is simply ipun txns mane so dummy text of
                                     free available in market the printing and typesetting industry</p>
                                 <div class="feature-one__inner-btn-box">
-                                    <a href="car-list-v-1.html" class="thm-btn">Rent Now</a>
+                                    <a href="car-list.html" class="thm-btn">Rent Now</a>
                                 </div>
                             </div>
                         </div>
@@ -2500,7 +2356,7 @@
                                 <div class="footer-widget__services">
                                     <h4 class="footer-widget__title">Services</h4>
                                     <ul class="footer-widget__links-list list-unstyled">
-                                        <li><a href="car-list-v-1.html">Your Reliable Ride</a></li>
+                                        <li><a href="car-list.html">Your Reliable Ride</a></li>
                                         <li><a href="car-list-v-2.html">Express Shuttle</a></li>
                                         <li><a href="car-list-v-3.html">Travel in Style</a></li>
                                         <li><a href="cars.html">Rental List</a></li>
