@@ -1,51 +1,62 @@
 package com.turbopick.autowise.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
+public class CarDto {
 
-import lombok.Data;
-
-@Data
-@Entity
-public class Car {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @NotEmpty(message = "Car name cannot be empty")
     private String name;
+
+    @NotEmpty(message = "YouTube link cannot be empty")
     private String youtubeLink;
+
+    @NotEmpty(message = "Car image ID cannot be empty")
     private String carImageId;
 
+    @NotNull(message = "Brand ID is required")
     private Long brandId;
+
+    @NotNull(message = "Type ID is required")
     private Long typeId;
+
+    @NotNull(message = "Rating ID is required")
     private Long ratingId;
 
+    @NotNull(message = "Price is required")
     private Long price;
+
+    @NotEmpty(message = "Fuel type cannot be empty")
     private String fuelType;
+
+    @NotNull(message = "Production year is required")
     private Long productionYear;
+
+    @NotEmpty(message = "Engine size cannot be empty")
     private String engineSize;
+
+    @NotNull(message = "Seat count is required")
     private Long seat;
+
+    @NotNull(message = "Door count is required")
     private Long door;
+
+    @NotNull(message = "Warranty is required")
     private Long warranty;
 
+    @NotEmpty(message = "Transmission cannot be empty")
     private String transmission;
+
+    @NotEmpty(message = "Drive type cannot be empty")
     private String driveType;
+
+    @NotNull(message = "Color ID is required")
     private Long color;
 
+    @NotEmpty(message = "Description cannot be empty")
     private String description;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Getters and Setters
 
     public String getName() {
         return name;

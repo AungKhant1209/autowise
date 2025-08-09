@@ -1,36 +1,34 @@
 package com.turbopick.autowise.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-public class CarType {
+public class Brand {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long typeId;
+    private Long brandId;
 
-    private String typeName;
+    private String name;
     private String imageLink;
     private String description;
 
-    public Long getTypeId() {
-        return typeId;
+    public Long getBrandId() {
+        return brandId;
     }
 
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getImageLink() {
