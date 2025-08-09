@@ -4,182 +4,31 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-import lombok.Data;
+import java.util.Date;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Car {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
     private String youtubeLink;
-    private String carImageId;
-
-    private Long brandId;
-    private Long typeId;
-    private Long ratingId;
-
     private Long price;
     private String fuelType;
-    private Long productionYear;
+    private Date productionYear;
     private String engineSize;
-    private Long seat;
-    private Long door;
+    private int seat;
+    private int door;
     private Long warranty;
-
     private String transmission;
     private String driveType;
-    private Long color;
-
+    private String color;
     private String description;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getYoutubeLink() {
-        return youtubeLink;
-    }
-
-    public void setYoutubeLink(String youtubeLink) {
-        this.youtubeLink = youtubeLink;
-    }
-
-    public String getCarImageId() {
-        return carImageId;
-    }
-
-    public void setCarImageId(String carImageId) {
-        this.carImageId = carImageId;
-    }
-
-    public Long getBrandId() {
-        return brandId;
-    }
-
-    public void setBrandId(Long brandId) {
-        this.brandId = brandId;
-    }
-
-    public Long getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
-    }
-
-    public Long getRatingId() {
-        return ratingId;
-    }
-
-    public void setRatingId(Long ratingId) {
-        this.ratingId = ratingId;
-    }
-
-    public Long getPrice() {
-        return price;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public String getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
-    }
-
-    public Long getProductionYear() {
-        return productionYear;
-    }
-
-    public void setProductionYear(Long productionYear) {
-        this.productionYear = productionYear;
-    }
-
-    public String getEngineSize() {
-        return engineSize;
-    }
-
-    public void setEngineSize(String engineSize) {
-        this.engineSize = engineSize;
-    }
-
-    public Long getSeat() {
-        return seat;
-    }
-
-    public void setSeat(Long seat) {
-        this.seat = seat;
-    }
-
-    public Long getDoor() {
-        return door;
-    }
-
-    public void setDoor(Long door) {
-        this.door = door;
-    }
-
-    public Long getWarranty() {
-        return warranty;
-    }
-
-    public void setWarranty(Long warranty) {
-        this.warranty = warranty;
-    }
-
-    public String getTransmission() {
-        return transmission;
-    }
-
-    public void setTransmission(String transmission) {
-        this.transmission = transmission;
-    }
-
-    public String getDriveType() {
-        return driveType;
-    }
-
-    public void setDriveType(String driveType) {
-        this.driveType = driveType;
-    }
-
-    public Long getColor() {
-        return color;
-    }
-
-    public void setColor(Long color) {
-        this.color = color;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
