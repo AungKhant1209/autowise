@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/cars")
 public class CarApiController {
+
     @Autowired
     private CarService carService;
 
@@ -24,12 +26,12 @@ public class CarApiController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Car> getCarById(@PathVariable int id) {
+    public Optional<Car> getCarById(@PathVariable Long id) {
         return carService.findCarById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCar(@PathVariable int id) {
+    public void deleteCar(@PathVariable Long id) {
         carService.deleteCarById(id);
     }
 }

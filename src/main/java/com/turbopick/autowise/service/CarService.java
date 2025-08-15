@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class CarService {
+
     @Autowired
     private CarRepository carRepository;
 
@@ -17,17 +18,14 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    // Delete a car by ID
-    public void deleteCarById(int id) {
+    public void deleteCarById(Long id) {
         carRepository.deleteById(id);
     }
 
-    // Find a car by ID
-    public Optional<Car> findCarById(int id) {
+    public Optional<Car> findCarById(Long id) {
         return carRepository.findById(id);
     }
 
-    // Get all cars
     public List<Car> getAllCars() {
         return carRepository.findAll();
     }
