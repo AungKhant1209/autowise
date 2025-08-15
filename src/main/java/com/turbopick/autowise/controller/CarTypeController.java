@@ -1,7 +1,10 @@
 package com.turbopick.autowise.controller;
 
+import com.turbopick.autowise.model.CarType;
 import com.turbopick.autowise.model.CarTypeDto;
+import com.turbopick.autowise.service.CarTypeService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,13 +17,14 @@ import java.util.List;
 
 @Controller
 public class CarTypeController {
-//    @Autowired
-//    private CarTypeService carTypeService;
+    @Autowired
+    private CarTypeService carTypeService;
 
     @GetMapping("/carTypes")
     public String carTypes(Model model) {
-//        List<CarType>carTypes=carTypeService.findAllCarTypes();
-//        model.addAttribute("carTypes",carTypes);
+        List<CarType>carTypes=carTypeService.findAllCarTypes();
+        model.addAttribute("carTypes",carTypes);
+        System.out.println("CarTypeController.carList"+ carTypes.size());
         return "carTypes";
     }
 

@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -23,17 +27,18 @@ public class CarDto {
     @NotEmpty(message = "Fuel type cannot be empty")
     private String fuelType;
 
-    @NotNull(message = "Production year is required")
-    private Long productionYear;
+
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    private LocalDate productionYear;
 
     @NotEmpty(message = "Engine size cannot be empty")
     private String engineSize;
 
     @NotNull(message = "Seat count is required")
-    private Long seat;
+    private int seat;
 
     @NotNull(message = "Door count is required")
-    private Long door;
+    private int door;
 
     @NotNull(message = "Warranty is required")
     private Long warranty;
@@ -45,9 +50,12 @@ public class CarDto {
     private String driveType;
 
     @NotNull(message = "Color ID is required")
-    private Long color;
+    private String color;
 
     @NotEmpty(message = "Description cannot be empty")
     private String description;
+
+    @NotEmpty(message = "Car Type Id cannot be empty")
+    private String carTypeId;
 
 }
