@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -57,5 +58,7 @@ public class CarDto {
 
     @NotEmpty(message = "Car Type Id cannot be empty")
     private String carTypeId;
+
+    private List<Long> featureIds;
 
 }

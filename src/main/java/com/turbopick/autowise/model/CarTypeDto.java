@@ -1,43 +1,26 @@
 package com.turbopick.autowise.model;
 
+
 import jakarta.validation.constraints.NotEmpty;
 
+import lombok.Data;
+
+
+@Data
 public class CarTypeDto {
 
     @NotEmpty(message = "Name cannot be empty")
-    private String name;
-
-    @NotEmpty(message = "Brand cannot be empty")
-    private String brand;
-
-    @NotEmpty(message = "Code cannot be empty")
-    private String code;
+    private String typeName;
 
     @NotEmpty(message = "Description cannot be empty")
     private String description;
 
-    public String getName() {
-        return name;
+    public String getTypeName() {
+        return typeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public String getDescription() {

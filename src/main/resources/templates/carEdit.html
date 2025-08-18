@@ -87,6 +87,17 @@
         <textarea id="description" th:field="*{description}"></textarea>
         <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
     </div>
+    <div>
+        <label>Car Type:</label>
+        <select th:field="*{carTypeId}">
+            <option value="" disabled selected>-- Select car type --</option>
+            <option th:each="t : ${carTypes}"
+                    th:value="${t.typeId}"
+                    th:text="${t.typeName}">
+            </option>
+        </select>
+        <span th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></span>
+    </div>
 
     <div>
         <button type="submit">Update</button>

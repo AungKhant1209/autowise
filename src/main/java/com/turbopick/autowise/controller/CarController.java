@@ -1,11 +1,9 @@
 package com.turbopick.autowise.controller;
 
-import com.turbopick.autowise.model.Car;
-import com.turbopick.autowise.model.CarDto;
-import com.turbopick.autowise.model.CarType;
-import com.turbopick.autowise.model.CarTypeDto;
+import com.turbopick.autowise.model.*;
 import com.turbopick.autowise.repository.CarRepository;
 import com.turbopick.autowise.repository.CarTypeRepository;
+import com.turbopick.autowise.repository.FeatureRepository;
 import com.turbopick.autowise.service.CarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +13,23 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
 public class CarController {
+    @Autowired
+    private FeatureRepository featureRepository;
     @Autowired
     private CarService carService;
     @Autowired
     private CarRepository carRepository;
     @Autowired
     private CarTypeRepository carTypeRepository;
+    @ModelAttribute("carTypes")
+    public java.util.List<CarType> carTypes() {
+        return carTypeRepository.findAll();
+    }
 
 
     @GetMapping("/carList")
@@ -44,13 +49,20 @@ public class CarController {
     public String showCarForm(Model model) {
         model.addAttribute("carDto", new CarDto()); // empty DTO for form binding
         model.addAttribute("carTypes", carTypeRepository.findAll());
-        return "carCreate"; // your Thymeleaf form template name
+        model.addAttribute("allFeatures", featureRepository.findAll());
+        return "carCreate";
     }
     @PostMapping("carCreate")
     public String createCar(@Valid @ModelAttribute("carDto") CarDto carDto, BindingResult result,Model model){
         if (carRepository.findCarByName(carDto.getName()) != null ){
             FieldError error = new FieldError("carDto", "name", "Car name already exists");
             result.addError(error);
+        }
+        CarType type = carTypeRepository.findById(Long.valueOf(carDto.getCarTypeId())).orElse(null);
+        if (type == null) {
+            result.addError(new FieldError("carDto", "carTypeId", "Invalid car type"));
+            model.addAttribute("carTypes", carTypeRepository.findAll());
+            return "carCreate";
         }
         if (result.hasErrors()) {
             return "carCreate";
@@ -69,17 +81,14 @@ public class CarController {
         car.setDriveType(carDto.getDriveType());
         car.setColor(carDto.getColor());
         car.setDescription(carDto.getDescription());
-        carRepository.save(car);
-        // Load and set the CarType
-        CarType type = carTypeRepository.findById(Integer.parseInt(carDto.getCarTypeId()))
-                .orElse(null);
-        if (type == null) {
-            result.addError(new FieldError("carDto", "carTypeId", "Invalid car type"));
-            model.addAttribute("carTypes", carTypeRepository.findAll());
-            return "carCreate";
-        }
-        car.setCarType(type); // <-- ensure Car has: @ManyToOne CarType carType;
 
+        List<Long> ids = carDto.getFeatureIds();
+
+        if (ids != null && !ids.isEmpty()) {
+            List<Feature> selected = featureRepository.findAllById(ids);
+            car.getFeatures().clear();
+            car.getFeatures().addAll(new HashSet<>(selected));
+        }
         carRepository.save(car);
         return "redirect:/cars";
 
@@ -87,6 +96,7 @@ public class CarController {
     @GetMapping("/editCar/{id}")
     public String editCar(@PathVariable int id, Model model) {
         Car car = carRepository.findCarById(id);
+
         if (car == null) return "redirect:/cars";
 
         System.out.println("this is car type::"+ car.getCarType().getTypeName());
@@ -107,10 +117,9 @@ public class CarController {
         carDto.setColor(car.getColor());
         carDto.setDescription(car.getDescription());
 
-
-
         model.addAttribute("carId", id);     // <-- REQUIRED
         model.addAttribute("carDto", carDto);
+
         return "carEdit";
     }
 

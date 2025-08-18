@@ -8,6 +8,8 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -34,4 +36,13 @@ public class Car {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "car_type_id",nullable = true)
     private CarType carType;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "car_feature",
+            joinColumns = @JoinColumn(name = "car_id"),
+            inverseJoinColumns = @JoinColumn(name = "feature_id")
+    )
+    @ToString.Exclude
+    private Set<Feature> features = new HashSet<>();
 }
