@@ -11,22 +11,19 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>Name</th>
-        <th>Brand</th>
-        <th>Code</th>
+        <th>Type Name</th>
         <th>Description</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="type : ${carTypes}">
-        <td th:text="${type.id}"></td>
-        <td th:text="${type.name}"></td>
-        <td th:text="${type.brand}"></td>
-        <td th:text="${type.code}"></td>
+        <td th:text="${type.typeId}"></td>
+        <td th:text="${type.typeName}"></td>
         <td th:text="${type.description}"></td>
         <td>
-            <a th:href="@{carTypesEdit(id=${type.id})}">Edit</a>
-            <a th:href="@{carTypesDelete(id=${type.id})}">Delete</a>
+            <a th:href="@{carTypesEdit(id=${type.typeId})}">Edit</a>
+            <a th:href="@{carTypesDelete(id=${type.typeId})}" onclick="return confirm('Delete this car type?');">Delete</a>
         </td>
     </tr>
     </tbody>

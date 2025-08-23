@@ -1,28 +1,25 @@
 package com.turbopick.autowise.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.Date;
-
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString(onlyExplicitlyIncluded = true)
+@Table(name = "car")
 public class Car {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String youtubeLink;
     private Long price;
     private String fuelType;
+
     private LocalDate productionYear;
+
     private String engineSize;
     private int seat;
     private int door;
@@ -30,8 +27,16 @@ public class Car {
     private String transmission;
     private String driveType;
     private String color;
+
+    @Column(length = 4000)
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_type_id",nullable = true)
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_type_id")
     private CarType carType;
+
+    // ✅ NEW: Brand relation
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brand_id")
+    private CarBrand carBrand;
 }

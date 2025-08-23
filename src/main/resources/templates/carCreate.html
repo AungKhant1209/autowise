@@ -33,12 +33,9 @@
 
     <div>
         <label>Production Year:</label>
-        <input type="date"
-               th:field="*{productionYear}"
-               placeholder="Select production year"
-               th:value="${#temporals.format(productionYear, 'yyyy/MM/dd')}" />
-        <span th:if="${#fields.hasErrors('productionYear')}"
-              th:errors="*{productionYear}"></span>
+        <!-- Keep only th:field; remove th:value to avoid conflicts -->
+        <input type="date" th:field="*{productionYear}" placeholder="Select production year"/>
+        <span th:if="${#fields.hasErrors('productionYear')}" th:errors="*{productionYear}"></span>
     </div>
 
     <div>
@@ -82,6 +79,7 @@
         <input type="text" th:field="*{color}" placeholder="Enter car color"/>
         <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></span>
     </div>
+
     <div>
         <label>Car Type:</label>
         <select th:field="*{carTypeId}">
@@ -94,6 +92,17 @@
         <span th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></span>
     </div>
 
+    <!-- ✅ Added Brand select block -->
+    <div>
+        <label>Brand:</label>
+        <select th:field="*{brandId}" required>
+            <option value="" disabled th:selected="${carDto.brandId == null}">-- Select brand --</option>
+            <option th:each="b : ${carBrands}" th:value="${b.brandId}" th:text="${b.brandName}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('brandId')}" th:errors="*{brandId}"></span>
+    </div>
+    <!-- ✅ End Brand select block -->
+
     <div>
         <label>Description:</label>
         <textarea th:field="*{description}" placeholder="Enter description"></textarea>
@@ -104,7 +113,6 @@
         <button type="submit">Create</button>
         <a th:href="@{/cars}"><button type="button">Cancel</button></a>
     </div>
-
 
 </form>
 </body>

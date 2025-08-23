@@ -3,9 +3,10 @@ package com.turbopick.autowise.controller;
 import com.turbopick.autowise.model.Car;
 import com.turbopick.autowise.model.CarDto;
 import com.turbopick.autowise.model.CarType;
-import com.turbopick.autowise.model.CarTypeDto;
+import com.turbopick.autowise.model.CarBrand;                              // <-- add
 import com.turbopick.autowise.repository.CarRepository;
 import com.turbopick.autowise.repository.CarTypeRepository;
+import com.turbopick.autowise.repository.CarBrandRepository;               // <-- add
 import com.turbopick.autowise.service.CarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,42 +20,75 @@ import java.util.List;
 
 @Controller
 public class CarController {
-    @Autowired
-    private CarService carService;
-    @Autowired
-    private CarRepository carRepository;
-    @Autowired
-    private CarTypeRepository carTypeRepository;
-
+    @Autowired private CarService carService;
+    @Autowired private CarRepository carRepository;
+    @Autowired private CarTypeRepository carTypeRepository;
+    @Autowired private CarBrandRepository carBrandRepository;              // <-- add
 
     @GetMapping("/carList")
     public String cars(Model model) {
         List<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
-        System.out.println("CarController.carList"+ cars.size());
         return "car-list";
     }
-    @GetMapping({"/cars"})
+
+    @GetMapping("/cars")
     public String getCars(Model model) {
-        List<Car>  cars = carService.getAllCars();
+        List<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
         return "cars";
     }
+
+    // 3.1 GET /carCreate — add brands to the model
     @GetMapping("/carCreate")
     public String showCarForm(Model model) {
-        model.addAttribute("carDto", new CarDto()); // empty DTO for form binding
+        model.addAttribute("carDto", new CarDto());
         model.addAttribute("carTypes", carTypeRepository.findAll());
-        return "carCreate"; // your Thymeleaf form template name
+        model.addAttribute("carBrands", carBrandRepository.findAll());     // <-- here
+        return "carCreate";
     }
-    @PostMapping("carCreate")
-    public String createCar(@Valid @ModelAttribute("carDto") CarDto carDto, BindingResult result,Model model){
-        if (carRepository.findCarByName(carDto.getName()) != null ){
-            FieldError error = new FieldError("carDto", "name", "Car name already exists");
-            result.addError(error);
+
+    // 3.2 POST /carCreate — load brand and set on entity
+    @PostMapping("/carCreate")
+    public String createCar(@Valid @ModelAttribute("carDto") CarDto carDto,
+                            BindingResult result,
+                            Model model) {
+
+        // example duplicate name check
+        if (carRepository.findCarByName(carDto.getName()) != null) {
+            result.addError(new FieldError("carDto", "name", "Car name already exists"));
         }
+
+        // Load CarType
+        CarType type = null;
+        if (carDto.getCarTypeId() != null) {
+            type = carTypeRepository.findById(carDto.getCarTypeId()).orElse(null);
+            if (type == null) {
+                result.addError(new FieldError("carDto", "carTypeId", "Invalid car type"));
+            }
+        } else {
+            result.addError(new FieldError("carDto", "carTypeId", "Car type is required"));
+        }
+
+        // Load CarBrand  <-- your snippet goes exactly here
+        CarBrand brand = null;
+        if (carDto.getBrandId() != null) {
+            brand = carBrandRepository.findById(carDto.getBrandId()).orElse(null);
+            if (brand == null) {
+                result.addError(new FieldError("carDto", "brandId", "Invalid brand"));
+            }
+        } else {
+            result.addError(new FieldError("carDto", "brandId", "Brand is required"));
+        }
+
+        // on errors, re-add lists for the form
         if (result.hasErrors()) {
+            model.addAttribute("carTypes", carTypeRepository.findAll());
+            model.addAttribute("carBrands", carBrandRepository.findAll()); // <-- re-add here
             return "carCreate";
         }
+
+        // Build entity
         Car car = new Car();
         car.setName(carDto.getName());
         car.setYoutubeLink(carDto.getYoutubeLink());
@@ -62,34 +96,27 @@ public class CarController {
         car.setFuelType(carDto.getFuelType());
         car.setProductionYear(carDto.getProductionYear());
         car.setEngineSize(carDto.getEngineSize());
-        car.setSeat(carDto.getSeat());
-        car.setDoor(carDto.getDoor());
+        car.setSeat(carDto.getSeat() != null ? carDto.getSeat() : 0);
+        car.setDoor(carDto.getDoor() != null ? carDto.getDoor() : 0);
         car.setWarranty(carDto.getWarranty());
         car.setTransmission(carDto.getTransmission());
         car.setDriveType(carDto.getDriveType());
         car.setColor(carDto.getColor());
         car.setDescription(carDto.getDescription());
-        carRepository.save(car);
-        // Load and set the CarType
-        CarType type = carTypeRepository.findById(Integer.parseInt(carDto.getCarTypeId()))
-                .orElse(null);
-        if (type == null) {
-            result.addError(new FieldError("carDto", "carTypeId", "Invalid car type"));
-            model.addAttribute("carTypes", carTypeRepository.findAll());
-            return "carCreate";
-        }
-        car.setCarType(type); // <-- ensure Car has: @ManyToOne CarType carType;
+
+        // Set relations
+        car.setCarType(type);
+        car.setCarBrand(brand);                                            // <-- set selected brand
 
         carRepository.save(car);
         return "redirect:/cars";
-
     }
+
+    // 3.3 GET /editCar/{id} — pre-fill brand and send brand list
     @GetMapping("/editCar/{id}")
     public String editCar(@PathVariable int id, Model model) {
         Car car = carRepository.findCarById(id);
         if (car == null) return "redirect:/cars";
-
-        System.out.println("this is car type::"+ car.getCarType().getTypeName());
 
         CarDto carDto = new CarDto();
         // entity -> dto
@@ -106,14 +133,17 @@ public class CarController {
         carDto.setDriveType(car.getDriveType());
         carDto.setColor(car.getColor());
         carDto.setDescription(car.getDescription());
+        carDto.setCarTypeId(car.getCarType() != null ? car.getCarType().getTypeId() : null);
+        carDto.setBrandId(car.getCarBrand() != null ? car.getCarBrand().getBrandId() : null); // <-- here
 
-
-
-        model.addAttribute("carId", id);     // <-- REQUIRED
+        model.addAttribute("carId", id);
         model.addAttribute("carDto", carDto);
+        model.addAttribute("carTypes", carTypeRepository.findAll());
+        model.addAttribute("carBrands", carBrandRepository.findAll());     // <-- here
         return "carEdit";
     }
 
+    // 3.4 POST /editCar/{id} — load/set brand and re-add list on error
     @PostMapping("/editCar/{id}")
     public String updateCar(@PathVariable int id,
                             @Valid @ModelAttribute("carDto") CarDto carDto,
@@ -122,8 +152,32 @@ public class CarController {
         Car existing = carRepository.findCarById(id);
         if (existing == null) return "redirect:/cars";
 
+        // Load CarType
+        CarType type = null;
+        if (carDto.getCarTypeId() != null) {
+            type = carTypeRepository.findById(carDto.getCarTypeId()).orElse(null);
+            if (type == null) {
+                result.addError(new FieldError("carDto", "carTypeId", "Invalid car type"));
+            }
+        } else {
+            result.addError(new FieldError("carDto", "carTypeId", "Car type is required"));
+        }
+
+        // Load CarBrand  <-- your snippet goes exactly here
+        CarBrand brand = null;
+        if (carDto.getBrandId() != null) {
+            brand = carBrandRepository.findById(carDto.getBrandId()).orElse(null);
+            if (brand == null) {
+                result.addError(new FieldError("carDto", "brandId", "Invalid brand"));
+            }
+        } else {
+            result.addError(new FieldError("carDto", "brandId", "Brand is required"));
+        }
+
         if (result.hasErrors()) {
-            model.addAttribute("carId", id);  // <-- keep action URL valid on error
+            model.addAttribute("carId", id);
+            model.addAttribute("carTypes", carTypeRepository.findAll());
+            model.addAttribute("carBrands", carBrandRepository.findAll()); // <-- re-add here
             return "carEdit";
         }
 
@@ -134,17 +188,22 @@ public class CarController {
         existing.setFuelType(carDto.getFuelType());
         existing.setProductionYear(carDto.getProductionYear());
         existing.setEngineSize(carDto.getEngineSize());
-        existing.setSeat(carDto.getSeat());
-        existing.setDoor(carDto.getDoor());
+        existing.setSeat(carDto.getSeat() != null ? carDto.getSeat() : existing.getSeat());
+        existing.setDoor(carDto.getDoor() != null ? carDto.getDoor() : existing.getDoor());
         existing.setWarranty(carDto.getWarranty());
         existing.setTransmission(carDto.getTransmission());
         existing.setDriveType(carDto.getDriveType());
         existing.setColor(carDto.getColor());
         existing.setDescription(carDto.getDescription());
-        carRepository.save(existing);
 
+        // Set relations
+        existing.setCarType(type);
+        existing.setCarBrand(brand);                                       // <-- set selected brand
+
+        carRepository.save(existing);
         return "redirect:/cars";
     }
+
     @GetMapping("/carDelete/{id}")
     public String deleteCar(@PathVariable int id) {
         if (carRepository.existsById(id)) {
@@ -152,6 +211,4 @@ public class CarController {
         }
         return "redirect:/cars";
     }
-
-
 }
