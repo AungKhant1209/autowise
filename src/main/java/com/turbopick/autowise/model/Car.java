@@ -1,10 +1,7 @@
 package com.turbopick.autowise.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -19,7 +16,9 @@ import java.util.Set;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @EqualsAndHashCode.Include
+    @ToString.Include
+    private Long id;
     private String name;
     private String youtubeLink;
     private Long price;
@@ -37,12 +36,13 @@ public class Car {
     @JoinColumn(name = "car_type_id",nullable = true)
     private CarType carType;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "car_feature",
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "feature_id")
     )
-    @ToString.Exclude
+
     private Set<Feature> features = new HashSet<>();
+
 }

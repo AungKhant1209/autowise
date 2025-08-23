@@ -35,9 +35,13 @@
     </div>
 
     <div>
-        <label for="productionYear">Production Year:</label>
-        <input id="productionYear" type="number" min="1900" max="2099" th:field="*{productionYear}" />
-        <span th:if="${#fields.hasErrors('productionYear')}" th:errors="*{productionYear}"></span>
+        <label>Production Year:</label>
+        <input type="date"
+               th:field="*{productionYear}"
+               placeholder="Select production year"
+               th:value="${#temporals.format(productionYear, 'yyyy/MM/dd')}" />
+        <span th:if="${#fields.hasErrors('productionYear')}"
+              th:errors="*{productionYear}"></span>
     </div>
 
     <div>
@@ -91,13 +95,18 @@
         <label>Car Type:</label>
         <select th:field="*{carTypeId}">
             <option value="" disabled selected>-- Select car type --</option>
-            <option th:each="t : ${carTypes}"
-                    th:value="${t.typeId}"
-                    th:text="${t.typeName}">
-            </option>
+            <option th:each="t : ${carTypes}" th:value="${t.typeId}" th:text="${t.typeName}"></option>
         </select>
         <span th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></span>
     </div>
+    <div>
+        <label>Features:</label>
+        <div th:each="f : ${allFeatures}">
+            <label>
+                <input type="checkbox" th:field="*{featureIds}" th:value="${f.id}" />
+                <span th:text="${f.name}">Feature</span>
+            </label>
+        </div>
 
     <div>
         <button type="submit">Update</button>

@@ -18,12 +18,12 @@ public class CarService {
     }
 
     // Delete a car by ID
-    public void deleteCarById(int id) {
+    public void deleteCarById(Long id) {
         carRepository.deleteById(id);
     }
 
     // Find a car by ID
-    public Optional<Car> findCarById(int id) {
+    public Optional<Car> findCarById(Long id) {
         return carRepository.findById(id);
     }
 

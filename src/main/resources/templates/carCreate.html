@@ -86,24 +86,19 @@
         <label>Car Type:</label>
         <select th:field="*{carTypeId}">
             <option value="" disabled selected>-- Select car type --</option>
-            <option th:each="t : ${carTypes}"
-                    th:value="${t.typeId}"
-                    th:text="${t.typeName}">
-            </option>
+            <option th:each="t : ${carTypes}" th:value="${t.typeId}" th:text="${t.typeName}"></option>
         </select>
         <span th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></span>
     </div>
     <div>
-        <label>Features:</label>
-        <div th:each="f : ${allFeatures}">
-            <label>
-                <input type="checkbox"
-                       th:field="*{featureIds}"
-                       th:value="${f.id}" />
-                <span th:text="${f.name}">Feature</span>
-            </label>
-        </div>
+    <label>Features:</label>
+    <div th:each="f : ${allFeatures}">
+        <label>
+            <input type="checkbox" th:field="*{featureIds}" th:value="${f.id}" />
+            <span th:text="${f.name}">Feature</span>
+        </label>
     </div>
+</div>
 
     <div>
         <label>Description:</label>
