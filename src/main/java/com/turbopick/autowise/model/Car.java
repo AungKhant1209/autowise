@@ -36,7 +36,7 @@ public class Car {
     @JoinColumn(name = "car_type_id",nullable = true)
     private CarType carType;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "car_feature",
             joinColumns = @JoinColumn(name = "car_id"),
