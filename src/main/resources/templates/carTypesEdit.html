@@ -1,43 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit CarType</title>
+    <title>Edit Car Type</title>
 </head>
 <body>
-<h1>Edit CarType</h1>
-<form th:action="@{/carTypesEdit(id=${carType.id})}" th:object="${carTypeDto}" method="post">
+<h1>Edit Car Type</h1>
 
-<div>
-    <label>Name:</label>
-    <input type="text" th:field="*{name}">
-    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-</div>
+<form th:action="@{/carTypesEdit/{id}(id=${carType.typeId})}"
+      th:object="${carTypeDto}" method="post">
+    <input type="hidden" th:if="${_csrf != null}"
+           th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-<div>
-    <label>Brand:</label>
-    <input type="text" th:field="*{brand}"/>
-    <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></span>
-</div>
+    <div>
+        <label for="typeName">Type Name:</label>
+        <input id="typeName" type="text" th:field="*{typeName}" />
+        <span th:if="${#fields.hasErrors('typeName')}" th:errors="*{typeName}"></span>
+    </div>
 
-<div>
-    <label for="code">Code:</label>
-    <input type="text" th:field="*{code}" id="code" />
-    <span th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></span>
-</div>
+    <div>
+        <label for="description">Description:</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+    </div>
 
-<div>
-    <label for="description">Description:</label>
-    <textarea th:field="*{description}" id="description"></textarea>
-    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-</div>
-
-<div>
-    <button type="submit">Update</button>
-    <a th:href="@{/carTypes}"><button type="button">Cancel</button></a>
-</div>
+    <div style="margin-top:1rem;">
+        <button type="submit">Update</button>
+        <a th:href="@{/carTypes}">Cancel</a>
+    </div>
 </form>
-
 
 </body>
 </html>

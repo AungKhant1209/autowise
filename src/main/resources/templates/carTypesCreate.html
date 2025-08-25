@@ -7,39 +7,26 @@
 <body>
 <h1>Create New Car Type</h1>
 <form th:action="@{/carTypesCreate}" th:object="${carTypeDto}" method="post">
-
-
-  <div>
-    <label>Name:</label>
-    <input type="text" th:field="*{name}">
-    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-  </div>
+  <!-- CSRF (shown only if present) -->
+  <input type="hidden" th:if="${_csrf != null}"
+         th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
   <div>
-    <label>Brand:</label>
-    <input type="text" th:field="*{brand}"/>
-    <span th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></span>
-  </div>
-
-  <div>
-    <label for="code">Code:</label>
-    <input type="text" th:field="*{code}" id="code" />
-    <span th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></span>
+    <label for="typeName">Type Name:</label>
+    <input id="typeName" type="text" th:field="*{typeName}" placeholder="" />
+    <span th:if="${#fields.hasErrors('typeName')}" th:errors="*{typeName}"></span>
   </div>
 
   <div>
     <label for="description">Description:</label>
-    <textarea th:field="*{description}" id="description"></textarea>
+    <textarea id="description" th:field="*{description}" placeholder=""></textarea>
     <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
   </div>
 
   <div>
     <button type="submit">Create</button>
-    <a th:href="@{/carTypes}"><button type="button">Cancel</button></a>
+    <a th:href="@{/carTypes}">Cancel</a>
   </div>
-
-
-
 </form>
 </body>
 </html>

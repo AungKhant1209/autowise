@@ -14,6 +14,10 @@ public class CarTypeService {
     public List<CarType> findAllCarTypes() {
         return carTypeRepository.findAll();
     }
+    public CarType findById(Long id) {
+        return carTypeRepository.findById(id).orElse(null);
+    }
+
 }
 
 

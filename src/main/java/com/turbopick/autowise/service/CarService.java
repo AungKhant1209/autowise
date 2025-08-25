@@ -20,19 +20,16 @@ public class CarService {
     }
 
     // Delete a car by ID
-    public void deleteCarById(int id) {
+    public void deleteCarById(Long id) {
         carRepository.deleteById(id);
     }
 
-    // Find a car by ID (Optional)
-    public Optional<Car> findCarById(int id) {
+    // Find a car by ID
+    public Optional<Car> findCarById(Long id) {
         return carRepository.findById(id);
     }
 
-    // Find a car by ID (direct return if you prefer)
-    public Car findCarByIdDirect(int id) {
-        return carRepository.findCarById(id);
-    }
+
 
     // Find by name
     public Car findCarByName(String name) {

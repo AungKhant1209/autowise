@@ -4,7 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
 @Data
 public class CarDto {
 
@@ -19,7 +21,7 @@ public class CarDto {
     private String fuelType;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate productionYear;
+    private Date productionYear;
 
     private String engineSize;
 
@@ -34,11 +36,13 @@ public class CarDto {
 
     private String description;
 
-    // Must match CarType.typeId (Long)
+    
     @NotNull
     private Long carTypeId;
 
-    // ✅ NEW: must match CarBrand.brandId (Long)
+    
     @NotNull
     private Long brandId;
+    private List<Long> featureIds;
+
 }

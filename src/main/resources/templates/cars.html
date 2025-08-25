@@ -44,6 +44,7 @@
         <td th:text="${car.driveType}"></td>
         <td th:text="${car.color}"></td>
         <td th:text="${car.description}"></td>
+        <td th:text="${car.carType != null ? car.carType.typeName : '—'}"></td>
         <td>
             <a th:href="@{/editCar/{id}(id=${car.id})}">Edit</a>
 
