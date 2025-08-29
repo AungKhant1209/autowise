@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>User List</title>
+    <meta charset="UTF-8" />
 </head>
 <body>
-$END$
+<h1>User List</h1>
+
+<button onclick="location.href='/users/create'">Create User</button>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>No</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- st.count gives 1,2,3... regardless of gaps in real DB ids -->
+    <tr th:each="u, st : ${users}">
+        <td th:text="${st.count}">1</td>
+        <td th:text="${u.name}">Alice</td>
+        <td th:text="${u.email}">alice@example.com</td>
+        <td>
+            <!-- we still use the real id in URLs, but don't show it -->
+            <a th:href="@{/users/edit/{id}(id=${u.id})}">Edit</a>
+            <a th:href="@{/users/delete/{id}(id=${u.id})}"
+               onclick="return confirm('Delete this user?');">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>
