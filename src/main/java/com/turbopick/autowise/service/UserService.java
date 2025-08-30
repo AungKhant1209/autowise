@@ -1,35 +1,33 @@
-//package com.turbopick.autowise.service;
-//
-//import com.turbopick.autowise.model.User;
-//import com.turbopick.autowise.repository.UserRepository;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@Service
-//public class UserService {
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    public User saveUser(User user) {
-//        return userRepository.save(user);
-//    }
-//
-//    // Delete a user by ID
-//    public void deleteUserById(int id) {
-//        userRepository.deleteById(id);
-//    }
-//
-//    // Find a user by ID
-//    public Optional<User> findUserById(int id) {
-//        return userRepository.findById(id);
-//    }
-//
-//    // Get all users
-//    public List<User> getAllUsers() {
-//        return userRepository.findAll();
-//    }
-//}
+package com.turbopick.autowise.service;
+
+import com.turbopick.autowise.model.User;
+import com.turbopick.autowise.repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class UserService {
+
+    private final UserRepository repo;
+
+    public UserService(UserRepository repo) {
+        this.repo = repo;
+    }
+
+    public List<User> findAll() {
+        return repo.findAll();
+    }
+
+    public User findById(Long id) {
+        return repo.findById(id).orElseThrow();
+    }
+
+    public User save(User user) {
+        return repo.save(user);
+    }
+
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+}

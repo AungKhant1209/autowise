@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Car Brand List</title></head>
+<body>
+<h1>Car Brand List</h1>
+<button onclick="location.href='/carBrandsCreate'">Create Brand</button>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Brand Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="b : ${carBrands}">
+        <td th:text="${b.brandId}">1</td>
+        <td th:text="${b.brandName}">Toyota</td>
+        <td th:text="${b.description}">Japan</td>
+        <td>
+            <a th:href="@{/carBrandsEdit/{id}(id=${b.brandId})}">Edit</a>
+            <a th:href="@{/carBrandsDelete/{id}(id=${b.brandId})}" onclick="return confirm('Delete this brand?');">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

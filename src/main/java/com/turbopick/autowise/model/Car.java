@@ -38,7 +38,7 @@ public class Car {
     @JoinColumn(name = "car_type_id",nullable = true)
     private CarType carType;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "car_feature",
             joinColumns = @JoinColumn(name = "car_id"),
@@ -46,5 +46,10 @@ public class Car {
     )
 
     private Set<Feature> features = new HashSet<>();
+
+    // ✅ NEW: Brand relation
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brand_id")
+    private CarBrand carBrand;
 
 }
