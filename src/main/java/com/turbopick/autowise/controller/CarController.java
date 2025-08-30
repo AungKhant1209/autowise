@@ -128,16 +128,14 @@ public class CarController {
     }
 
     // Detail page
+    // CarController.java
     @GetMapping("/car-detail/{id}")
-    public String carDetail(@PathVariable("id") Long id, Model model) {
-        Optional<Car> carOpt = carRepository.findById(id);
-        if (carOpt.isEmpty()) {
-            return "redirect:/carList";
-        }
+    public String carDetail(@PathVariable Long id, Model model) {
+        var carOpt = carRepository.findByIdWithFeatures(id);
+        if (carOpt.isEmpty()) return "redirect:/carList";
         model.addAttribute("car", carOpt.get());
         return "listing-single";
     }
-
     // Edit form
     @GetMapping("/editCar/{id}")
     public String editCar(@PathVariable Long id, Model model) {

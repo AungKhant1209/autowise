@@ -472,182 +472,72 @@
                             </div>
                             <div class="listing-single__feature">
                                 <h3 class="listing-single__feature-title">Features</h3>
+
                                 <div class="listing-single__feature-points-box">
+
+                                    <!-- Interior -->
                                     <div class="listing-single__feature-point-single">
                                         <h4 class="listing-single__feature-point-title">Interior</h4>
                                         <ul class="list-unstyled listing-single__feature-point">
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Air Conditioner</p>
-                                                </div>
+                                            <li th:each="feat : ${car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Interior')
+            ]}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p th:text="${feat.name}">Feature</p></div>
                                             </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Digital Odometer</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Heater</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Leather Seats</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Panoramic Moonroof</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Tachometer</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Touchscreen Display</p>
-                                                </div>
+                                            <li th:if="${#lists.isEmpty(car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Interior')
+            ])}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p>—</p></div>
                                             </li>
                                         </ul>
                                     </div>
+
+                                    <!-- Safety -->
                                     <div class="listing-single__feature-point-single">
                                         <h4 class="listing-single__feature-point-title">Safety</h4>
                                         <ul class="list-unstyled listing-single__feature-point">
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Anti-lock Braking</p>
-                                                </div>
+                                            <li th:each="feat : ${car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Safety')
+            ]}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p th:text="${feat.name}">Feature</p></div>
                                             </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Brake Assist Child</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Safety Locks Driver</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Air Bag Power</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Door Locks</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Stability Control</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Traction Control</p>
-                                                </div>
+                                            <li th:if="${#lists.isEmpty(car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Safety')
+            ])}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p>—</p></div>
                                             </li>
                                         </ul>
                                     </div>
+
+                                    <!-- Comfort & Convenience -->
                                     <div class="listing-single__feature-point-single">
                                         <h4 class="listing-single__feature-point-title">Comfort & Convenience</h4>
                                         <ul class="list-unstyled listing-single__feature-point">
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Android Auto</p>
-                                                </div>
+                                            <li th:each="feat : ${car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Comfort & Convenience')
+            ]}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p th:text="${feat.name}">Feature</p></div>
                                             </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Apple CarPlay</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Bluetooth</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>HomeLink</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Power Steering</p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="icon">
-                                                    <span class="icon-cheack"></span>
-                                                </div>
-                                                <div class="text">
-                                                    <p>Vanity Mirror</p>
-                                                </div>
+                                            <li th:if="${#lists.isEmpty(car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Comfort & Convenience')
+            ])}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p>—</p></div>
                                             </li>
                                         </ul>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="listing-single__review-and-comment">
