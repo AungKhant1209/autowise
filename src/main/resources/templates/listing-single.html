@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{layout/headerLog :: headerLog}"></div>
+<body class="custom-cursor">
+<div class="custom-cursor__cursor"></div>
+<div class="custom-cursor__cursor-two"></div>
+
+<div class="page-wrapper">
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+    <div class="stricky-header stricked-menu main-menu">
+        <div class="sticky-header__content"></div><!-- /.sticky-header__content -->
+    </div>
+
+    <section class="page-header">
+        <div class="page-header__bg"
+             th:style="'background-image: url(' + @{/assets/images/backgrounds/page-header-bg.jpg} + ');'">
+        </div>
+
+        <div class="page-header__shape-1"
+             th:style="'background-image: url(' + @{/assets/images/shapes/page-header-shape-1.png} + ');'">
+        </div>
+        <div class="container">
+            <div class="page-header__inner">
+                <h3>Car List V-1</h3>
+                <div class="thm-breadcrumb__inner">
+                    <ul class="thm-breadcrumb list-unstyled">
+                        <li><a href="index.html">Home</a></li>
+                        <li><span class="icon-arrow-left"></span></li>
+                        <li>Car List V-1</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Page Header End -->
+
+    <!--Listing Single Start-->
+    <section class="listing-single">
+        <div class="container">
+            <div class="listing-single__top">
+                <div class="listing-single__top-left">
+                    <h3 class="listing-single__title" th:text="${car.name}"></h3>
+                    <p class="listing-single__sub-title" th:text="${car.description}"></p>
+                    <div class="listing-single__car-details-box">
+                        <ul class="list-unstyled listing-single__car-details">
+                            <li>
+                                <span class="icon-date"></span>
+                                <p>2025</p>
+                            </li>
+                            <li>
+                                <span class="icon-mileage"></span>
+                                <p>80 Miles</p>
+                            </li>
+                            <li>
+                                <span class="icon-Carrier"></span>
+                                <p>Automatic</p>
+                            </li>
+                            <li>
+                                <span class="icon-fuel-type"></span>
+                                <p>Petrol</p>
+                            </li>
+                        </ul>
+                        <ul class="list-unstyled listing-single__car-details">
+                            <li>
+                                <span class="icon-seat"></span>
+                                <p>7 seats</p>
+                            </li>
+                            <li>
+                                <span class="icon-door"></span>
+                                <p>4 Doors</p>
+                            </li>
+                            <li>
+                                <span class="icon-fuel-type"></span>
+                                <p>2.5L</p>
+                            </li>
+                            <li>
+                                <span class="icon-car-insurance"></span>
+                                <p>3 Large bags</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="listing-single__top-right">
+                    <div class="listing-single__tag">
+                        <a href="#">Share <span class="icon-arrow-up-from"></span> </a>
+                        <a href="#">Save <span class="icon-bookmark"></span> </a>
+                        <a href="#">Compare <span class="icon-compress"></span> </a>
+                    </div>
+                    <h2 class="listing-single__price" th:text="'$' + ${car.price}"></h2>
+                    <div class="listing-single__offer-price">
+                        <div class="icon">
+                            <span class="icon-tag-2"></span>
+                        </div>
+                        <div class="text">
+                            <p>Make An Offer Price</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="listing-single__inner">
+                <div class="listing-single__main-content">
+                    <div class="swiper-container" id="listing-single__carousel">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="listing-single__main-content-inner">
+                                    <div class="row">
+                                        <div class="col-xl-5 col-lg-5">
+                                            <div class="listing-single__left">
+                                                <div class="listing-single__img">
+                                                    <img src="assets/images/listing/listing-single-1-1.jpg" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-7 col-lg-7">
+                                            <div class="listing-single__right">
+                                                <h3 class="listing-single__title-two">2025 Toyota Corolla Preview
+                                                    What's Coming Next Car</h3>
+                                                <p class="listing-single__text">The Toyota Corolla Hybrid is the
+                                                    high-performance
+                                                    version of the 2 Series 2-door coupé. The first generation of
+                                                    the M2 is the F87 coupé and is powered by turbocharged.</p>
+                                                <ul class="list-unstyled listing-single__meta">
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map-marker-alt"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p>Las Vegas, USA</p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map-marked-alt"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p><a href="#">Show on map</a></p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p>Fleet Code:<a href="#"><span>BMW-4525</span></a></p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="listing-single__btn-and-video-box">
+                                                    <div class="listing-single__btn-box">
+                                                        <a href="cars.html" class="thm-btn">See All Photo<span
+                                                                class="fas fa-arrow-right"></span></a>
+                                                    </div>
+                                                    <div class="listing-single__video-link">
+                                                        <a href="https://www.youtube.com/watch?v=Get7rqXYrbQ"
+                                                           class="video-popup">
+                                                            <div class="listing-single__video-icon">
+                                                                <span class="icon-play-2"></span>
+                                                                <i class="ripple"></i>
+                                                            </div>
+                                                        </a>
+                                                        <h4 class="listing-single__video-title">Watch Video</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.swiper-slide -->
+                            <div class="swiper-slide">
+                                <div class="listing-single__main-content-inner">
+                                    <div class="row">
+                                        <div class="col-xl-5 col-lg-5">
+                                            <div class="listing-single__left">
+                                                <div class="listing-single__img">
+                                                    <img src="assets/images/listing/listing-single-1-2.jpg" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-7 col-lg-7">
+                                            <div class="listing-single__right">
+                                                <h3 class="listing-single__title-two">Hyundai Accent 2025 - Modern
+                                                    compact sedan in blue color car.</h3>
+                                                <p class="listing-single__text">The Toyota Corolla Hybrid is the
+                                                    high-performance
+                                                    version of the 2 Series 2-door coupé. The first generation of
+                                                    the M2 is the F87 coupé and is powered by turbocharged.</p>
+                                                <ul class="list-unstyled listing-single__meta">
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map-marker-alt"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p>Las Vegas, USA</p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map-marked-alt"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p><a href="#">Show on map</a></p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p>Fleet Code:<a href="#"><span>BMW-4525</span></a></p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="listing-single__btn-and-video-box">
+                                                    <div class="listing-single__btn-box">
+                                                        <a href="cars.html" class="thm-btn">See All Photo<span
+                                                                class="fas fa-arrow-right"></span></a>
+                                                    </div>
+                                                    <div class="listing-single__video-link">
+                                                        <a href="https://www.youtube.com/watch?v=Get7rqXYrbQ"
+                                                           class="video-popup">
+                                                            <div class="listing-single__video-icon">
+                                                                <span class="icon-play-2"></span>
+                                                                <i class="ripple"></i>
+                                                            </div>
+                                                        </a>
+                                                        <h4 class="listing-single__video-title">Watch Video</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.swiper-slide -->
+                            <div class="swiper-slide">
+                                <div class="listing-single__main-content-inner">
+                                    <div class="row">
+                                        <div class="col-xl-5 col-lg-5">
+                                            <div class="listing-single__left">
+                                                <div class="listing-single__img">
+                                                    <img src="assets/images/listing/listing-single-1-3.jpg" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-7 col-lg-7">
+                                            <div class="listing-single__right">
+                                                <h3 class="listing-single__title-two">2025 Toyota Corolla Hybrid
+                                                    Best Reviews and Specs</h3>
+                                                <p class="listing-single__text">The Toyota Corolla Hybrid is the
+                                                    high-performance
+                                                    version of the 2 Series 2-door coupé. The first generation of
+                                                    the M2 is the F87 coupé and is powered by turbocharged.</p>
+                                                <ul class="list-unstyled listing-single__meta">
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map-marker-alt"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p>Las Vegas, USA</p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map-marked-alt"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p><a href="#">Show on map</a></p>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="icon">
+                                                            <span class="fas fa-map"></span>
+                                                        </div>
+                                                        <div class="text">
+                                                            <p>Fleet Code:<a href="#"><span>BMW-4525</span></a></p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                <div class="listing-single__btn-and-video-box">
+                                                    <div class="listing-single__btn-box">
+                                                        <a href="cars.html" class="thm-btn">See All Photo<span
+                                                                class="fas fa-arrow-right"></span></a>
+                                                    </div>
+                                                    <div class="listing-single__video-link">
+                                                        <a href="https://www.youtube.com/watch?v=Get7rqXYrbQ"
+                                                           class="video-popup">
+                                                            <div class="listing-single__video-icon">
+                                                                <span class="icon-play-2"></span>
+                                                                <i class="ripple"></i>
+                                                            </div>
+                                                        </a>
+                                                        <h4 class="listing-single__video-title">Watch Video</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.swiper-slide -->
+                        </div>
+                    </div>
+                    <div class="listing-single__nav">
+                        <div class="swiper-button-next" id="listing-single__swiper-button-prev">
+                            <i class="far fa-long-arrow-left"></i>
+                        </div>
+                        <div class="swiper-button-prev" id="listing-single__swiper-button-next">
+                            <i class="far fa-long-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listing-single__thumb-box">
+                    <div class="swiper-container" id="listing-single__thumb">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="listing-single__img-holder-box">
+                                    <div class="listing-single__img-holder">
+                                        <img src="assets/images/listing/listing-single-thamb-1-1.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div><!-- /.swiper-slide -->
+                            <div class="swiper-slide">
+                                <div class="listing-single__img-holder-box">
+                                    <div class="listing-single__img-holder">
+                                        <img src="assets/images/listing/listing-single-thamb-1-2.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div><!-- /.swiper-slide -->
+                            <div class="swiper-slide">
+                                <div class="listing-single__img-holder-box">
+                                    <div class="listing-single__img-holder">
+                                        <img src="assets/images/listing/listing-single-thamb-1-3.jpg" alt="">
+                                    </div>
+                                </div>
+                            </div><!-- /.swiper-slide -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="listing-single__bottom">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="listing-single__bottom-left">
+                            <div class="listing-single__car-overview">
+                                <h3 class="listing-single__car-overview-title">Car Overview</h3>
+                                <div class="listing-single__car-overview-points-box">
+                                    <ul class="list-unstyled listing-single__car-overview-point">
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-car1"></i>
+                                                <p>Body</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>SUV</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-mileage"></i>
+                                                <p>Mileage</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>50</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-fuel-type"></i>
+                                                <p>Fuel Type</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>Petrol</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-date"></i>
+                                                <p>Year</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>2024</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-Carrier"></i>
+                                                <p>Transmission</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>Automatic</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-test-drive"></i>
+                                                <p>Drive Type</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>Drive (AWD/4WD)</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-unstyled listing-single__car-overview-point">
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-avatar"></i>
+                                                <p>Condition</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>New</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-engine"></i>
+                                                <p>Engine Size</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>4.5</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-door"></i>
+                                                <p>Door</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>4 Doors</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-range"></i>
+                                                <p>Range</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>$1700</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-color"></i>
+                                                <p>Color</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>Blue, Gold, Red</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="listing-single__car-overview-point-left">
+                                                <i class="icon-seat"></i>
+                                                <p>Seats</p>
+                                            </div>
+                                            <div class="listing-single__car-overview-point-right">
+                                                <p>05</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="listing-single__description">
+                                <h3 class="listing-single__description-title">Description</h3>
+                                <p class="listing-single__description-text-1">Lorem ipsum is simply ipun txns mane
+                                    so dummy text of free available in market the printing and typesetting industry
+                                    has been the industry's standard dummy text ever. Lorem ipsum is simply ipun
+                                    txns mane. Lorem ipsum is simply ipun txns mane
+                                    so dummy text of free available in market the printing and typesetting industry
+                                    has been the industry's standard dummy text ever.</p>
+                                <p class="listing-single__description-text-2">Lorem ipsum is simply ipun txns mane
+                                    so dummy text of free available in market the printing and typesetting industry
+                                    has been the industry's standard dummy text ever.</p>
+                            </div>
+                            <div class="listing-single__feature">
+                                <h3 class="listing-single__feature-title">Features</h3>
+
+                                <div class="listing-single__feature-points-box">
+
+                                    <!-- Interior -->
+                                    <div class="listing-single__feature-point-single">
+                                        <h4 class="listing-single__feature-point-title">Interior</h4>
+                                        <ul class="list-unstyled listing-single__feature-point">
+                                            <li th:each="feat : ${car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Interior')
+            ]}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p th:text="${feat.name}">Feature</p></div>
+                                            </li>
+                                            <li th:if="${#lists.isEmpty(car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Interior')
+            ])}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p>—</p></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Safety -->
+                                    <div class="listing-single__feature-point-single">
+                                        <h4 class="listing-single__feature-point-title">Safety</h4>
+                                        <ul class="list-unstyled listing-single__feature-point">
+                                            <li th:each="feat : ${car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Safety')
+            ]}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p th:text="${feat.name}">Feature</p></div>
+                                            </li>
+                                            <li th:if="${#lists.isEmpty(car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Safety')
+            ])}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p>—</p></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <!-- Comfort & Convenience -->
+                                    <div class="listing-single__feature-point-single">
+                                        <h4 class="listing-single__feature-point-title">Comfort & Convenience</h4>
+                                        <ul class="list-unstyled listing-single__feature-point">
+                                            <li th:each="feat : ${car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Comfort & Convenience')
+            ]}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p th:text="${feat.name}">Feature</p></div>
+                                            </li>
+                                            <li th:if="${#lists.isEmpty(car.features.?[
+              category != null and
+              #strings.equalsIgnoreCase(#strings.trim(category),'Comfort & Convenience')
+            ])}">
+                                                <div class="icon"><span class="icon-cheack"></span></div>
+                                                <div class="text"><p>—</p></div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="listing-single__review-and-comment">
+                                <!--Review One Start-->
+                                <div class="review-one">
+                                    <div class="comments-area">
+                                        <div class="review-one__title">
+                                            <h3>2 Reviews</h3>
+                                        </div>
+                                        <!--Start Comment Box-->
+                                        <div class="comment-box">
+                                            <div class="comment">
+                                                <div class="author-thumb">
+                                                    <figure class="thumb"><img
+                                                            src="assets/images/shop/review-1-1.jpg" alt="">
+                                                    </figure>
+                                                </div>
+
+                                                <div class="review-one__content">
+                                                    <div class="review-one__content-top">
+                                                        <div class="info">
+                                                            <h2>Kevin martin <span>20 Oct, 2022 . 4:00
+                                                                        pm</span></h2>
+                                                        </div>
+                                                        <div class="reply-btn">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="review-one__content-bottom">
+                                                        <p>Lorem ipsum dolor sit amet, cibo mundi ea duo, vim exerci
+                                                            phaedrum. There are many variations of passages of Lorem
+                                                            Ipsum available, but the majority have alteration in
+                                                            some injected or words which don't look even slightly
+                                                            believable. If you are going to use a passage of Lorem
+                                                            Ipsum, you need to be sure there isn't anything
+                                                            embarrang hidden in the middle of text.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--End Comment Box-->
+
+                                        <!--Start Comment Box-->
+                                        <div class="comment-box">
+                                            <div class="comment">
+                                                <div class="author-thumb">
+                                                    <figure class="thumb"><img
+                                                            src="assets/images/shop/review-1-2.jpg" alt="">
+                                                    </figure>
+                                                </div>
+
+                                                <div class="review-one__content">
+                                                    <div class="review-one__content-top">
+                                                        <div class="info">
+                                                            <h2>Sarah albert <span>20 Oct, 2022 . 4:00
+                                                                        pm</span></h2>
+                                                        </div>
+                                                        <div class="reply-btn">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="review-one__content-bottom">
+                                                        <p>It has survived not only five centuries, but also
+                                                            the leap into electronic
+                                                            typesetting unchanged. It was popularised in the
+                                                            sheets containing lorem ipsum
+                                                            is simply free text. Class aptent taciti
+                                                            sociosqu ad litora torquent per conubia
+                                                            nostra, per inceptos himenaeos. Vestibulum
+                                                            sollicitudin varius mauris non
+                                                            dignissim.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--End Comment Box-->
+                                    </div>
+                                </div>
+                                <!--Review One End-->
+
+                                <!--Start Review Form-->
+                                <div class="review-form-one">
+                                    <div class="review-form-one__inner">
+                                        <h3 class="review-form-one__title">Add a review</h3>
+                                        <div class="review-form-one__rate-box">
+                                            <p class="review-form-one__rate-text">Rate this product?</p>
+                                            <div class="review-form-one__rate">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                        <form action="assets/inc/sendemail.php"
+                                              class="review-form-one__form contact-form-validated"
+                                              novalidate="novalidate">
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="review-form-one__input-box text-message-box">
+                                                            <textarea name="message"
+                                                                      placeholder="Write a comment"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-6 col-lg-6">
+                                                    <div class="review-form-one__input-box">
+                                                        <input type="text" placeholder="Your name" name="name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-6 col-lg-6">
+                                                    <div class="review-form-one__input-box">
+                                                        <input type="email" placeholder="Email address"
+                                                               name="email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <button type="submit"
+                                                            class="thm-btn review-form-one__btn">Submit a review <span
+                                                            class="fas fa-arrow-right"></span></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div class="result"></div>
+                                    </div>
+                                </div>
+                                <!--End Review Form-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-5">
+                        <div class="listing-single__sidebar">
+                            <div class="listing-single__rent-car-daily-price listing-single__single-box">
+                                <p>Daily rate</p>
+                                <h3>$150</h3>
+                            </div>
+                            <div class="listing-single__rent-car listing-single__single-box">
+                                <h3 class="listing-single__rent-car-title">Rent This Car</h3>
+                                <div class="listing-single__rent-car-content">
+                                    <div class="listing-single__rent-car-content-form">
+                                        <div class="listing-single__rent-car-date-box">
+                                            <p class="listing-single__rent-car-date-title">Pick-Up
+                                            </p>
+                                            <div class="listing-single__rent-car-date-time-box">
+                                                <input type="text" placeholder="mm/dd/yyy" name="date"
+                                                       id="datepicker">
+                                                <input type="text" name="time" placeholder="Time"
+                                                       class="listing-single__rent-car-time-box">
+                                            </div>
+                                        </div>
+                                        <div class="listing-single__rent-car-date-box">
+                                            <p class="listing-single__rent-car-date-title">Drop-Off
+                                            </p>
+                                            <div class="listing-single__rent-car-date-time-box">
+                                                <input type="text" placeholder="mm/dd/yyy" name="date"
+                                                       id="datepicker-2">
+                                                <input type="text" name="time" placeholder="Time"
+                                                       class="listing-single__rent-car-time-box">
+                                            </div>
+                                        </div>
+                                        <div class="listing-single__rent-car-extra">
+                                            <h3 class="listing-single__rent-car-extra-title">Add Extra:</h3>
+                                            <ul class="list-unstyled">
+                                                <li>
+                                                    <div class="checked-box">
+                                                        <input type="checkbox" name="f_extra1" id="f_extra1">
+                                                        <label for="f_extra1"><span></span>Bluetooth</label>
+                                                    </div>
+                                                    <div class="counts-box">
+                                                        <p>$20</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="checked-box">
+                                                        <input type="checkbox" name="f_extra2" id="f_extra2"
+                                                               checked="">
+                                                        <label for="f_extra2"><span></span>GPS System </label>
+                                                    </div>
+                                                    <div class="counts-box">
+                                                        <p>$20</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="checked-box">
+                                                        <input type="checkbox" name="f_extra3" id="f_extra3">
+                                                        <label for="f_extra3"><span></span>Additional Driver
+                                                        </label>
+                                                    </div>
+                                                    <div class="counts-box">
+                                                        <p>$100</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="checked-box">
+                                                        <input type="checkbox" name="f_extra4" id="f_extra4">
+                                                        <label for="f_extra4"><span></span>Central Lock</label>
+                                                    </div>
+                                                    <div class="counts-box">
+                                                        <p>$150</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="listing-single__rent-car-price-box">
+                                            <ul class="list-unstyled">
+                                                <li>
+                                                    <div class="title">
+                                                        <p>Subtotal</p>
+                                                    </div>
+                                                    <div class="price">
+                                                        <p>$150.00</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="title">
+                                                        <p>Sale discount</p>
+                                                    </div>
+                                                    <div class="price">
+                                                        <p>$140.00</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="title">
+                                                        <p>Total Payable</p>
+                                                    </div>
+                                                    <div class="price">
+                                                        <p>$160.00</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="listing-single__btn-box-2">
+                                    <a href="listing-single.html" class="thm-btn">Rent Now<span
+                                            class="fas fa-arrow-right"></span></a>
+                                </div>
+                            </div>
+                            <div class="listing-single__contact-info listing-single__single-box">
+                                <div class="listing-single__contact-phone">
+                                    <a href="tel:15502505260" class="listing-single__contact-phone-number"> <span
+                                            class="icon-call-3"></span> +1 (550) 250 5260</a>
+                                    <p class="listing-single__contact-phone-text">Click here to reveal phone number.
+                                    </p>
+                                </div>
+                                <div class="listing-single__contact-btn-box">
+                                    <a href="#"> <i class="icon-steering-wheel"></i>Schedule Test Drive </a>
+                                    <a href="#"> <i class="fab fa-whatsapp"></i>Whatsapp</a>
+                                    <a href="#"> <i class="far fa-envelope"></i>Email Address</a>
+                                </div>
+                            </div>
+                            <div class="listing-single__seller-info listing-single__single-box">
+                                <div class="listing-single__seller-info-details">
+                                    <div class="listing-single__seller-info-img">
+                                        <img src="assets/images/listing/listing-single-seller-info-img-1.jpg"
+                                             alt="">
+                                    </div>
+                                    <div class="listing-single__seller-info-content">
+                                        <p>Add by:</p>
+                                        <h5>Kevin Obrain <span class="icon-cheack"></span> </h5>
+                                    </div>
+                                </div>
+                                <div class="listing-single__seller-contact-info">
+                                    <ul class="list-unstyled listing-single__seller-contact-info-list">
+                                        <li>
+                                            <div class="icon">
+                                                <i class="far fa-phone"></i>
+                                            </div>
+                                            <div class="text">
+                                                <p><a href="tel:15502505260">+1 (550) 250 5260</a>
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <i class="far fa-envelope"></i>
+                                            </div>
+                                            <div class="text">
+                                                <p><a
+                                                        href="mailto:kevin.gilbert@gmail.com">kevin.obrain@gmail.com</a>
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                            </div>
+                                            <div class="text">
+                                                <p>Las Vegas, USA</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <i class="fas fa-globe"></i>
+                                            </div>
+                                            <div class="text">
+                                                <p><a href="#">www.kevin.com</a></p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="listing-single__seller-profile">
+                                    <a href="#" class="thm-btn">View Profile <span
+                                            class="fas fa-arrow-right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Listing Single End-->
+
+    <!--Gallery One Start -->
+    <section class="gallery-one">
+        <div class="gallery-one__carousel owl-theme owl-carousel">
+            <!--Gallery One Single Start-->
+            <div class="item">
+                <div class="gallery-one__single">
+                    <div class="gallery-one__img">
+                        <img src="assets/images/gallery/gallery-1-1.jpg" alt="">
+                        <a href="cars.html"><span class="fab fa-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Gallery One Single End-->
+            <!--Gallery One Single Start-->
+            <div class="item">
+                <div class="gallery-one__single">
+                    <div class="gallery-one__img">
+                        <img src="assets/images/gallery/gallery-1-2.jpg" alt="">
+                        <a href="cars.html"><span class="fab fa-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Gallery One Single End-->
+            <!--Gallery One Single Start-->
+            <div class="item">
+                <div class="gallery-one__single">
+                    <div class="gallery-one__img">
+                        <img src="assets/images/gallery/gallery-1-3.jpg" alt="">
+                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Gallery One Single End-->
+            <!--Gallery One Single Start-->
+            <div class="item">
+                <div class="gallery-one__single">
+                    <div class="gallery-one__img">
+                        <img src="assets/images/gallery/gallery-1-4.jpg" alt="">
+                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Gallery One Single End-->
+            <!--Gallery One Single Start-->
+            <div class="item">
+                <div class="gallery-one__single">
+                    <div class="gallery-one__img">
+                        <img src="assets/images/gallery/gallery-1-5.jpg" alt="">
+                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Gallery One Single End-->
+            <!--Gallery One Single Start-->
+            <div class="item">
+                <div class="gallery-one__single">
+                    <div class="gallery-one__img">
+                        <img src="assets/images/gallery/gallery-1-6.jpg" alt="">
+                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
+                    </div>
+                </div>
+            </div>
+            <!--Gallery One Single End-->
+        </div>
+    </section>
+    <!--Gallery One End -->
+
+    <!--Site Footer Start-->
+    <footer class="site-footer">
+        <div class="site-footer__bg" style="background-image: url(assets/images/backgrounds/site-footer-bg.jpg);">
+        </div>
+        <div class="site-footer__top">
+            <div class="container">
+                <div class="site-footer__top-inner">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
+                            <div class="footer-widget__about">
+                                <div class="footer-widget__about-logo">
+                                    <a href="index.html"><img src="assets/images/resources/footer-logo.png"
+                                                              alt=""></a>
+                                </div>
+                                <p class="footer-widget__about-text">Car Is Where Early Adopters And Innovation
+                                    Seekers Find Lively
+                                    Imaginative Tech.</p>
+                                <form class="footer-widget__form">
+                                    <div class="footer-widget__input">
+                                        <input type="email" placeholder="Your Email">
+                                    </div>
+                                    <button type="submit" class="footer-widget__btn"><i
+                                            class="icon-right-arrow"></i></button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
+                            <div class="footer-widget__links">
+                                <h4 class="footer-widget__title">Quick links</h4>
+                                <ul class="footer-widget__links-list list-unstyled">
+                                    <li><a href="about.html">About Us</a></li>
+                                    <li><a href="services.html">Our Services</a></li>
+                                    <li><a href="drivers.html">Our Drivers</a></li>
+                                    <li><a href="blog.html">Our Blog</a></li>
+                                    <li><a href="contact.html">Contact Us</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
+                            <div class="footer-widget__services">
+                                <h4 class="footer-widget__title">Services</h4>
+                                <ul class="footer-widget__links-list list-unstyled">
+                                    <li><a href="car-list-v-1.html">Your Reliable Ride</a></li>
+                                    <li><a href="car-list-v-2.html">Express Shuttle</a></li>
+                                    <li><a href="car-list-v-3.html">Travel in Style</a></li>
+                                    <li><a href="cars.html">Rental List</a></li>
+                                    <li><a href="listing-single.html">Dash Transport</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
+                            <div class="footer-widget__contact">
+                                <h3 class="footer-widget__title">Contact Us</h3>
+                                <ul class="footer-widget__contact-list list-unstyled">
+                                    <li>
+                                        <div class="icon">
+                                            <span class="icon-pin"></span>
+                                        </div>
+                                        <p>4140 Parker Rd. Allentown, New
+                                            <br> Mexico 31134</p>
+                                    </li>
+                                    <li>
+                                        <div class="icon">
+                                            <span class="icon-call"></span>
+                                        </div>
+                                        <p><a href="tel:2195550114">(219) 555-0114</a></p>
+                                    </li>
+                                    <li>
+                                        <div class="icon">
+                                            <span class="icon-envelope"></span>
+                                        </div>
+                                        <p><a href="mailto:gorent@gmail.com">gorent@gmail.com</a></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="site-footer__bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="site-footer__bottom-inner">
+                            <div class="site-footer__copyright">
+                                <p class="site-footer__copyright-text">© 2025 Gorent By <a
+                                        href="https://themeforest.net/user/dreamlayout">Dreamlayout.</a> All
+                                    Rights
+                                    Reserved.</p>
+                            </div>
+                            <div class="site-footer__bottom-menu-box">
+                                <ul class="list-unstyled site-footer__bottom-menu">
+                                    <li><a href="about.html">Terms of Service</a></li>
+                                    <li><a href="about.html">Privacy policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--Site Footer End-->
+
+
+
+
+</div><!-- /.page-wrapper -->
+
+
+<div class="mobile-nav__wrapper">
+    <div class="mobile-nav__overlay mobile-nav__toggler"></div>
+    <!-- /.mobile-nav__overlay -->
+    <div class="mobile-nav__content">
+        <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
+
+        <div class="logo-box">
+            <a href="index.html" aria-label="logo image"><img src="assets/images/resources/logo-2.png" width="140"
+                                                              alt="" /></a>
+        </div>
+        <!-- /.logo-box -->
+        <div class="mobile-nav__container"></div>
+        <!-- /.mobile-nav__container -->
+
+        <ul class="mobile-nav__contact list-unstyled">
+            <li>
+                <i class="fa fa-envelope"></i>
+                <a href="mailto:needhelp@packageName__.com">needhelp@gorent.com</a>
+            </li>
+            <li>
+                <i class="fas fa-phone"></i>
+                <a href="tel:666-888-0000">666 888 0000</a>
+            </li>
+        </ul><!-- /.mobile-nav__contact -->
+        <div class="mobile-nav__top">
+            <div class="mobile-nav__social">
+                <a href="#" class="fab fa-twitter"></a>
+                <a href="#" class="fab fa-facebook-square"></a>
+                <a href="#" class="fab fa-pinterest-p"></a>
+                <a href="#" class="fab fa-instagram"></a>
+            </div><!-- /.mobile-nav__social -->
+        </div><!-- /.mobile-nav__top -->
+
+
+
+    </div>
+    <!-- /.mobile-nav__content -->
+</div>
+<!-- /.mobile-nav__wrapper -->
+
+<div class="search-popup">
+    <div class="search-popup__overlay search-toggler"></div>
+    <!-- /.search-popup__overlay -->
+    <div class="search-popup__content">
+        <form action="#">
+            <label for="search" class="sr-only">search here</label><!-- /.sr-only -->
+            <input type="text" id="search" placeholder="Search Here..." />
+            <button type="submit" aria-label="search submit" class="thm-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+    </div>
+    <!-- /.search-popup__content -->
+</div>
+<!-- /.search-popup -->
+
+<a href="#" data-target="html" class="scroll-to-target scroll-to-top">
+    <span class="scroll-to-top__wrapper"><span class="scroll-to-top__inner"></span></span>
+    <span class="scroll-to-top__text"> Go Back Top</span>
+</a>
+
+
+<script src="assets/js/jquery-3.6.0.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/jarallax.min.js"></script>
+<script src="assets/js/jquery.ajaxchimp.min.js"></script>
+<script src="assets/js/jquery.appear.min.js"></script>
+<script src="assets/js/swiper.min.js"></script>
+<script src="assets/js/jquery.circle-progress.min.js"></script>
+<script src="assets/js/knob.js"></script>
+<script src="assets/js/jquery.magnific-popup.min.js"></script>
+<script src="assets/js/jquery.validate.min.js"></script>
+<script src="assets/js/wNumb.min.js"></script>
+<script src="assets/js/wow.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/jquery-ui.js"></script>
+<script src="assets/js/jquery.nice-select.min.js"></script>
+<script src="assets/js/jquery-sidebar-content.js"></script>
+<script src="assets/js/gsap/gsap.js"></script>
+<script src="assets/js/gsap/ScrollTrigger.js"></script>
+<script src="assets/js/gsap/SplitText.js"></script>
+<script src="assets/js/marquee.min.js"></script>
+<script src="assets/js/odometer.min.js"></script>
+<script src="assets/js/timePicker.js"></script>
+<script src="assets/js/typed-2.0.11.js"></script>
+<script src="assets/js/aos.js"></script>
+
+
+
+
+<!-- template js -->
+<script src="assets/js/script.js"></script>
+</body>
+
+</html>

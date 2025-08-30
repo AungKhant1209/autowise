@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Service
 public class CarService {
+
     @Autowired
     private CarRepository carRepository;
 
@@ -27,7 +28,6 @@ public class CarService {
         return carRepository.findById(id);
     }
 
-    // Get all cars
     public List<Car> getAllCars() {
         return carRepository.findAll();
     }

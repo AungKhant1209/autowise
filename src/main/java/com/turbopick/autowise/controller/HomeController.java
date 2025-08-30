@@ -31,4 +31,5 @@ public class HomeController {
         model.addAttribute("name", "Aung Khant");
         return "sign-up";
     }
+
 }

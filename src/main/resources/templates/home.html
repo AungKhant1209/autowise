@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<div th:replace="layout/header :: header"></div>
+<div th:replace="~{layout/header :: header}"></div>
 
 <body class="custom-cursor">
     <div class="custom-cursor__cursor"></div>
@@ -17,7 +17,7 @@
 
 
     <div class="page-wrapper">
-        <div th:replace="layout/navbar :: navbar"></div>
+        <div th:replace="~{layout/navbar :: navbar}"></div>
         <div class="stricky-header stricked-menu main-menu main-menu-three">
             <div class="sticky-header__content"></div>
         </div>
@@ -339,7 +339,186 @@
         <!-- Team Three End -->
 
         <!--Services Three Start -->
-
+        <section class="services-three" id="services">
+            <div class="services-three__shape-1"></div>
+            <div class="services-three__shape-2"></div>
+            <div class="container">
+                <div class="section-title text-center sec-title-animation animation-style1">
+                    <div class="section-title__tagline-box justify-content-center">
+                        <div class="section-title__tagline-shape">
+                            <img src="assets/images/shapes/section-title-tagline-shape-1.png" alt="">
+                        </div>
+                        <span class="section-title__tagline">What We’re Offering</span>
+                    </div>
+                    <h2 class="section-title__title title-animation">Services We’re Provding <br> to Customers</h2>
+                </div>
+                <div class="row">
+                    <!--Services Three Single Start-->
+                    <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay="100ms"
+                        data-wow-duration="1500ms">
+                        <div class="services-three__single">
+                            <div class="services-three__icon">
+                                <span class="icon-car"></span>
+                            </div>
+                            <div class="services-three__content">
+                                <h3 class="services-three__title"><a href="services.html">Corporate car
+                                        rental</a>
+                                </h3>
+                                <p class="services-three__text">Open multipy a green form lesser their from in made herb
+                                    multiply</p>
+                            </div>
+                            <div class="services-three__count"></div>
+                        </div>
+                    </div>
+                    <!--Services Three Single End-->
+                    <!--Services Three Single Start-->
+                    <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay="200ms"
+                        data-wow-duration="1500ms">
+                        <div class="services-three__single">
+                            <div class="services-three__icon">
+                                <span class="icon-taxi"></span>
+                            </div>
+                            <div class="services-three__content">
+                                <h3 class="services-three__title"><a href="services.html">Car rental with
+                                        driver</a>
+                                </h3>
+                                <p class="services-three__text">Open multipy a green form lesser their from in made herb
+                                    multiply</p>
+                            </div>
+                            <div class="services-three__count"></div>
+                        </div>
+                    </div>
+                    <!--Services Three Single End-->
+                    <!--Services Three Single Start-->
+                    <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInRight" data-wow-delay="300ms"
+                        data-wow-duration="1500ms">
+                        <div class="services-three__single">
+                            <div class="services-three__icon">
+                                <span class="icon-sport-car-1"></span>
+                            </div>
+                            <div class="services-three__content">
+                                <h3 class="services-three__title"><a href="services.html">Airport transfer</a>
+                                </h3>
+                                <p class="services-three__text">Open multipy a green form lesser their from in made herb
+                                    multiply</p>
+                            </div>
+                            <div class="services-three__count"></div>
+                        </div>
+                    </div>
+                    <!--Services Three Single End-->
+                    <!--Services Three Single Start-->
+                    <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInRight" data-wow-delay="400ms"
+                        data-wow-duration="1500ms">
+                        <div class="services-three__single">
+                            <div class="services-three__icon">
+                                <span class="icon-car-insurance"></span>
+                            </div>
+                            <div class="services-three__content">
+                                <h3 class="services-three__title"><a href="services.html">Fleet leasing</a>
+                                </h3>
+                                <p class="services-three__text">Open multipy a green form lesser their from in made herb
+                                    multiply</p>
+                            </div>
+                            <div class="services-three__count"></div>
+                        </div>
+                    </div>
+                    <!--Services Three Single End-->
+                </div>
+            </div>
+        </section>
+        <section class="listing-three" id="cars">
+            <div class="container">
+                <div class="section-title text-left sec-title-animation animation-style1">
+                    <div class="section-title__tagline-box">
+                        <div class="section-title__tagline-shape">
+                            <img src="assets/images/shapes/section-title-tagline-shape-1.png" alt="">
+                        </div>
+                        <span class="section-title__tagline">Checkout our new cars</span>
+                    </div>
+                    <h2 class="section-title__title title-animation">This is Our Popular Cars</h2>
+                </div>                 <!-- Listing One Single Start -->
+                    <div class="item">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-6" th:each="car : ${cars}">
+                              <div class="listing-three__single">
+                                <div class="listing-three__img">
+                                <img src="assets/images/listing/listing-3-1.jpg" alt="">
+                                <div class="listing-three__brand-name">
+                                    <p th:text="${car.getName()}">Acura</p>
+                                    <p>Acura</p>
+                                </div>
+                              </div>
+                              <div class="listing-three__content">
+                                <h3 class="listing-three__title"><a href="listing-single.html">Acura
+                                        Sport Version</a></h3>
+                                <div class="listing-three__meta-box-info">
+                                    <ul class="list-unstyled listing-three__meta">
+                                        <li>
+                                            <div class="icon">
+                                                <span class="icon-manual"></span>
+                                            </div>
+                                            <div class="text">
+                                                <p th:text="${car.getTransmission()}">Acura</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <span class="icon-mileage"></span>
+                                            </div>
+                                            <div class="text">
+                                                <p th:text="${car.getDriveType()}">Acura</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <span class="icon-fuel-type"></span>
+                                            </div>
+                                            <div class="text">
+                                                <p th:text="${car.getFuelType()}">Acura</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-unstyled listing-three__meta listing-three__meta--two">
+                                        <li>
+                                            <div class="icon">
+                                                <span class="icon-test-drive"></span>
+                                            </div>
+                                            <div class="text">
+                                                <p>Basic</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <span class="icon-avatar"></span>
+                                            </div>
+                                            <div class="text">
+                                                <p>Age 25</p>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="icon">
+                                                <span class="icon-in-person"></span>
+                                            </div>
+                                            <div class="text">
+                                                <p>5 Persons</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="listing-three__car-rent-and-btn-box">
+                                    <div class="listing-three__btn-box">
+                                        <a th:href="@{/car-detail/{id}(id=${car.id})}" class="thm-btn"><span
+                                                class="icon-right-arrow-1"></span></a>
+                                                   </div>
+                                             </div>
+                                           </div>
+                                      </div>
+                                  </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- Listing One Single End -->
+        </section>
         <!-- Listing Three End -->
 
         <!-- Video One Start -->
