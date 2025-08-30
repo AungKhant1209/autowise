@@ -1,6 +1,6 @@
 package com.turbopick.autowise.controller;
-import com.turbopick.autowise.model.Car;
-import com.turbopick.autowise.service.CarService;
+import com.turbopick.autowise.model.CarType;
+import com.turbopick.autowise.service.CarTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
@@ -11,14 +11,15 @@ import java.util.List;
 @Controller
 public class HomeController {
     @Autowired
-    private CarService carService;
+    private CarTypeService carTypeService;
 
     @GetMapping("/home")
-    public String homePage(Model model) {
-        // Fetch the list of cars and add them to the model
-        List<Car> cars = carService.getAllCars();
-        model.addAttribute("cars", cars);
-        return "home"; // This will return the 'home.html' template
+    public String hello(Model model) {
+        model.addAttribute("name", "Aung Khant");
+        List<CarType> carTypes=carTypeService.findAllCarTypes();
+        model.addAttribute("carTypes",carTypes);
+        System.out.println("CarTypeController.carList"+ carTypes.size());
+        return "home";
     }
     @GetMapping("/login")
     public String login(Model model) {

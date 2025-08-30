@@ -5,26 +5,53 @@
 </head>
 <body>
 <h1>Car List</h1>
+<button onclick="location.href='/carCreate'">Create Car</button>
 
 <table border="1">
     <thead>
     <tr>
         <th>ID</th>
         <th>Name</th>
+        <th>YouTubeLink</th>
+        <th>Price</th>
+        <th>Fuel Type</th>
+        <th>Production Year</th>
+        <th>Engine Size</th>
+        <th>Seat</th>
+        <th>Door</th>
+        <th>Warranty</th>
+        <th>Transmission</th>
+        <th>Drive Type</th>
         <th>Color</th>
-        <th>Model</th>
-        <th>License</th>
+        <th>Description</th>
     </tr>
     </thead>
+
+
     <tbody>
     <tr th:each="car : ${cars}">
         <td th:text="${car.id}"></td>
         <td th:text="${car.name}"></td>
+        <td th:text="${car.youtubeLink}"></td>
+        <td th:text="${car.price}"></td>
+        <td th:text="${car.fuelType}"></td>
+        <td th:text="${car.productionYear}"></td>
+        <td th:text="${car.engineSize}"></td>
+        <td th:text="${car.seat}"></td>
+        <td th:text="${car.door}"></td>
+        <td th:text="${car.warranty}"></td>
+        <td th:text="${car.transmission}"></td>
+        <td th:text="${car.driveType}"></td>
         <td th:text="${car.color}"></td>
-        <td th:text="${car.model}"></td>
-        <td th:text="${car.license}"></td>
-    </tr>
+        <td th:text="${car.description}"></td>
+        <td th:text="${car.carType != null ? car.carType.typeName : '—'}"></td>
+        <td>
+            <a th:href="@{/editCar/{id}(id=${car.id})}">Edit</a>
 
+            <a th:href="@{/carDelete/{id}(id=${car.id})}">Delete</a>
+
+        </td>
+    </tr>
     </tbody>
 </table>
 </body>

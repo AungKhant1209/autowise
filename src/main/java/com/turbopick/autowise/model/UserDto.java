@@ -1,29 +1,21 @@
 //package com.turbopick.autowise.model;
 //
-//import jakarta.persistence.*;
-//import lombok.Data;
+//import jakarta.validation.constraints.Email;
+//import jakarta.validation.constraints.*;
 //
-//@Data
-//@Entity
-//@Table(name = "users")
-//public class User {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//
+//public class UserDto {
+//    @NotEmpty(message = "Name cannot be empty")
 //    private String name;
+//
+//    @NotEmpty(message = "Email cannot be empty")
+//    @Email
 //    private String email;
+//
+//    @NotEmpty(message = "Phone number cannot be empty")
 //    private String phone;
+//
+//    @NotEmpty(message = "Password cannot be empty")
 //    private String password;
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 //
 //    public String getName() {
 //        return name;

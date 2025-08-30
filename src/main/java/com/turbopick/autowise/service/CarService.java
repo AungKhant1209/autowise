@@ -18,10 +18,12 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    // Delete a car by ID
     public void deleteCarById(Long id) {
         carRepository.deleteById(id);
     }
 
+    // Find a car by ID
     public Optional<Car> findCarById(Long id) {
         return carRepository.findById(id);
     }

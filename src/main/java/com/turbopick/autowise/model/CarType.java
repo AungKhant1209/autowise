@@ -1,51 +1,28 @@
 package com.turbopick.autowise.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.util.List;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
 public class CarType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long typeId;
 
     private String typeName;
-    private String imageLink;
     private String description;
+    @OneToMany(mappedBy = "carType", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Car> cars;
 
-    public Long getTypeId() {
-        return typeId;
-    }
 
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
-    }
 
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public String getImageLink() {
-        return imageLink;
-    }
-
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }

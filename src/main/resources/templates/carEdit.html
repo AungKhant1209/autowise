@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Car</title>
+</head>
+<body>
+<h1>Edit Car</h1>
+<form th:action="@{/editCar/{id}(id=${carId})}" th:object="${carDto}" method="post">
+    <input type="hidden" th:if="${_csrf != null}"
+           th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+    <div>
+        <label for="name">Name:</label>
+        <input id="name" type="text" th:field="*{name}" />
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+    </div>
+
+    <div>
+        <label for="youtubeLink">YouTube Link:</label>
+        <input id="youtubeLink" type="text" th:field="*{youtubeLink}" />
+        <span th:if="${#fields.hasErrors('youtubeLink')}" th:errors="*{youtubeLink}"></span>
+    </div>
+
+    <div>
+        <label for="price">Price:</label>
+        <input id="price" type="number" step="0.01" th:field="*{price}" />
+        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
+    </div>
+
+    <div>
+        <label for="fuelType">Fuel Type:</label>
+        <input id="fuelType" type="text" th:field="*{fuelType}" />
+        <span th:if="${#fields.hasErrors('fuelType')}" th:errors="*{fuelType}"></span>
+    </div>
+
+    <div>
+        <label>Production Year:</label>
+        <input type="date"
+               th:field="*{productionYear}"
+               placeholder="Select production year"
+               th:value="${#temporals.format(productionYear, 'yyyy/MM/dd')}" />
+        <span th:if="${#fields.hasErrors('productionYear')}"
+              th:errors="*{productionYear}"></span>
+    </div>
+
+    <div>
+        <label for="engineSize">Engine Size:</label>
+        <input id="engineSize" type="text" th:field="*{engineSize}" />
+        <span th:if="${#fields.hasErrors('engineSize')}" th:errors="*{engineSize}"></span>
+    </div>
+
+    <div>
+        <label for="seat">Seat:</label>
+        <input id="seat" type="number" th:field="*{seat}" />
+        <span th:if="${#fields.hasErrors('seat')}" th:errors="*{seat}"></span>
+    </div>
+
+    <div>
+        <label for="door">Door:</label>
+        <input id="door" type="number" th:field="*{door}" />
+        <span th:if="${#fields.hasErrors('door')}" th:errors="*{door}"></span>
+    </div>
+
+    <div>
+        <label for="warranty">Warranty:</label>
+        <input id="warranty" type="text" th:field="*{warranty}" />
+        <span th:if="${#fields.hasErrors('warranty')}" th:errors="*{warranty}"></span>
+    </div>
+
+    <div>
+        <label for="transmission">Transmission:</label>
+        <input id="transmission" type="text" th:field="*{transmission}" />
+        <span th:if="${#fields.hasErrors('transmission')}" th:errors="*{transmission}"></span>
+    </div>
+
+    <div>
+        <label for="driveType">Drive Type:</label>
+        <input id="driveType" type="text" th:field="*{driveType}" />
+        <span th:if="${#fields.hasErrors('driveType')}" th:errors="*{driveType}"></span>
+    </div>
+
+    <div>
+        <label for="color">Color:</label>
+        <input id="color" type="text" th:field="*{color}" />
+        <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></span>
+    </div>
+
+    <div>
+        <label for="description">Description:</label>
+        <textarea id="description" th:field="*{description}"></textarea>
+        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+    </div>
+    <div>
+        <label>Car Type:</label>
+        <select th:field="*{carTypeId}">
+            <option value="" disabled selected>-- Select car type --</option>
+            <option th:each="t : ${carTypes}" th:value="${t.typeId}" th:text="${t.typeName}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></span>
+    </div>
+    <div>
+        <label>Features:</label>
+        <div th:each="f : ${allFeatures}">
+            <label>
+                <input type="checkbox" th:field="*{featureIds}" th:value="${f.id}" />
+                <span th:text="${f.name}">Feature</span>
+            </label>
+        </div>
+
+    <div>
+        <button type="submit">Update</button>
+        <a th:href="@{/cars}">Cancel</a>
+    </div>
+</form>
+
+</body>
+</html>
