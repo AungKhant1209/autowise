@@ -1,9 +1,7 @@
-package com.turbopick.autowise.model;
+package com.turbopick.autowise.dto;
 
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
-
 import lombok.Data;
 
 

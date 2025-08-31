@@ -1,7 +1,7 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.model.CarType;
-import com.turbopick.autowise.model.CarTypeDto;
+import com.turbopick.autowise.dto.CarTypeDto;
 import com.turbopick.autowise.repository.CarTypeRepository;
 import com.turbopick.autowise.service.CarTypeService;
 import jakarta.validation.Valid;

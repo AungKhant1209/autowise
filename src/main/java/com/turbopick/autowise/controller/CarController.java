@@ -1,7 +1,7 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.model.Car;
-import com.turbopick.autowise.model.CarDto;
+import com.turbopick.autowise.dto.CarDto;
 import com.turbopick.autowise.model.CarType;
 import com.turbopick.autowise.model.Feature;
 import com.turbopick.autowise.repository.CarRepository;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
