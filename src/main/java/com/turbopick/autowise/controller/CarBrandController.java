@@ -22,13 +22,13 @@ public class CarBrandController {
     @GetMapping("/carBrands")
     public String list(Model model) {
         model.addAttribute("carBrands", carBrandRepository.findAll());
-        return "carBrands";
+        return "admin/carBrands";
     }
 
     @GetMapping("/carBrandsCreate")
     public String createForm(Model model) {
         model.addAttribute("carBrand", new CarBrand());
-        return "carBrandCreate";
+        return "admin/carBrandCreate";
     }
 
     @PostMapping("/carBrandsCreate")
@@ -42,10 +42,10 @@ public class CarBrandController {
             result.addError(new FieldError("carBrand", "brandName", "Brand name already exists"));
         }
         if (result.hasErrors()) {
-            return "carBrandCreate";
+            return "admin/carBrandCreate";
         }
         carBrandRepository.save(carBrand);
-        return "redirect:/carBrands";
+        return "redirect:/admin/carBrands";
     }
 
     @GetMapping("/carBrandsEdit/{id}")
@@ -53,7 +53,7 @@ public class CarBrandController {
         CarBrand b = carBrandRepository.findById(id).orElse(null);
         if (b == null) return "redirect:/carBrands";
         model.addAttribute("carBrand", b);
-        return "carBrandEdit";
+        return "admin/carBrandEdit";
     }
 
     @PostMapping("/carBrandsEdit/{id}")
@@ -73,12 +73,12 @@ public class CarBrandController {
         }
 
         if (result.hasErrors()) {
-            return "carBrandEdit";
+            return "admin/carBrandEdit";
         }
 
         carBrand.setBrandId(id);
         carBrandRepository.save(carBrand);
-        return "redirect:/carBrands";
+        return "redirect:/admin/carBrands";
     }
 
     @GetMapping("/carBrandsDelete/{id}")
@@ -86,6 +86,6 @@ public class CarBrandController {
         if (carBrandRepository.existsById(id)) {
             carBrandRepository.deleteById(id);
         }
-        return "redirect:/carBrands";
+        return "redirect:/admin/carBrands";
     }
 }

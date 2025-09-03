@@ -19,25 +19,25 @@ public class UserController {
     @GetMapping
     public String list(Model model) {
         model.addAttribute("users", service.findAll());
-        return "userList";
+        return "admin/userList";
     }
 
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("user", new User());
-        return "userCreate";
+        return "admin/userCreate";
     }
 
     @PostMapping("/create")
     public String createSubmit(@ModelAttribute User user) {
         service.save(user);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         model.addAttribute("user", service.findById(id));
-        return "userEdit";
+        return "admin/userEdit";
     }
 
     @PostMapping("/edit/{id}")
@@ -47,12 +47,12 @@ public class UserController {
         u.setEmail(form.getEmail());
         u.setPassword(form.getPassword());
         service.save(u);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         service.delete(id);
-        return "redirect:/users";
+        return "redirect:/admin/users";
     }
 }

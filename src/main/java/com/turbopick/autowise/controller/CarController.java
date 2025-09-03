@@ -53,7 +53,7 @@ public class CarController {
     public String getCars(Model model) {
         List<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
-        return "cars";
+        return "admin/cars";
     }
 
     // Create form
@@ -61,7 +61,7 @@ public class CarController {
     public String showCarForm(Model model) {
         model.addAttribute("carDto", new CarDto());
         model.addAttribute("allFeatures", featureRepository.findAll());
-        return "carCreate";
+        return "admin/carCreate";
     }
 
     // Create submit
@@ -94,7 +94,7 @@ public class CarController {
 
         if (result.hasErrors()) {
             model.addAttribute("allFeatures", featureRepository.findAll());
-            return "carCreate";
+            return "admin/carCreate";
         }
 
         // Map DTO -> Entity
@@ -123,7 +123,7 @@ public class CarController {
         }
 
         carRepository.save(car);
-        return "redirect:/cars";
+        return "redirect:/admin/cars";
     }
 
     // Detail page
@@ -169,7 +169,7 @@ public class CarController {
         model.addAttribute("carId", id);
         model.addAttribute("carDto", carDto);
         model.addAttribute("allFeatures", featureRepository.findAll());
-        return "carEdit";
+        return "/admin/carEdit";
     }
 
     // Edit submit
@@ -179,7 +179,7 @@ public class CarController {
                             BindingResult result,
                             Model model) {
         Car existing = carRepository.findCarById(id);
-        if (existing == null) return "redirect:/cars";
+        if (existing == null) return "redirect:/admin/cars";
 
         // Parse & validate carTypeId
         CarType type = null;
@@ -204,7 +204,7 @@ public class CarController {
         if (result.hasErrors()) {
             model.addAttribute("carId", id);
             model.addAttribute("allFeatures", featureRepository.findAll());
-            return "carEdit";
+            return "/admin/carEdit";
         }
 
         // Map scalars
@@ -234,7 +234,7 @@ public class CarController {
         }
 
         carRepository.save(existing);
-        return "redirect:/cars";
+        return "redirect:/admin/cars";
     }
 
     // Delete
@@ -243,6 +243,6 @@ public class CarController {
         if (carRepository.existsById(id)) {
             carRepository.deleteById(id);
         }
-        return "redirect:/cars";
+        return "redirect:/admin/cars";
     }
 }

@@ -27,14 +27,14 @@ public class CarTypeController {
         List<CarType>carTypes=carTypeService.findAllCarTypes();
         model.addAttribute("carTypes",carTypes);
         System.out.println("CarTypeController.carList"+ carTypes.size());
-        return "carTypes";
+        return "admin/carTypes";
     }
 
     @GetMapping("/carTypesCreate")
     public String create(Model model) {
         CarTypeDto carTypeDto=new CarTypeDto();
         model.addAttribute("carTypeDto",carTypeDto);
-        return "carTypesCreate";
+        return "admin/carTypesCreate";
     }
     @PostMapping("/carTypesCreate")
     public String createCarType(@Valid @ModelAttribute("carTypeDto") CarTypeDto carTypeDto,
@@ -47,7 +47,7 @@ public class CarTypeController {
         }
 
         if (result.hasErrors()) {
-            return "carTypesCreate";
+            return "admin/carTypesCreate";
         }
 
         CarType carType = new CarType();
@@ -55,12 +55,12 @@ public class CarTypeController {
         carType.setDescription(carTypeDto.getDescription());
         carTypeRepository.save(carType);
 
-        return "redirect:/carTypes";
+        return "redirect:/admin/carTypes";
     }
     @GetMapping("/carTypesEdit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         CarType carType = carTypeService.findById(id);
-        if (carType == null) return "redirect:/carTypes";
+        if (carType == null) return "redirect:/admin/carTypes";
 
         CarTypeDto dto = new CarTypeDto();
         dto.setTypeName(carType.getTypeName());
@@ -68,7 +68,7 @@ public class CarTypeController {
 
         model.addAttribute("carType", carType);   // used by th:action for {id}
         model.addAttribute("carTypeDto", dto);    // form-backing bean
-        return "carTypesEdit";
+        return "admin/carTypesEdit";
     }
 
     @PostMapping("/carTypesEdit/{id}")
@@ -77,17 +77,17 @@ public class CarTypeController {
                               BindingResult result,
                               Model model) {
         CarType existing = carTypeService.findById(id);
-        if (existing == null) return "redirect:/carTypes";
+        if (existing == null) return "redirect:/admin/carTypes";
 
         if (result.hasErrors()) {
             model.addAttribute("carType", existing); // keep id for th:action
-            return "carTypesEdit";
+            return "admin/carTypesEdit";
         }
 
         existing.setTypeName(carTypeDto.getTypeName());
         existing.setDescription(carTypeDto.getDescription());
         carTypeRepository.save(existing);
-        return "redirect:/carTypes";
+        return "redirect:/admin/carTypes";
     }
     @GetMapping("/carTypeDelete/{id}")
     public String deleteCarType(@PathVariable Long id,
@@ -96,14 +96,14 @@ public class CarTypeController {
             CarType ct = carTypeService.findById(id);
             if (ct == null) {
                 ra.addFlashAttribute("alert", "Car type not found.");
-                return "redirect:/carTypes";
+                return "redirect:/admin/carTypes";
             }
             carTypeRepository.deleteById(id);
             ra.addFlashAttribute("notice", "Car type deleted.");
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             ra.addFlashAttribute("alert", "Cannot delete: this car type is in use.");
         }
-        return "redirect:/carTypes";
+        return "redirect:/admin/carTypes";
     }
 
 
