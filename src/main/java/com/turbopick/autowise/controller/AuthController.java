@@ -32,6 +32,15 @@ public class AuthController {
         model.addAttribute("registerDto", new RegisterDto());
         return "user-register-v1"; // templates/register.html
     }
+    @GetMapping("/login-1")
+    public String showLoginPage() {
+        return "login"; // This matches login.html
+    }
+
+    @GetMapping("/sign-up")
+    public String showSignUpPage() {
+        return "sign-up"; // This matches sign-up.html
+    }
 
     @PostMapping("/register")
     public String doRegister(@Valid @ModelAttribute("registerDto") RegisterDto dto,
