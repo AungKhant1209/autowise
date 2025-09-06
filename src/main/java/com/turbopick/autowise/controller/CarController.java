@@ -48,13 +48,13 @@ public class CarController {
         return "car-list";
     }
 
-    // Main list page (cars.html)
-    @GetMapping("/cars")
+    @GetMapping("/admin/cars")
     public String getCars(Model model) {
         List<Car> cars = carService.getAllCars();
         model.addAttribute("cars", cars);
         return "admin/cars";
     }
+
 
     // Create form
     @GetMapping("/carCreate")

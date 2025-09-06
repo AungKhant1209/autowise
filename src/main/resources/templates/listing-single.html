@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{layout/headerLog :: headerLog}"></div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/headerLog :: headerLog}"></head>
 <body class="custom-cursor">
+
 <div class="custom-cursor__cursor"></div>
 <div class="custom-cursor__cursor-two"></div>
 
@@ -25,9 +25,8 @@
                 <h3>Car List V-1</h3>
                 <div class="thm-breadcrumb__inner">
                     <ul class="thm-breadcrumb list-unstyled">
-                        <li><a href="index.html">Home</a></li>
                         <li><span class="icon-arrow-left"></span></li>
-                        <li>Car List V-1</li>
+                        <li>Car Details</li>
                     </ul>
                 </div>
             </div>
@@ -46,40 +45,33 @@
                         <ul class="list-unstyled listing-single__car-details">
                             <li>
                                 <span class="icon-date"></span>
-                                <p>2025</p>
-                            </li>
-                            <li>
-                                <span class="icon-mileage"></span>
-                                <p>80 Miles</p>
+                                <p th:text="${#temporals.format(car.productionYear, 'yyyy')}">2025</p>
                             </li>
                             <li>
                                 <span class="icon-Carrier"></span>
-                                <p>Automatic</p>
+                                <p th:text="${car.transmission}">Automatic</p>
                             </li>
                             <li>
                                 <span class="icon-fuel-type"></span>
-                                <p>Petrol</p>
+                                <p th:text="${car.fuelType}">Petrol</p>
                             </li>
                         </ul>
                         <ul class="list-unstyled listing-single__car-details">
                             <li>
                                 <span class="icon-seat"></span>
-                                <p>7 seats</p>
+                                <p th:text="${car.seat + ' seats'}">7 seats</p>
                             </li>
                             <li>
                                 <span class="icon-door"></span>
-                                <p>4 Doors</p>
+                                <p th:text="${car.door + ' Doors'}">4 Doors</p>
                             </li>
                             <li>
-                                <span class="icon-fuel-type"></span>
-                                <p>2.5L</p>
-                            </li>
-                            <li>
-                                <span class="icon-car-insurance"></span>
-                                <p>3 Large bags</p>
+                                <span class="icon-engine"></span>
+                                <p th:text="${car.engineSize}">2.5L</p>
                             </li>
                         </ul>
                     </div>
+
                 </div>
                 <div class="listing-single__top-right">
                     <div class="listing-single__tag">
@@ -152,8 +144,7 @@
                                                                 class="fas fa-arrow-right"></span></a>
                                                     </div>
                                                     <div class="listing-single__video-link">
-                                                        <a href="https://www.youtube.com/watch?v=Get7rqXYrbQ"
-                                                           class="video-popup">
+                                                        <a th:href="${car.youtubeLink}" class="video-popup">
                                                             <div class="listing-single__video-icon">
                                                                 <span class="icon-play-2"></span>
                                                                 <i class="ripple"></i>
@@ -351,16 +342,7 @@
                                                 <p>Body</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>SUV</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-mileage"></i>
-                                                <p>Mileage</p>
-                                            </div>
-                                            <div class="listing-single__car-overview-point-right">
-                                                <p>50</p>
+                                                <p th:text="${car.carType != null ? car.carType.typeName : '—'}">SUV</p>
                                             </div>
                                         </li>
                                         <li>
@@ -369,7 +351,7 @@
                                                 <p>Fuel Type</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>Petrol</p>
+                                                <p th:text="${car.fuelType}">Petrol</p>
                                             </div>
                                         </li>
                                         <li>
@@ -378,7 +360,7 @@
                                                 <p>Year</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>2024</p>
+                                                <p th:text="${car.productionYear != null ? car.productionYear.year : '—'}">2024</p>
                                             </div>
                                         </li>
                                         <li>
@@ -387,7 +369,7 @@
                                                 <p>Transmission</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>Automatic</p>
+                                                <p th:text="${car.transmission}">Automatic</p>
                                             </div>
                                         </li>
                                         <li>
@@ -396,27 +378,18 @@
                                                 <p>Drive Type</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>Drive (AWD/4WD)</p>
+                                                <p th:text="${car.driveType}">Drive (AWD/4WD)</p>
                                             </div>
                                         </li>
                                     </ul>
                                     <ul class="list-unstyled listing-single__car-overview-point">
                                         <li>
                                             <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-avatar"></i>
-                                                <p>Condition</p>
-                                            </div>
-                                            <div class="listing-single__car-overview-point-right">
-                                                <p>New</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
                                                 <i class="icon-engine"></i>
                                                 <p>Engine Size</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>4.5</p>
+                                                <p th:text="${car.engineSize}">4.5</p>
                                             </div>
                                         </li>
                                         <li>
@@ -425,16 +398,7 @@
                                                 <p>Door</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>4 Doors</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-range"></i>
-                                                <p>Range</p>
-                                            </div>
-                                            <div class="listing-single__car-overview-point-right">
-                                                <p>$1700</p>
+                                                <p th:text="${car.door + ' Doors'}">4 Doors</p>
                                             </div>
                                         </li>
                                         <li>
@@ -443,7 +407,7 @@
                                                 <p>Color</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>Blue, Gold, Red</p>
+                                                <p th:text="${car.color}">Blue, Gold, Red</p>
                                             </div>
                                         </li>
                                         <li>
@@ -452,7 +416,7 @@
                                                 <p>Seats</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>05</p>
+                                                <p th:text="${car.seat}">05</p>
                                             </div>
                                         </li>
                                     </ul>
@@ -460,15 +424,9 @@
                             </div>
                             <div class="listing-single__description">
                                 <h3 class="listing-single__description-title">Description</h3>
-                                <p class="listing-single__description-text-1">Lorem ipsum is simply ipun txns mane
-                                    so dummy text of free available in market the printing and typesetting industry
-                                    has been the industry's standard dummy text ever. Lorem ipsum is simply ipun
-                                    txns mane. Lorem ipsum is simply ipun txns mane
-                                    so dummy text of free available in market the printing and typesetting industry
-                                    has been the industry's standard dummy text ever.</p>
-                                <p class="listing-single__description-text-2">Lorem ipsum is simply ipun txns mane
-                                    so dummy text of free available in market the printing and typesetting industry
-                                    has been the industry's standard dummy text ever.</p>
+                                <p class="listing-single__description-text-1" th:text="${car.description}">
+                                    Lorem ipsum placeholder…
+                                </p>
                             </div>
                             <div class="listing-single__feature">
                                 <h3 class="listing-single__feature-title">Features</h3>
@@ -683,112 +641,6 @@
                     </div>
                     <div class="col-xl-4 col-lg-5">
                         <div class="listing-single__sidebar">
-                            <div class="listing-single__rent-car-daily-price listing-single__single-box">
-                                <p>Daily rate</p>
-                                <h3>$150</h3>
-                            </div>
-                            <div class="listing-single__rent-car listing-single__single-box">
-                                <h3 class="listing-single__rent-car-title">Rent This Car</h3>
-                                <div class="listing-single__rent-car-content">
-                                    <div class="listing-single__rent-car-content-form">
-                                        <div class="listing-single__rent-car-date-box">
-                                            <p class="listing-single__rent-car-date-title">Pick-Up
-                                            </p>
-                                            <div class="listing-single__rent-car-date-time-box">
-                                                <input type="text" placeholder="mm/dd/yyy" name="date"
-                                                       id="datepicker">
-                                                <input type="text" name="time" placeholder="Time"
-                                                       class="listing-single__rent-car-time-box">
-                                            </div>
-                                        </div>
-                                        <div class="listing-single__rent-car-date-box">
-                                            <p class="listing-single__rent-car-date-title">Drop-Off
-                                            </p>
-                                            <div class="listing-single__rent-car-date-time-box">
-                                                <input type="text" placeholder="mm/dd/yyy" name="date"
-                                                       id="datepicker-2">
-                                                <input type="text" name="time" placeholder="Time"
-                                                       class="listing-single__rent-car-time-box">
-                                            </div>
-                                        </div>
-                                        <div class="listing-single__rent-car-extra">
-                                            <h3 class="listing-single__rent-car-extra-title">Add Extra:</h3>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra1" id="f_extra1">
-                                                        <label for="f_extra1"><span></span>Bluetooth</label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$20</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra2" id="f_extra2"
-                                                               checked="">
-                                                        <label for="f_extra2"><span></span>GPS System </label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$20</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra3" id="f_extra3">
-                                                        <label for="f_extra3"><span></span>Additional Driver
-                                                        </label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$100</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra4" id="f_extra4">
-                                                        <label for="f_extra4"><span></span>Central Lock</label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$150</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="listing-single__rent-car-price-box">
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <div class="title">
-                                                        <p>Subtotal</p>
-                                                    </div>
-                                                    <div class="price">
-                                                        <p>$150.00</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">
-                                                        <p>Sale discount</p>
-                                                    </div>
-                                                    <div class="price">
-                                                        <p>$140.00</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">
-                                                        <p>Total Payable</p>
-                                                    </div>
-                                                    <div class="price">
-                                                        <p>$160.00</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="listing-single__btn-box-2">
-                                    <a href="listing-single.html" class="thm-btn">Rent Now<span
-                                            class="fas fa-arrow-right"></span></a>
-                                </div>
-                            </div>
                             <div class="listing-single__contact-info listing-single__single-box">
                                 <div class="listing-single__contact-phone">
                                     <a href="tel:15502505260" class="listing-single__contact-phone-number"> <span
