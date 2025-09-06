@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>S3 Image Upload</title>
+</head>
+<body>
+<h1>Upload Image to S3</h1>
+
+<form method="post" enctype="multipart/form-data" action="imageUpload">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <input type="file" name="file" required />
+    <button type="submit">Upload</button>
+</form>
+
+<p th:text="${message}"></p>
+
+<div th:if="${imageUrl}">
+    <h3>Uploaded Image:</h3>
+    <img th:src="${imageUrl}" alt="Uploaded Image" style="max-width: 400px;"/>
+</div>
+
+</body>
+</html>
