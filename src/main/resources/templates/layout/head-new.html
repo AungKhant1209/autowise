@@ -1,27 +1,28 @@
-<head th:fragment="header">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head-new">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> Home Three || Gorent || Gorent HTML 5 Template </title>
-    <!-- favicons Icons -->
+    <title th:remove="tag">Gorent</title>
+
+    <!-- favicons (LOCAL) -->
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/images/favicons/apple-touch-icon.png}" />
     <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/images/favicons/favicon-32x32.png}" />
     <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/favicons/favicon-16x16.png}" />
-    <link rel="manifest" th:href="@{assets/images/favicons/site.webmanifest}" />
-    <meta name="description" content="Gorent HTML 5 Template " />
+    <link rel="manifest" th:href="@{/assets/images/favicons/site.webmanifest}" />
+    <meta name="description" content="Gorent HTML 5 Template" />
 
-    <!-- fonts -->
+    <!-- fonts (EXTERNAL CDNs — use plain href, NOT th:href) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
             rel="stylesheet">
-
-
     <link
-            href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet">
 
-
+    <!-- CSS assets (LOCAL — use th:href only) -->
     <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/custom-animate.css}" />
@@ -29,7 +30,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/font-awesome-all.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/jarallax.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/jquery.magnific-popup.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/owl.theme.default.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}" />
@@ -38,7 +39,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/odometer.min.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/timePicker.css}" />
 
-
+    <!-- Module CSS -->
     <link rel="stylesheet" th:href="@{/assets/css/module-css/slider.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/module-css/footer.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/module-css/sliding-text.css}" />
@@ -61,12 +62,11 @@
     <link rel="stylesheet" th:href="@{/assets/css/module-css/process.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/module-css/why-choose.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/module-css/gallery.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/banner.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/search-car.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/contact.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/module-css/feature.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/module-css/page-header.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/module-css/shop.css}" />
 
-    <!-- template styles -->
+    <!-- Template styles -->
     <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
     <link rel="stylesheet" th:href="@{/assets/css/responsive.css}" />
 </head>
+</html>

@@ -24,7 +24,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login-v1"; // templates/login.html
+        return "login-v1"; // templates/sign-in.html
     }
 
     @GetMapping("/register")
@@ -34,7 +34,7 @@ public class AuthController {
     }
     @GetMapping("/login-1")
     public String showLoginPage() {
-        return "login"; // This matches login.html
+        return "sign-in"; // This matches sign-in.html
     }
 
     @GetMapping("/sign-up")

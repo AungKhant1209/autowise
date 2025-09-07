@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>S3 Image Upload</title>
+    <meta charset="UTF-8"/>
+    <title>Upload Car Images</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+        .msg { padding: .6rem .9rem; border-radius: 6px; margin:.75rem 0; }
+        .ok { background:#e8f5e9; color:#1b5e20; border:1px solid #c8e6c9; }
+        .err { background:#ffebee; color:#b71c1c; border:1px solid #ffcdd2; }
+        .card { border: 1px solid #eee; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap:.75rem; }
+        .thumb { width:100%; aspect-ratio:4/3; object-fit:cover; border:1px solid #ddd; border-radius:6px; }
+        label { font-weight: 600; margin-right: .5rem; }
+        select, input[type="file"] { padding:.45rem; }
+        button { padding:.55rem 1rem; border-radius:6px; border:1px solid #bbb; cursor:pointer; background:#fafafa; }
+        h1 { margin: 0 0 1rem; }
+    </style>
 </head>
 <body>
-<h1>Upload Image to S3</h1>
 
-<form method="post" enctype="multipart/form-data" action="imageUpload">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <input type="file" name="file" required />
-    <button type="submit">Upload</button>
-</form>
+<h1>Upload Images to S3</h1>
 
-<p th:text="${message}"></p>
+<!-- Flash messages -->
+<div th:if="${message}" class="msg ok" th:text="${message}"></div>
+<div th:if="${error}" class="msg err" th:text="${error}"></div>
 
-<div th:if="${imageUrl}">
-    <h3>Uploaded Image:</h3>
-    <img th:src="${imageUrl}" alt="Uploaded Image" style="max-width: 400px;"/>
+<!-- Car selector (GET) -->
+<div class="card">
+    <form th:action="@{/admin/imageUpload}" method="get">
+        <label for="carId">Car</label>
+        <select id="carId" name="carId" required>
+            <option value="" th:unless="${selectedCarId}">-- Select a car --</option>
+            <option th:each="c : ${cars}"
+                    th:value="${c.id}"
+                    th:selected="${selectedCarId} == ${c.id}"
+                    th:text="${c.id + ' — ' + c.name}">Car</option>
+        </select>
+        <button type="submit">Load</button>
+    </form>
+</div>
+
+<!-- Upload form (POST) -->
+<div class="card" th:if="${selectedCarId}">
+    <form th:action="@{/admin/imageUpload}" method="post" enctype="multipart/form-data">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="hidden" name="carId" th:value="${selectedCarId}" />
+
+        <label for="files">Images</label>
+        <input id="files" type="file" name="files" accept="image/*" multiple required />
+        <button type="submit">Upload</button>
+    </form>
+</div>
+
+<!-- Existing images -->
+<div th:if="${imageUrls}">
+    <h3>Existing Images</h3>
+    <div class="grid">
+        <img class="thumb" th:each="u : ${imageUrls}" th:src="${u}" alt="Car image"/>
+    </div>
 </div>
 
 </body>

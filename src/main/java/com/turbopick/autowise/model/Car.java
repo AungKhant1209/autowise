@@ -1,41 +1,45 @@
 package com.turbopick.autowise.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-@Data
+@Getter
+@Setter
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@Table(name = "car")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "car")
 public class Car {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     @ToString.Include
     private Long id;
+
     private String name;
     private String youtubeLink;
     private Long price;
     private String fuelType;
-    private LocalDate productionYear;
+    private LocalDate productionYear; // or int if you only need year
     private String engineSize;
     private int seat;
     private int door;
-    private Long warranty;
+    private Long warranty;            // consider warrantyYears int
     private String transmission;
     private String driveType;
     private String color;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_type_id",nullable = true)
+
+    // Avoid ALL on ManyToOne to prevent accidental deletes of reference data
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "car_type_id")
     private CarType carType;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -44,12 +48,14 @@ public class Car {
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "feature_id")
     )
-
     private Set<Feature> features = new HashSet<>();
 
-    // ✅ NEW: Brand relation
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "brand_id")
     private CarBrand carBrand;
 
+    @ElementCollection
+    @CollectionTable(name = "car_images", joinColumns = @JoinColumn(name = "car_id"))
+    @Column(name = "image_url", length = 1024) // important for long S3 URLs
+    private List<String> imageUrls = new ArrayList<>();
 }

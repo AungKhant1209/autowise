@@ -21,11 +21,11 @@ public class HomeController {
         System.out.println("CarTypeController.carList"+ carTypes.size());
         return "home";
     }
-//    @GetMapping("/login")
-//    public String login(Model model) {
-//        model.addAttribute("name", "Aung Khant");
-//        return "login";
-//    }
+    @GetMapping("/sign-in")
+    public String login(Model model) {
+        model.addAttribute("name", "Aung Khant");
+        return "sign-in";
+    }
 //    @GetMapping("/sign-up")
 //    public String signup(Model model) {
 //        model.addAttribute("name", "Aung Khant");
