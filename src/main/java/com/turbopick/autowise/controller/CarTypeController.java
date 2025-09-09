@@ -22,6 +22,11 @@ public class CarTypeController {
     @Autowired
     private CarTypeRepository carTypeRepository;
 
+    @GetMapping("/admin/carTypes")
+    public String legacyCarTypesRedirect() {
+        return "redirect:/carTypes";
+    }
+
     @GetMapping("/carTypes")
     public String carTypes(Model model) {
         List<CarType>carTypes=carTypeService.findAllCarTypes();
@@ -55,7 +60,7 @@ public class CarTypeController {
         carType.setDescription(carTypeDto.getDescription());
         carTypeRepository.save(carType);
 
-        return "redirect:/admin/carTypes";
+        return "redirect:/carTypes";
     }
     @GetMapping("/carTypesEdit/{id}")
     public String edit(@PathVariable Long id, Model model) {

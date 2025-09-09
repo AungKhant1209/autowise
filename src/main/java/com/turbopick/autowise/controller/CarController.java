@@ -48,6 +48,13 @@ public class CarController {
         return "car-list";
     }
 
+    // In CarController
+    @GetMapping("/cars")
+    public String legacyCarsRedirect() {
+        return "redirect:/admin/cars";
+    }
+
+
     @GetMapping("/admin/cars")
     public String getCars(Model model) {
         List<Car> cars = carService.getAllCars();
@@ -139,8 +146,7 @@ public class CarController {
     @GetMapping("/editCar/{id}")
     public String editCar(@PathVariable Long id, Model model) {
         Car car = carRepository.findCarById(id);
-        if (car == null) return "redirect:/cars";
-
+        if (car == null) return "redirect:/admin/cars";
         CarDto carDto = new CarDto();
         carDto.setName(car.getName());
         carDto.setYoutubeLink(car.getYoutubeLink());
@@ -240,9 +246,25 @@ public class CarController {
     // Delete
     @GetMapping("/carDelete/{id}")
     public String deleteCar(@PathVariable Long id) {
-        if (carRepository.existsById(id)) {
-            carRepository.deleteById(id);
-        }
+        carRepository.findById(id).ifPresent(car -> {
+            // 1) Clear Many-to-Many to avoid join-table FK violations
+            if (car.getFeatures() != null) {
+                car.getFeatures().clear();
+            }
+
+            // 2) Break the Many-to-One (FK) to car_type if your schema restricts deletes
+            car.setCarType(null);
+
+            // 3) If you have other children (e.g., carImages), clear them here too
+            //    e.g., car.getImages().clear(); (and/or delete from image repo first)
+
+            // Persist the detach so join/FK rows are gone before delete
+            carRepository.save(car);
+
+            // Now it's safe to delete the car row
+            carRepository.delete(car);
+        });
         return "redirect:/admin/cars";
     }
+
 }

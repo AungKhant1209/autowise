@@ -58,4 +58,10 @@ public class Car {
     @CollectionTable(name = "car_images", joinColumns = @JoinColumn(name = "car_id"))
     @Column(name = "image_url", length = 1024) // important for long S3 URLs
     private List<String> imageUrls = new ArrayList<>();
+
+    @PreRemove
+    private void preRemove() {
+        if (features != null) features.clear();
+        setCarType(null);
+    }
 }

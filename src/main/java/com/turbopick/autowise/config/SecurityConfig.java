@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .usernameParameter("username") // must match form field name
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
+                .defaultSuccessUrl("/admin/cars", true)
                 .failureUrl("/login?error")
                 .permitAll()
         );
