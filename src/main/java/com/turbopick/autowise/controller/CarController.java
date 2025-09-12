@@ -8,13 +8,16 @@ import com.turbopick.autowise.repository.CarRepository;
 import com.turbopick.autowise.repository.CarTypeRepository;
 import com.turbopick.autowise.repository.FeatureRepository;
 import com.turbopick.autowise.service.CarService;
+import com.turbopick.autowise.service.S3Service;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +36,10 @@ public class CarController {
 
     @Autowired
     private CarTypeRepository carTypeRepository;
+
+    @Autowired
+    private S3Service s3Service;
+
 
     // Expose car types to all views that need them
     @ModelAttribute("carTypes")
@@ -129,7 +136,32 @@ public class CarController {
             car.getFeatures().addAll(new HashSet<>(selected));
         }
 
-        carRepository.save(car);
+
+        Car carSaved=carRepository.save(car);
+        MultipartFile[] files=carDto.getFiles();
+        long nonEmpty = Arrays.stream(files).filter(f -> !f.isEmpty()).count();
+
+
+        try {
+            for (MultipartFile file : files) {
+                if (file.isEmpty()) continue;
+
+                String ct = file.getContentType();
+                if (ct == null || !ct.startsWith("image/")) {
+                    return "redirect:/admin/imageUpload?carId=" + carSaved.getId();
+                }
+                String url = s3Service.uploadFile(file);
+                if (url == null || url.isBlank()) {
+                    return "redirect:/admin/imageUpload?carId=" + carSaved.getId();
+                }
+                carSaved.getImageUrls().add(url);
+                System.out.println("Success Upload-->"+car.getImageUrls());
+            }
+            carRepository.save(carSaved);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Fail Upload");
+        }
         return "redirect:/admin/cars";
     }
 
