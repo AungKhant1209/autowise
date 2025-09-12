@@ -100,11 +100,34 @@
                                         <div class="col-xl-5 col-lg-5">
                                             <div class="listing-single__left">
                                                 <div class="listing-single__img">
-                                                    <img src="assets/images/listing/listing-single-1-1.jpg" alt="">
+                                                    <img th:src="${#lists.isEmpty(car.imageUrls)
+                        ? '/assets/images/placeholder-car.jpg'
+                        : car.imageUrls.get(0)}"
+                                                         alt="Car image"
+                                                         style="width:100%;height:325px;object-fit:cover;display:block;">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-7 col-lg-7">
+
+                                        <!-- MIDDLE: three thumbs -->
+                                        <div class="col-xl-2 col-lg-2">
+                                            <div th:with="count=${car.imageUrls != null ? car.imageUrls.size() : 0},
+                  end=${T(java.lang.Math).min(3, count)}">
+
+                                                <!-- real images -->
+                                                <div th:each="url : ${count > 0 ? car.imageUrls.subList(0, end) : {}}">
+                                                    <img th:src="${url}" alt="Thumb"
+                                                         style="width:161px;height:161px;object-fit:cover;display:block;margin-bottom:10px;">
+                                                </div>
+
+                                                <!-- placeholders if < 3 -->
+                                                <div th:each="i : ${end < 3 ? #numbers.sequence(1, 3 - end) : {}}">
+                                                    <img src="/assets/images/placeholder-car.jpg" alt="No image"
+                                                         style="width:161px;height:161px;object-fit:cover;display:block;margin-bottom:10px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-5 col-lg-5">
                                             <div class="listing-single__right">
                                                 <h3 class="listing-single__title-two">2025 Toyota Corolla Preview
                                                     What's Coming Next Car</h3>
@@ -222,7 +245,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div><!-- /.swiper-slide -->
+                            </div>
+                            list<!-- /.swiper-slide -->
                             <div class="swiper-slide">
                                 <div class="listing-single__main-content-inner">
                                     <div class="row">
@@ -306,14 +330,16 @@
                             <div class="swiper-slide">
                                 <div class="listing-single__img-holder-box">
                                     <div class="listing-single__img-holder">
-                                        <img src="assets/images/listing/listing-single-thamb-1-1.jpg" alt="">
+                                        <img src="assets/images/types/pickup.png" alt="">
                                     </div>
                                 </div>
                             </div><!-- /.swiper-slide -->
                             <div class="swiper-slide">
                                 <div class="listing-single__img-holder-box">
                                     <div class="listing-single__img-holder">
-                                        <img src="assets/images/listing/listing-single-thamb-1-2.jpg" alt="">
+                                        img th:src="${#lists.isEmpty(car.imageUrls)
+                                        ? '/assets/images/placeholder-car.jpg'
+                                        : car.imageUrls.get(0)}">
                                     </div>
                                 </div>
                             </div><!-- /.swiper-slide -->
