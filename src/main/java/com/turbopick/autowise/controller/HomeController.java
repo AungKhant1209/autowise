@@ -16,7 +16,7 @@ public class HomeController {
     @GetMapping("/home")
     public String hello(Model model) {
         model.addAttribute("name", "Aung Khant");
-        List<CarType> carTypes=carTypeService.findAllCarTypes();
+        List<CarType> carTypes=carTypeService.findAll();
         model.addAttribute("carTypes",carTypes);
         System.out.println("CarTypeController.carList"+ carTypes.size());
         return "home";

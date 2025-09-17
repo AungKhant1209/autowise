@@ -29,7 +29,7 @@ public class CarTypeController {
 
     @GetMapping("/carTypes")
     public String carTypes(Model model) {
-        List<CarType>carTypes=carTypeService.findAllCarTypes();
+        List<CarType>carTypes=carTypeService.findAll();
         model.addAttribute("carTypes",carTypes);
         System.out.println("CarTypeController.carList"+ carTypes.size());
         return "admin/carTypes";

@@ -8,6 +8,8 @@ import com.turbopick.autowise.repository.CarRepository;
 import com.turbopick.autowise.repository.CarTypeRepository;
 import com.turbopick.autowise.repository.FeatureRepository;
 import com.turbopick.autowise.service.CarService;
+import com.turbopick.autowise.service.CarTypeService;
+import com.turbopick.autowise.service.FeatureService;
 import com.turbopick.autowise.service.S3Service;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,17 @@ import java.util.stream.Collectors;
 
 @Controller
 public class CarController {
+    @Autowired
+    private FeatureService featureService;
 
     @Autowired
     private FeatureRepository featureRepository;
 
     @Autowired
     private CarService carService;
+
+    @Autowired
+    private CarTypeService carTypeService;
 
     @Autowired
     private CarRepository carRepository;
@@ -44,13 +51,13 @@ public class CarController {
     // Expose car types to all views that need them
     @ModelAttribute("carTypes")
     public List<CarType> carTypes() {
-        return carTypeRepository.findAll();
+        return carTypeService.findAll();
     }
 
     // Simple list page (car-list.html)
     @GetMapping("/carList")
     public String cars(Model model) {
-        List<Car> cars = carRepository.findAll();
+        List<Car> cars = carService.findAll();
         model.addAttribute("cars", cars);
         return "car-list";
     }
@@ -64,7 +71,7 @@ public class CarController {
 
     @GetMapping("/admin/cars")
     public String getCars(Model model) {
-        List<Car> cars = carService.getAllCars();
+        List<Car> cars = carService.findAll();
         model.addAttribute("cars", cars);
         return "admin/cars";
     }
@@ -74,7 +81,7 @@ public class CarController {
     @GetMapping("/carCreate")
     public String showCarForm(Model model) {
         model.addAttribute("carDto", new CarDto());
-        model.addAttribute("allFeatures", featureRepository.findAll());
+        model.addAttribute("allFeatures", featureService.findAllFeatures());
         return "admin/carCreate";
     }
 
@@ -85,7 +92,7 @@ public class CarController {
                             Model model) {
 
         // Unique name check (example)
-        if (carRepository.findCarByName(carDto.getName()) != null) {
+        if (carService.findByName(carDto.getName()) != null) {
             result.rejectValue("name", "duplicate", "Car name already exists");
         }
 
@@ -97,7 +104,7 @@ public class CarController {
         } else {
             try {
                 Long typeId = Long.parseLong(rawTypeId.trim());
-                type = carTypeRepository.findById(typeId).orElse(null);
+                type = carTypeService.findById(typeId);
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
                 }
@@ -107,7 +114,7 @@ public class CarController {
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("allFeatures", featureRepository.findAll());
+            model.addAttribute("allFeatures", featureService.findAllFeatures());
             return "admin/carCreate";
         }
 
@@ -132,12 +139,12 @@ public class CarController {
 
         // Features
         if (carDto.getFeatureIds() != null && !carDto.getFeatureIds().isEmpty()) {
-            List<Feature> selected = featureRepository.findAllById(carDto.getFeatureIds());
+            List<Feature> selected = featureService.findAllByIds(carDto.getFeatureIds());
             car.getFeatures().addAll(new HashSet<>(selected));
         }
 
 
-        Car carSaved=carRepository.save(car);
+        Car carSaved=carService.save(car);
         MultipartFile[] files=carDto.getFiles();
         long nonEmpty = Arrays.stream(files).filter(f -> !f.isEmpty()).count();
 
@@ -169,7 +176,7 @@ public class CarController {
     // CarController.java
     @GetMapping("/car-detail/{id}")
     public String carDetail(@PathVariable Long id, Model model) {
-        var carOpt = carRepository.findByIdWithFeatures(id);
+        var carOpt = carService.findByIdWithFeatures(id);
         if (carOpt.isEmpty()) return "redirect:/carList";
         model.addAttribute("car", carOpt.get());
         return "listing-single";
@@ -177,7 +184,7 @@ public class CarController {
     // Edit form
     @GetMapping("/editCar/{id}")
     public String editCar(@PathVariable Long id, Model model) {
-        Car car = carRepository.findCarById(id);
+        Car car = carService.findByIdOrNull(id);
         if (car == null) return "redirect:/admin/cars";
         CarDto carDto = new CarDto();
         carDto.setName(car.getName());
@@ -206,7 +213,7 @@ public class CarController {
 
         model.addAttribute("carId", id);
         model.addAttribute("carDto", carDto);
-        model.addAttribute("allFeatures", featureRepository.findAll());
+        model.addAttribute("allFeatures", featureService.findAllFeatures());
         return "/admin/carEdit";
     }
 
@@ -216,7 +223,7 @@ public class CarController {
                             @Valid @ModelAttribute("carDto") CarDto carDto,
                             BindingResult result,
                             Model model) {
-        Car existing = carRepository.findCarById(id);
+        Car existing = carService.findByIdOrNull(id);
         if (existing == null) return "redirect:/admin/cars";
 
         // Parse & validate carTypeId
@@ -232,7 +239,7 @@ public class CarController {
                 result.rejectValue("carTypeId", "invalid", "Invalid car type");
             }
             if (typeId != null) {
-                type = carTypeRepository.findById(typeId).orElse(null);
+                type = carTypeService.findById(typeId);
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
                 }
@@ -241,7 +248,7 @@ public class CarController {
 
         if (result.hasErrors()) {
             model.addAttribute("carId", id);
-            model.addAttribute("allFeatures", featureRepository.findAll());
+            model.addAttribute("allFeatures", featureService.findAllFeatures());
             return "/admin/carEdit";
         }
 
@@ -267,18 +274,18 @@ public class CarController {
         existing.getFeatures().clear();
         List<Long> ids = carDto.getFeatureIds();
         if (ids != null && !ids.isEmpty()) {
-            List<Feature> selected = featureRepository.findAllById(ids);
+            List<Feature> selected = featureService.findAllByIds(ids);
             existing.getFeatures().addAll(new HashSet<>(selected));
         }
 
-        carRepository.save(existing);
+        carService.save(existing);
         return "redirect:/admin/cars";
     }
 
     // Delete
     @GetMapping("/carDelete/{id}")
     public String deleteCar(@PathVariable Long id) {
-        carRepository.findById(id).ifPresent(car -> {
+        carService.findById(id).ifPresent(car -> {
             // 1) Clear Many-to-Many to avoid join-table FK violations
             if (car.getFeatures() != null) {
                 car.getFeatures().clear();
@@ -291,10 +298,10 @@ public class CarController {
             //    e.g., car.getImages().clear(); (and/or delete from image repo first)
 
             // Persist the detach so join/FK rows are gone before delete
-            carRepository.save(car);
+            carService.save(car);
 
             // Now it's safe to delete the car row
-            carRepository.delete(car);
+            carService.delete(car);
         });
         return "redirect:/admin/cars";
     }

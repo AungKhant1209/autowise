@@ -1,7 +1,9 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.model.Car;
+import com.turbopick.autowise.repository.CarBrandRepository;
 import com.turbopick.autowise.repository.CarRepository;
+import com.turbopick.autowise.service.CarService;
 import com.turbopick.autowise.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,14 +22,15 @@ public class ImageController {
 
     private final S3Service s3Service;
     private final CarRepository carRepository;
+    private final CarService carService;
 
     @GetMapping("/imageUpload")
     public String imageUploadForm(@RequestParam(value = "carId", required = false) Long carId, Model model) {
-        model.addAttribute("cars", carRepository.findAll());
+        model.addAttribute("cars", carService.findAll());
         if (carId != null) {
             model.addAttribute("selectedCarId", carId);
             model.addAttribute("imageUrls",
-                    carRepository.findById(carId).map(Car::getImageUrls).orElseGet(java.util.List::of));
+                    carService.findById(carId).map(Car::getImageUrls).orElseGet(java.util.List::of));
         }
         return "admin/imageUpload";
     }
@@ -38,7 +41,7 @@ public class ImageController {
                               @RequestParam("carId") Long carId,
                               RedirectAttributes ra) {
 
-        Car car = carRepository.findById(carId)
+        Car car = carService.findById(carId)
                 .orElseThrow(() -> new IllegalArgumentException("Car not found: " + carId));
 
         long nonEmpty = Arrays.stream(files).filter(f -> !f.isEmpty()).count();
@@ -65,7 +68,7 @@ public class ImageController {
                 car.getImageUrls().add(url);
             }
 
-            carRepository.save(car);
+            carService.save(car);
             ra.addFlashAttribute("message", "Images uploaded successfully!");
 
         } catch (Exception e) {
