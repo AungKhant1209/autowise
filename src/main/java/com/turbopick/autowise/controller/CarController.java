@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,18 +98,20 @@ public class CarController {
                             BindingResult result,
                             Model model) {
 
-        // Unique name check (example)
+        // === Unique Name Check ===
         if (carService.findByName(carDto.getName()) != null) {
             result.rejectValue("name", "duplicate", "Car name already exists");
         }
 
+        // === Car Type Validation ===
         CarType type = null;
         String rawTypeId = carDto.getCarTypeId();
+        Long typeId = null;
         if (rawTypeId == null || rawTypeId.isBlank()) {
             result.rejectValue("carTypeId", "required", "Car type is required");
         } else {
             try {
-                Long typeId = Long.parseLong(rawTypeId.trim());
+                typeId = Long.parseLong(rawTypeId.trim());
                 type = carTypeService.findById(typeId);
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
@@ -118,6 +121,7 @@ public class CarController {
             }
         }
 
+        // === Car Brand Validation ===
         CarBrand brand = null;
         Long brandId = carDto.getCarBrandId();
         if (brandId == null) {
@@ -129,11 +133,13 @@ public class CarController {
             }
         }
 
+        // === Return to Form on Validation Errors ===
         if (result.hasErrors()) {
             model.addAttribute("allFeatures", featureService.findAllFeatures());
             return "admin/carCreate";
         }
 
+        // === Build Car Entity ===
         Car car = new Car();
         car.setName(carDto.getName());
         car.setYoutubeLink(carDto.getYoutubeLink());
@@ -151,29 +157,33 @@ public class CarController {
         car.setCarType(type);
         car.setCarBrand(brand);
 
+        // === Set Features ===
         if (carDto.getFeatureIds() != null && !carDto.getFeatureIds().isEmpty()) {
             List<Feature> selected = featureService.findAllByIds(carDto.getFeatureIds());
             car.getFeatures().addAll(new HashSet<>(selected));
         }
 
-        Car carSaved = carRepository.save(car);
+        // === Save Car ===
+        Car carSaved = carService.save(car);
 
-        Car carSaved=carService.save(car);
-        MultipartFile[] files=carDto.getFiles();
-        long nonEmpty = Arrays.stream(files).filter(f -> !f.isEmpty()).count();
+        // === Handle Image Uploads ===
+        MultipartFile[] files = carDto.getFiles();
+        if (files != null && files.length > 0) {
+            try {
+                for (MultipartFile file : files) {
+                    if (file.isEmpty()) continue;
+
+                    String contentType = file.getContentType();
+                    if (contentType == null || !contentType.startsWith("image/")) {
+                        // Redirect to upload page if invalid
+                        return "redirect:/admin/imageUpload?carId=" + carSaved.getId();
+                    }
 
 
-        try {
-            for (MultipartFile file : files) {
-                if (file.isEmpty()) continue;
-
-                String ct = file.getContentType();
-                if (ct == null || !ct.startsWith("image/")) {
-                    return "redirect:/admin/imageUpload?carId=" + carSaved.getId();
                 }
-                carRepository.save(carSaved);
             } catch (Exception e) {
                 e.printStackTrace();
+                // Optional: redirect to error page
             }
         }
 
@@ -232,20 +242,19 @@ public class CarController {
                             @Valid @ModelAttribute("carDto") CarDto carDto,
                             BindingResult result,
                             Model model) {
+
         Car existing = carService.findByIdOrNull(id);
         if (existing == null) return "redirect:/admin/cars";
 
+        // ===== Car Type Validation =====
         CarType type = null;
         String rawTypeId = carDto.getCarTypeId();
+        Long typeId = null;
         if (rawTypeId == null || rawTypeId.isBlank()) {
             result.rejectValue("carTypeId", "required", "Car type is required");
         } else {
             try {
                 typeId = Long.parseLong(rawTypeId.trim());
-            } catch (NumberFormatException e) {
-                result.rejectValue("carTypeId", "invalid", "Invalid car type");
-            }
-            if (typeId != null) {
                 type = carTypeService.findById(typeId);
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
@@ -255,6 +264,7 @@ public class CarController {
             }
         }
 
+        // ===== Car Brand Validation =====
         CarBrand brand = null;
         Long brandId = carDto.getCarBrandId();
         if (brandId == null) {
@@ -266,12 +276,14 @@ public class CarController {
             }
         }
 
+        // ===== Return to form if errors =====
         if (result.hasErrors()) {
             model.addAttribute("carId", id);
             model.addAttribute("allFeatures", featureService.findAllFeatures());
             return "/admin/carEdit";
         }
 
+        // ===== Update Car Fields =====
         existing.setName(carDto.getName());
         existing.setYoutubeLink(carDto.getYoutubeLink());
         existing.setPrice(carDto.getPrice());
@@ -288,6 +300,7 @@ public class CarController {
         existing.setCarType(type);
         existing.setCarBrand(brand);
 
+        // ===== Features Update =====
         existing.getFeatures().clear();
         List<Long> ids = carDto.getFeatureIds();
         if (ids != null && !ids.isEmpty()) {
@@ -295,6 +308,7 @@ public class CarController {
             existing.getFeatures().addAll(new HashSet<>(selected));
         }
 
+        // ===== Save and Redirect =====
         carService.save(existing);
         return "redirect:/admin/cars";
     }
@@ -308,7 +322,7 @@ public class CarController {
                 car.getFeatures().clear();
             }
 
-        carService.deleteCarById(id); // clears join tables + hard deletes + flush
+        carService.deleteById(id); // clears join tables + hard deletes + flush
 
             // 3) If you have other children (e.g., carImages), clear them here too
             //    e.g., car.getImages().clear(); (and/or delete from image repo first)
