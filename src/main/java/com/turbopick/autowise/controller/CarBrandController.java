@@ -12,8 +12,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/admin")   // <— add this
 public class CarBrandController {
-
 
     @Autowired
     private CarBrandRepository carBrandRepository;
@@ -25,6 +25,7 @@ public class CarBrandController {
 
     @GetMapping("/carBrands")
     public String list(Model model) {
+
         model.addAttribute("carBrands", carBrandService.findAll());
         return "admin/carBrands";
     }
@@ -54,8 +55,11 @@ public class CarBrandController {
 
     @GetMapping("/carBrandsEdit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
+
         CarBrand b = carBrandService.findById(id).orElse(null);
         if (b == null) return "redirect:/carBrands";
+
+
         model.addAttribute("carBrand", b);
         return "admin/carBrandEdit";
     }
@@ -64,13 +68,13 @@ public class CarBrandController {
     public String update(@PathVariable Long id,
                          @Valid @ModelAttribute("carBrand") CarBrand carBrand,
                          BindingResult result) {
+
         if (!carBrandService.existsById(id)) return "redirect:/carBrands";
+
 
         if (carBrand.getBrandName() == null || carBrand.getBrandName().isBlank()) {
             result.addError(new FieldError("carBrand", "brandName", "Brand name is required"));
         }
-
-        // NEW: duplicate name check (excluding this brand)
         if (!result.hasFieldErrors("brandName") &&
                 carBrandService.existsByBrandNameExcludingId(id ,carBrand.getBrandName())) {
             result.addError(new FieldError("carBrand", "brandName", "Brand name already exists"));

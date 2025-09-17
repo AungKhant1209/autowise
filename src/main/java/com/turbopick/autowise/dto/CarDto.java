@@ -63,4 +63,7 @@ public class CarDto {
 
     private MultipartFile[] files;
 
+    @NotNull(message = "Car Brand Id is required")
+    private Long carBrandId;
+
 }

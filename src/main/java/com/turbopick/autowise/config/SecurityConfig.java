@@ -31,7 +31,10 @@ public class SecurityConfig {
         http.authenticationProvider(provider);
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**","/webjars/**","/favicon.ico").permitAll()
+                .requestMatchers(
+                        "/login", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
+                ).permitAll()
+                .requestMatchers("/admin/**").permitAll()   // 👈 added
                 .anyRequest().authenticated()
         );
 
@@ -39,7 +42,7 @@ public class SecurityConfig {
                 .loginPage("/login")
                 .usernameParameter("username") // must match form field name
                 .passwordParameter("password")
-                .defaultSuccessUrl("/admin/cars", true)
+                .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error")
                 .permitAll()
         );
@@ -49,7 +52,11 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login?logout")
         );
 
-        http.csrf(Customizer.withDefaults());
+        // 👇 added
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/admin/**")
+        );
+
         return http.build();
     }
 }

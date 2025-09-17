@@ -1,118 +1,235 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Edit Car</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .navbar {
+            background-color: #343a40;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #495057;
+        }
+        .navbar-brand {
+            color: #ffffff !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-item .nav-link {
+            color: #ffffff !important;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+        }
+        .navbar-nav .nav-item .nav-link:hover {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .dropdown-menu { background-color: #343a40; }
+        .dropdown-item {
+            color: #ffffff !important;
+            padding: 10px 20px;
+        }
+        .dropdown-item:hover {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .container { margin-top: 80px; }
+        .navbar-nav.ml-auto { margin-left: auto; }
+    </style>
 </head>
 <body>
-<h1>Edit Car</h1>
-<form th:action="@{/editCar/{id}(id=${carId})}" th:object="${carDto}" method="post">
-    <input type="hidden" th:if="${_csrf != null}"
-           th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="/admin">Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
 
-    <div>
-        <label for="name">Name:</label>
-        <input id="name" type="text" th:field="*{name}" />
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+            <!-- Car Management -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="carMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-car"></i> Car Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="carMenu">
+                    <a class="dropdown-item" href="/admin/carsCreate"><i class="fas fa-plus-circle"></i> Car Register</a>
+                    <a class="dropdown-item" href="/admin/cars"><i class="fas fa-list-ul"></i> Show All Cars</a>
+                </div>
+            </li>
+
+            <!-- Car Type Management -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="carTypeMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-cogs"></i> Car Type Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="carTypeMenu">
+                    <a class="dropdown-item" href="/admin/carTypesCreate"><i class="fas fa-plus-circle"></i> Car Type Register</a>
+                    <a class="dropdown-item" href="/admin/carTypes"><i class="fas fa-list-ul"></i> Show All Car Types</a>
+                </div>
+            </li>
+
+            <!-- Car Brand Management -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="carBrandMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-industry"></i> Car Brand Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="carBrandMenu">
+                    <a class="dropdown-item" href="/admin/carBrandsCreate"><i class="fas fa-plus-circle"></i> Car Brand Register</a>
+                    <a class="dropdown-item" href="/admin/carBrands"><i class="fas fa-list-ul"></i> Show All Car Brands</a>
+                </div>
+            </li>
+
+            <!-- Home -->
+            <li class="nav-item">
+                <a class="nav-link" href="/home"><i class="fas fa-home"></i> Go to Home</a>
+            </li>
+        </ul>
     </div>
+</nav>
 
-    <div>
-        <label for="youtubeLink">YouTube Link:</label>
-        <input id="youtubeLink" type="text" th:field="*{youtubeLink}" />
-        <span th:if="${#fields.hasErrors('youtubeLink')}" th:errors="*{youtubeLink}"></span>
-    </div>
-
-    <div>
-        <label for="price">Price:</label>
-        <input id="price" type="number" step="0.01" th:field="*{price}" />
-        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></span>
-    </div>
-
-    <div>
-        <label for="fuelType">Fuel Type:</label>
-        <input id="fuelType" type="text" th:field="*{fuelType}" />
-        <span th:if="${#fields.hasErrors('fuelType')}" th:errors="*{fuelType}"></span>
-    </div>
-
-    <div>
-        <label>Production Year:</label>
-        <input type="date"
-               th:field="*{productionYear}"
-               placeholder="Select production year"
-               th:value="${#temporals.format(productionYear, 'yyyy/MM/dd')}" />
-        <span th:if="${#fields.hasErrors('productionYear')}"
-              th:errors="*{productionYear}"></span>
-    </div>
-
-    <div>
-        <label for="engineSize">Engine Size:</label>
-        <input id="engineSize" type="text" th:field="*{engineSize}" />
-        <span th:if="${#fields.hasErrors('engineSize')}" th:errors="*{engineSize}"></span>
-    </div>
-
-    <div>
-        <label for="seat">Seat:</label>
-        <input id="seat" type="number" th:field="*{seat}" />
-        <span th:if="${#fields.hasErrors('seat')}" th:errors="*{seat}"></span>
-    </div>
-
-    <div>
-        <label for="door">Door:</label>
-        <input id="door" type="number" th:field="*{door}" />
-        <span th:if="${#fields.hasErrors('door')}" th:errors="*{door}"></span>
-    </div>
-
-    <div>
-        <label for="warranty">Warranty:</label>
-        <input id="warranty" type="text" th:field="*{warranty}" />
-        <span th:if="${#fields.hasErrors('warranty')}" th:errors="*{warranty}"></span>
+<div class="container">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Car</h3>
     </div>
 
-    <div>
-        <label for="transmission">Transmission:</label>
-        <input id="transmission" type="text" th:field="*{transmission}" />
-        <span th:if="${#fields.hasErrors('transmission')}" th:errors="*{transmission}"></span>
-    </div>
-
-    <div>
-        <label for="driveType">Drive Type:</label>
-        <input id="driveType" type="text" th:field="*{driveType}" />
-        <span th:if="${#fields.hasErrors('driveType')}" th:errors="*{driveType}"></span>
-    </div>
-
-    <div>
-        <label for="color">Color:</label>
-        <input id="color" type="text" th:field="*{color}" />
-        <span th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></span>
-    </div>
-
-    <div>
-        <label for="description">Description:</label>
-        <textarea id="description" th:field="*{description}"></textarea>
-        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-    </div>
-    <div>
-        <label>Car Type:</label>
-        <select th:field="*{carTypeId}">
-            <option value="" disabled selected>-- Select car type --</option>
-            <option th:each="t : ${carTypes}" th:value="${t.typeId}" th:text="${t.typeName}"></option>
-        </select>
-        <span th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></span>
-    </div>
-    <div>
-        <label>Features:</label>
-        <div th:each="f : ${allFeatures}">
-            <label>
-                <input type="checkbox" th:field="*{featureIds}" th:value="${f.id}" />
-                <span th:text="${f.name}">Feature</span>
-            </label>
+    <div class="card">
+        <div class="card-header">
+            <span class="form-section-title">Car Information</span>
         </div>
+        <div class="card-body">
+            <form th:action="@{/editCar/{id}(id=${carId})}" th:object="${carDto}" method="post">
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-    <div>
-        <button type="submit">Update</button>
-        <a th:href="@{/cars}">Cancel</a>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" class="form-control" th:field="*{name}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="youtubeLink">YouTube Link</label>
+                        <input id="youtubeLink" type="text" class="form-control" th:field="*{youtubeLink}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('youtubeLink')}" th:errors="*{youtubeLink}"></small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="price">Price</label>
+                        <input id="price" type="number" class="form-control" th:field="*{price}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="fuelType">Fuel Type</label>
+                        <input id="fuelType" type="text" class="form-control" th:field="*{fuelType}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('fuelType')}" th:errors="*{fuelType}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="productionYear">Production Year</label>
+                        <input id="productionYear" type="date" class="form-control" th:field="*{productionYear}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('productionYear')}" th:errors="*{productionYear}"></small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="engineSize">Engine Size</label>
+                        <input id="engineSize" type="text" class="form-control" th:field="*{engineSize}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('engineSize')}" th:errors="*{engineSize}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="seat">Seat</label>
+                        <input id="seat" type="number" class="form-control" th:field="*{seat}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('seat')}" th:errors="*{seat}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="door">Door</label>
+                        <input id="door" type="number" class="form-control" th:field="*{door}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('door')}" th:errors="*{door}"></small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="warranty">Warranty</label>
+                        <input id="warranty" type="number" class="form-control" th:field="*{warranty}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('warranty')}" th:errors="*{warranty}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="transmission">Transmission</label>
+                        <input id="transmission" type="text" class="form-control" th:field="*{transmission}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('transmission')}" th:errors="*{transmission}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="driveType">Drive Type</label>
+                        <input id="driveType" type="text" class="form-control" th:field="*{driveType}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('driveType')}" th:errors="*{driveType}"></small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="color">Color</label>
+                        <input id="color" type="text" class="form-control" th:field="*{color}"/>
+                        <small class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="carBrandId">Car Brand</label>
+                        <select id="carBrandId" class="form-control" th:field="*{carBrandId}">
+                            <option value="" disabled>-- Select car brand --</option>
+                            <option th:each="b : ${carBrands}" th:value="${b.brandId}" th:text="${b.brandName}"></option>
+                        </select>
+                        <small class="text-danger" th:if="${#fields.hasErrors('carBrandId')}" th:errors="*{carBrandId}"></small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="carTypeId">Car Type</label>
+                        <select id="carTypeId" class="form-control" th:field="*{carTypeId}">
+                            <option value="" disabled>-- Select car type --</option>
+                            <option th:each="t : ${carTypes}" th:value="${t.typeId}" th:text="${t.typeName}"></option>
+                        </select>
+                        <small class="text-danger" th:if="${#fields.hasErrors('carTypeId')}" th:errors="*{carTypeId}"></small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="d-block">Features</label>
+                    <div>
+                        <label class="badge badge-pill badge-light border feature-bubble" th:each="f : ${allFeatures}">
+                            <input type="checkbox" th:field="*{featureIds}" th:value="${f.id}" class="mr-1"/>
+                            <span th:text="${f.name}">Feature</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" th:field="*{description}" rows="4"></textarea>
+                    <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
+                </div>
+
+                <p class="text-muted mb-4"><i class="fas fa-info-circle mr-1"></i>Images can be uploaded on Create only in the current flow.</p>
+
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-outline-secondary" th:href="@{/admin/cars}"><i class="fas fa-arrow-left mr-1"></i>Back</a>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-1"></i>Update</button>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+</div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
