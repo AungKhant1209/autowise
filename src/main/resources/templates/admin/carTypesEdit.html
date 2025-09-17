@@ -1,34 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>Edit Car Type</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        .navbar {
+            background-color: #343a40;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #495057;
+        }
+        .navbar-brand {
+            color: #ffffff !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-nav .nav-item .nav-link {
+            color: #ffffff !important;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+        }
+        .navbar-nav .nav-item .nav-link:hover {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .dropdown-menu { background-color: #343a40; }
+        .dropdown-item {
+            color: #ffffff !important;
+            padding: 10px 20px;
+        }
+        .dropdown-item:hover {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .container { margin-top: 80px; }
+        .navbar-nav.ml-auto { margin-left: auto; }
+    </style>
 </head>
 <body>
-<h1>Edit Car Type</h1>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="/admin">Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navCTE" aria-controls="navCTE" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navCTE">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a class="nav-link" href="/admin/carTypes"><i class="fas fa-list-ul"></i> Show All Types</a></li>
+            <li class="nav-item"><a class="nav-link" href="/home"><i class="fas fa-home"></i> Home</a></li>
+        </ul>
+    </div>
+</nav>
 
-<form th:action="@{/carTypesEdit/{id}(id=${carType.typeId})}"
-      th:object="${carTypeDto}" method="post">
-    <input type="hidden" th:if="${_csrf != null}"
-           th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-
-    <div>
-        <label for="typeName">Type Name:</label>
-        <input id="typeName" type="text" th:field="*{typeName}" />
-        <span th:if="${#fields.hasErrors('typeName')}" th:errors="*{typeName}"></span>
+<div class="container">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Car Type</h3>
     </div>
 
-    <div>
-        <label for="description">Description:</label>
-        <textarea id="description" th:field="*{description}"></textarea>
-        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
-    </div>
+    <div class="card">
+        <div class="card-header">
+            <strong>Type Information</strong>
+        </div>
+        <div class="card-body">
+            <!-- FIXED: use carType.typeId, not carType.id -->
+            <form th:action="@{/admin/carTypesEdit/{id}(id=${carType.typeId})}"
+                  th:object="${carTypeDto}" method="post">
+                <!-- CSRF (optional if security enabled) -->
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-    <div style="margin-top:1rem;">
-        <button type="submit">Update</button>
-        <a th:href="@{/carTypes}">Cancel</a>
-    </div>
-</form>
+                <div class="form-group">
+                    <label for="typeName">Type Name</label>
+                    <input id="typeName" class="form-control" th:field="*{typeName}" placeholder="e.g., Sedan"/>
+                    <small class="text-danger" th:if="${#fields.hasErrors('typeName')}" th:errors="*{typeName}"></small>
+                </div>
 
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" th:field="*{description}" rows="4" placeholder="Describe this car type"></textarea>
+                    <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-outline-secondary" th:href="@{/admin/carTypes}">
+                        <i class="fas fa-arrow-left mr-1"></i>Back
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-1"></i>Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

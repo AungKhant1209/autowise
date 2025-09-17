@@ -37,31 +37,28 @@ public class Car {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    // Avoid ALL on ManyToOne to prevent accidental deletes of reference data
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    // Removed cascade to avoid accidental operations on reference data during delete
+// Only the relation annotations shown here; leave everything else as you posted.
+    @ManyToOne(fetch = FetchType.EAGER)                 // no cascade
     @JoinColumn(name = "car_type_id")
     private CarType carType;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER)                 // no cascade
+    @JoinColumn(name = "brand_id")
+    private CarBrand carBrand;
+
+    // ManyToMany is fine; we’re deleting join rows explicitly before parent delete
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "car_feature",
             joinColumns = @JoinColumn(name = "car_id"),
             inverseJoinColumns = @JoinColumn(name = "feature_id")
     )
-    private Set<Feature> features = new HashSet<>();
+    private Set<Feature> features = new java.util.HashSet<>();
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "brand_id")
-    private CarBrand carBrand;
 
     @ElementCollection
     @CollectionTable(name = "car_images", joinColumns = @JoinColumn(name = "car_id"))
     @Column(name = "image_url", length = 1024) // important for long S3 URLs
     private List<String> imageUrls = new ArrayList<>();
-
-    @PreRemove
-    private void preRemove() {
-        if (features != null) features.clear();
-        setCarType(null);
-    }
 }

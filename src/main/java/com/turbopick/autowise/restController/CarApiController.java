@@ -3,10 +3,10 @@ package com.turbopick.autowise.restController;
 import com.turbopick.autowise.model.Car;
 import com.turbopick.autowise.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cars")
@@ -26,12 +26,23 @@ public class CarApiController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Car> getCarById(@PathVariable Long id) {
-        return carService.findCarById(id);
+    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
+        return carService.findCarById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCar(@PathVariable Long id) {
-        carService.deleteCarById(id);
+    public ResponseEntity<String> deleteCar(@PathVariable Long id) {
+        if (carService.findCarById(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        try {
+            carService.deleteCarById(id);
+            return ResponseEntity.ok("Car deleted successfully with id " + id);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body("Failed to delete car with id " + id + " : " + e.getMessage());
+        }
     }
 }
