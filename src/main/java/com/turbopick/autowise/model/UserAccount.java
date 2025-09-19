@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Entity @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Entity @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Data
 @Table(name = "user_accounts", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class UserAccount {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +24,8 @@ public class UserAccount {
     // very simple role model; you can expand to many-to-many
     @Column(nullable = false)
     private String role = "ROLE_USER";
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private java.util.List<Review> reviews = new java.util.ArrayList<>();
 }

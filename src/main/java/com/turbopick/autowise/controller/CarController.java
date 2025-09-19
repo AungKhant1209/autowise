@@ -1,19 +1,10 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.dto.CarDto;
-import org.springframework.transaction.annotation.Transactional;
-import com.turbopick.autowise.model.Car;
-import com.turbopick.autowise.model.CarBrand;
-import com.turbopick.autowise.model.CarType;
-import com.turbopick.autowise.model.Feature;
-import com.turbopick.autowise.repository.CarBrandRepository;
-import com.turbopick.autowise.repository.CarRepository;
-import com.turbopick.autowise.repository.CarTypeRepository;
-import com.turbopick.autowise.repository.FeatureRepository;
-import com.turbopick.autowise.service.CarService;
-import com.turbopick.autowise.service.CarTypeService;
-import com.turbopick.autowise.service.FeatureService;
-import com.turbopick.autowise.service.S3Service;
+import com.turbopick.autowise.dto.ReviewDto;
+import com.turbopick.autowise.model.*;
+import com.turbopick.autowise.service.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,20 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Controller
 public class CarController {
     @Autowired
     private FeatureService featureService;
-
-    @Autowired
-    private FeatureRepository featureRepository;
 
     @Autowired
     private CarService carService;
@@ -43,16 +28,14 @@ public class CarController {
     private CarTypeService carTypeService;
 
     @Autowired
-    private CarRepository carRepository;
-
-    @Autowired
-    private CarTypeRepository carTypeRepository;
-
-    @Autowired
-    private CarBrandRepository carBrandRepository;
+    private CarBrandService carBrandService;
 
     @Autowired
     private S3Service s3Service;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private UserAccountService userAccountService;
 
     // --- expose car types & brands to views ---
     @ModelAttribute("carTypes")
@@ -62,7 +45,7 @@ public class CarController {
 
     @ModelAttribute("carBrands")
     public List<CarBrand> carBrands() {
-        return carBrandRepository.findAll();
+        return carBrandService.findAll();
     }
 
     // --- LIST ---
@@ -98,20 +81,23 @@ public class CarController {
                             BindingResult result,
                             Model model) {
 
-        // === Unique Name Check ===
-        if (carService.findByName(carDto.getName()) != null) {
+        // === Normalize name early (same string used everywhere) ===
+        String normalizedName = carService.normalizeName(carDto.getName());
+        if (normalizedName == null || normalizedName.isEmpty()) {
+            result.rejectValue("name", "required", "Car name is required");
+        } else if (carService.nameExists(normalizedName)) {
             result.rejectValue("name", "duplicate", "Car name already exists");
         }
 
         // === Car Type Validation ===
         CarType type = null;
         String rawTypeId = carDto.getCarTypeId();
-        Long typeId = null;
-        if (rawTypeId == null || rawTypeId.isBlank()) {
+        if (rawTypeId == null || rawTypeId.trim().isEmpty()) {
             result.rejectValue("carTypeId", "required", "Car type is required");
         } else {
             try {
-                typeId = Long.parseLong(rawTypeId.trim());
+                Long typeId = Long.parseLong(rawTypeId.trim());
+                // carTypeService.findById should return null if not found (or adapt)
                 type = carTypeService.findById(typeId);
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
@@ -127,63 +113,45 @@ public class CarController {
         if (brandId == null) {
             result.rejectValue("carBrandId", "required", "Car brand is required");
         } else {
-            brand = carBrandRepository.findById(brandId).orElse(null);
+            brand = carBrandService.findById(brandId).orElse(null);
             if (brand == null) {
                 result.rejectValue("carBrandId", "invalid", "Invalid car brand");
             }
         }
 
-        // === Return to Form on Validation Errors ===
+        // === Return to form on validation errors (re-add ALL lists used by the view) ===
         if (result.hasErrors()) {
+            model.addAttribute("carTypes", carTypeService.findAll());
+            model.addAttribute("carBrands", carBrandService.findAll());
             model.addAttribute("allFeatures", featureService.findAllFeatures());
             return "admin/carCreate";
         }
 
-        // === Build Car Entity ===
-        Car car = new Car();
-        car.setName(carDto.getName());
-        car.setYoutubeLink(carDto.getYoutubeLink());
-        car.setPrice(carDto.getPrice());
-        car.setFuelType(carDto.getFuelType());
-        car.setProductionYear(carDto.getProductionYear());
-        car.setEngineSize(carDto.getEngineSize());
-        car.setSeat(carDto.getSeat());
-        car.setDoor(carDto.getDoor());
-        car.setWarranty(carDto.getWarranty());
-        car.setTransmission(carDto.getTransmission());
-        car.setDriveType(carDto.getDriveType());
-        car.setColor(carDto.getColor());
-        car.setDescription(carDto.getDescription());
-        car.setCarType(type);
-        car.setCarBrand(brand);
+        // === Resolve features ===
+        List<Feature> selected = (carDto.getFeatureIds() == null || carDto.getFeatureIds().isEmpty())
+                ? java.util.Collections.emptyList()
+                : featureService.findAllByIds(carDto.getFeatureIds());
 
-        // === Set Features ===
-        if (carDto.getFeatureIds() != null && !carDto.getFeatureIds().isEmpty()) {
-            List<Feature> selected = featureService.findAllByIds(carDto.getFeatureIds());
-            car.getFeatures().addAll(new HashSet<>(selected));
-        }
+        // === Build & Save (uses normalized name) ===
+        Car car = carService.buildCarForCreate(carDto, type, brand, selected);
+        car.setName(normalizedName); // enforce normalized value
+        Car saved = carService.save(car);
 
-        // === Save Car ===
-        Car carSaved = carService.save(car);
-
-        // === Handle Image Uploads ===
+        // === Handle Image Uploads (left as in your code) ===
         MultipartFile[] files = carDto.getFiles();
         if (files != null && files.length > 0) {
             try {
                 for (MultipartFile file : files) {
                     if (file.isEmpty()) continue;
-
                     String contentType = file.getContentType();
                     if (contentType == null || !contentType.startsWith("image/")) {
-                        // Redirect to upload page if invalid
-                        return "redirect:/admin/imageUpload?carId=" + carSaved.getId();
+                        return "redirect:/admin/imageUpload?carId=" + saved.getId();
                     }
-
-
+                    // your actual upload/store logic here...
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                // Optional: redirect to error page
+                // optionally: return an error page
             }
         }
 
@@ -192,11 +160,61 @@ public class CarController {
 
     // --- DETAIL ---
     @GetMapping("/car-detail/{id}")
-    public String carDetail(@PathVariable Long id, Model model) {
+    public String carDetail(@PathVariable Long id,
+                            @AuthenticationPrincipal(expression = "username") String email,
+                            Model model) {
         var carOpt = carService.findByIdWithFeatures(id);
         if (carOpt.isEmpty()) return "redirect:/carList";
+
         model.addAttribute("car", carOpt.get());
+        model.addAttribute("reviews", reviewService.listForCar(id));
+        model.addAttribute("avgRating", reviewService.averageForCar(id));
+        model.addAttribute("reviewDto", new ReviewDto());
+
+        boolean userHasReviewed = false;
+        if (email != null) {
+            userHasReviewed = userAccountService.findByEmail(email)
+                    .map(u -> reviewService.hasUserReviewedCar(id, u.getId()))
+                    .orElse(false);
+        }
+        model.addAttribute("userHasReviewed", userHasReviewed);
+
         return "listing-single";
+    }
+
+
+    @PostMapping("/cars/{id}/reviews")
+    public String submitReview(@PathVariable Long id,
+                               @Valid @ModelAttribute("reviewDto") ReviewDto reviewDto,
+                               BindingResult result,
+                               @AuthenticationPrincipal(expression = "username") String email,
+                               Model model) {
+
+        if (email == null) return "redirect:/login";
+
+        // ✅ get a UserAccount, not Optional<UserAccount>
+        UserAccount user = userAccountService.findByEmailOrThrow(email);
+        // or: UserAccount user = userAccountService.findByEmail(email)
+        //         .orElseThrow(() -> new UsernameNotFoundException("No user " + email));
+
+        if (result.hasErrors()) {
+            model.addAttribute("car", carService.findByIdOrNull(id));
+            model.addAttribute("reviews", reviewService.listForCar(id));
+            model.addAttribute("avgRating", reviewService.averageForCar(id));
+            return "listing-single";
+        }
+
+        try {
+            reviewService.addReview(id, user.getId(), reviewDto); // now compiles
+        } catch (IllegalStateException dup) {
+            result.rejectValue("comment", "duplicate", "You already reviewed this car.");
+            model.addAttribute("car", carService.findByIdOrNull(id));
+            model.addAttribute("reviews", reviewService.listForCar(id));
+            model.addAttribute("avgRating", reviewService.averageForCar(id));
+            return "listing-single";
+        }
+
+        return "redirect:/car-detail/" + id;
     }
 
     // --- EDIT ---
@@ -205,36 +223,14 @@ public class CarController {
         Car car = carService.findByIdOrNull(id);
         if (car == null) return "redirect:/admin/cars";
 
-        CarDto carDto = new CarDto();
-        carDto.setName(car.getName());
-        carDto.setYoutubeLink(car.getYoutubeLink());
-        carDto.setPrice(car.getPrice());
-        carDto.setFuelType(car.getFuelType());
-        carDto.setProductionYear(car.getProductionYear());
-        carDto.setEngineSize(car.getEngineSize());
-        carDto.setSeat(car.getSeat());
-        carDto.setDoor(car.getDoor());
-        carDto.setWarranty(car.getWarranty());
-        carDto.setTransmission(car.getTransmission());
-        carDto.setDriveType(car.getDriveType());
-        carDto.setColor(car.getColor());
-        carDto.setDescription(car.getDescription());
-
-        if (car.getCarType() != null) {
-            carDto.setCarTypeId(String.valueOf(car.getCarType().getTypeId()));
-        }
-        if (car.getCarBrand() != null) {
-            carDto.setCarBrandId(car.getCarBrand().getBrandId());
-        }
-
-        carDto.setFeatureIds(
-                car.getFeatures().stream().map(Feature::getId).collect(Collectors.toList())
-        );
+        CarDto carDto = carService.buildDtoForEdit(car);
 
         model.addAttribute("carId", id);
         model.addAttribute("carDto", carDto);
+        model.addAttribute("carTypes", carTypeService.findAll());
+        model.addAttribute("carBrands", carBrandService.findAll());
         model.addAttribute("allFeatures", featureService.findAllFeatures());
-        return "/admin/carEdit";
+        return "admin/carEdit";
     }
 
     @PostMapping({"/editCar/{id}", "/admin/editCar/{id}"})
@@ -246,16 +242,23 @@ public class CarController {
         Car existing = carService.findByIdOrNull(id);
         if (existing == null) return "redirect:/admin/cars";
 
+        // ===== Name (normalize + unique excluding current id) =====
+        String normalizedName = carService.normalizeName(carDto.getName());
+        if (normalizedName == null || normalizedName.isEmpty()) {
+            result.rejectValue("name", "required", "Car name is required");
+        } else if (carService.nameExistsExcludingId(id, normalizedName)) {
+            result.rejectValue("name", "duplicate", "Car name already exists");
+        }
+
         // ===== Car Type Validation =====
         CarType type = null;
         String rawTypeId = carDto.getCarTypeId();
-        Long typeId = null;
-        if (rawTypeId == null || rawTypeId.isBlank()) {
+        if (rawTypeId == null || rawTypeId.trim().isEmpty()) {
             result.rejectValue("carTypeId", "required", "Car type is required");
         } else {
             try {
-                typeId = Long.parseLong(rawTypeId.trim());
-                type = carTypeService.findById(typeId);
+                Long typeId = Long.parseLong(rawTypeId.trim());
+                type = carTypeService.findById(typeId); // return null if not found
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
                 }
@@ -270,49 +273,33 @@ public class CarController {
         if (brandId == null) {
             result.rejectValue("carBrandId", "required", "Car brand is required");
         } else {
-            brand = carBrandRepository.findById(brandId).orElse(null);
+            brand = carBrandService.findById(brandId).orElse(null);
             if (brand == null) {
                 result.rejectValue("carBrandId", "invalid", "Invalid car brand");
             }
         }
 
-        // ===== Return to form if errors =====
+        // ===== On errors: re-add all lists used by the view =====
         if (result.hasErrors()) {
             model.addAttribute("carId", id);
+            model.addAttribute("carTypes", carTypeService.findAll());
+            model.addAttribute("carBrands", carBrandService.findAll());
             model.addAttribute("allFeatures", featureService.findAllFeatures());
-            return "/admin/carEdit";
+            return "admin/carEdit";
         }
 
-        // ===== Update Car Fields =====
-        existing.setName(carDto.getName());
-        existing.setYoutubeLink(carDto.getYoutubeLink());
-        existing.setPrice(carDto.getPrice());
-        existing.setFuelType(carDto.getFuelType());
-        existing.setProductionYear(carDto.getProductionYear());
-        existing.setEngineSize(carDto.getEngineSize());
-        existing.setSeat(carDto.getSeat());
-        existing.setDoor(carDto.getDoor());
-        existing.setWarranty(carDto.getWarranty());
-        existing.setTransmission(carDto.getTransmission());
-        existing.setDriveType(carDto.getDriveType());
-        existing.setColor(carDto.getColor());
-        existing.setDescription(carDto.getDescription());
-        existing.setCarType(type);
-        existing.setCarBrand(brand);
+        // ===== Resolve features =====
+        List<Feature> selected = (carDto.getFeatureIds() == null || carDto.getFeatureIds().isEmpty())
+                ? java.util.Collections.emptyList()
+                : featureService.findAllByIds(carDto.getFeatureIds());
 
-        // ===== Features Update =====
-        existing.getFeatures().clear();
-        List<Long> ids = carDto.getFeatureIds();
-        if (ids != null && !ids.isEmpty()) {
-            List<Feature> selected = featureService.findAllByIds(ids);
-            existing.getFeatures().addAll(new HashSet<>(selected));
-        }
-
-        // ===== Save and Redirect =====
+        // ===== Apply DTO via service + save =====
+        carDto.setName(normalizedName); // ensure normalized value goes into entity
+        carService.applyDtoToEntity(existing, carDto, type, brand, selected);
         carService.save(existing);
+
         return "redirect:/admin/cars";
     }
-
     // Delete
     @GetMapping("/carDelete/{id}")
     public String deleteCar(@PathVariable Long id) {

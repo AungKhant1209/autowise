@@ -12,13 +12,18 @@ import java.util.Optional;
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long> {
 
-    Car findCarByName(String name);
-    Car findCarById(Long id);
 
+
+    // === Robust, case-insensitive name lookups ===
+    Optional<Car> findByNameIgnoreCase(String name);
+    boolean existsByNameIgnoreCase(String name);
+    boolean existsByNameIgnoreCaseAndIdNot(String name, Long id);
+
+    // === Eager features fetch ===
     @Query("select c from Car c left join fetch c.features where c.id = :id")
     Optional<Car> findByIdWithFeatures(@Param("id") Long id);
 
-    // --- cleanup dependents ---
+    // === Cleanup dependents (native) ===
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "DELETE FROM car_feature WHERE car_id = :id", nativeQuery = true)
     void deleteCarFeatures(@Param("id") long id);
@@ -27,7 +32,7 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query(value = "DELETE FROM car_images WHERE car_id = :id", nativeQuery = true)
     void deleteCarImages(@Param("id") long id);
 
-    // --- hard delete parent row ---
+    // === Hard delete parent row ===
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "DELETE FROM car WHERE id = :id", nativeQuery = true)
     void hardDeleteCar(@Param("id") long id);

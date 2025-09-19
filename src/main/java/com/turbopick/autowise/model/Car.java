@@ -61,4 +61,9 @@ public class Car {
     @CollectionTable(name = "car_images", joinColumns = @JoinColumn(name = "car_id"))
     @Column(name = "image_url", length = 1024) // important for long S3 URLs
     private List<String> imageUrls = new ArrayList<>();
+
+    // in Car.java
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private java.util.List<Review> reviews = new java.util.ArrayList<>();
 }
