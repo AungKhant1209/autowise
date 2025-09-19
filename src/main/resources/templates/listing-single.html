@@ -547,145 +547,106 @@
 
                                 </div>
                             </div>
+
+
+<!--                            reviewsdisplaying-->
                             <div class="listing-single__review-and-comment">
-                                <!--Review One Start-->
+
                                 <div class="review-one">
                                     <div class="comments-area">
                                         <div class="review-one__title">
-                                            <h3>2 Reviews</h3>
+                                            <h3 th:text="${#lists.size(reviews)} + ' Reviews'">0 Reviews</h3>
                                         </div>
-                                        <!--Start Comment Box-->
-                                        <div class="comment-box">
-                                            <div class="comment">
-                                                <div class="author-thumb">
-                                                    <figure class="thumb"><img
-                                                            src="assets/images/shop/review-1-1.jpg" alt="">
-                                                    </figure>
-                                                </div>
 
-                                                <div class="review-one__content">
-                                                    <div class="review-one__content-top">
+                                        <!-- render each review -->
+                                        <!-- One review item -->
+                                        <div class="comment-box" th:each="r : ${reviews}">
+                                            <div class="comment">
+                                                <div class="review-one__content" style="width:100%">
+                                                    <div class="review-one__content-top" style="display:flex;justify-content:space-between;align-items:center;">
                                                         <div class="info">
-                                                            <h2>Kevin martin <span>20 Oct, 2022 . 4:00
-                                                                        pm</span></h2>
+                                                            <h2 style="margin:0;">
+                                                                <span th:text="${r.user != null ? r.user.name : 'User'}">User Name</span>
+                                                                <small class="text-muted"
+                                                                       style="font-weight:normal;margin-left:8px;"
+                                                                       th:text="${#temporals.format(r.createdAt, 'dd MMM, yyyy • h:mm a')}">
+                                                                    01 Jan, 2025 • 4:00 PM
+                                                                </small>
+                                                            </h2>
                                                         </div>
-                                                        <div class="reply-btn">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
+
+                                                        <!-- Stars and numeric rating -->
+                                                        <div class="reply-btn" aria-label="rating" style="white-space:nowrap;">
+          <span th:each="i : ${#numbers.sequence(1,5)}">
+            <i class="fa fa-star" th:classappend="${i <= r.rating} ? '' : ' text-muted'"></i>
+          </span>
+                                                            <span style="margin-left:6px;" th:text="'(' + r.rating + '/5)'">(5/5)</span>
                                                         </div>
                                                     </div>
 
-                                                    <div class="review-one__content-bottom">
-                                                        <p>Lorem ipsum dolor sit amet, cibo mundi ea duo, vim exerci
-                                                            phaedrum. There are many variations of passages of Lorem
-                                                            Ipsum available, but the majority have alteration in
-                                                            some injected or words which don't look even slightly
-                                                            believable. If you are going to use a passage of Lorem
-                                                            Ipsum, you need to be sure there isn't anything
-                                                            embarrang hidden in the middle of text.</p>
+                                                    <div class="review-one__content-bottom" style="margin-top:8px;">
+                                                        <p th:text="${r.comment}">Comment…</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--End Comment Box-->
 
-                                        <!--Start Comment Box-->
-                                        <div class="comment-box">
-                                            <div class="comment">
-                                                <div class="author-thumb">
-                                                    <figure class="thumb"><img
-                                                            src="assets/images/shop/review-1-2.jpg" alt="">
-                                                    </figure>
-                                                </div>
-
-                                                <div class="review-one__content">
-                                                    <div class="review-one__content-top">
-                                                        <div class="info">
-                                                            <h2>Sarah albert <span>20 Oct, 2022 . 4:00
-                                                                        pm</span></h2>
-                                                        </div>
-                                                        <div class="reply-btn">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="review-one__content-bottom">
-                                                        <p>It has survived not only five centuries, but also
-                                                            the leap into electronic
-                                                            typesetting unchanged. It was popularised in the
-                                                            sheets containing lorem ipsum
-                                                            is simply free text. Class aptent taciti
-                                                            sociosqu ad litora torquent per conubia
-                                                            nostra, per inceptos himenaeos. Vestibulum
-                                                            sollicitudin varius mauris non
-                                                            dignissim.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--End Comment Box-->
                                     </div>
                                 </div>
-                                <!--Review One End-->
 
-                                <!--Start Review Form-->
+                                <!-- Add review -->
                                 <div class="review-form-one">
                                     <div class="review-form-one__inner">
                                         <h3 class="review-form-one__title">Add a review</h3>
-                                        <div class="review-form-one__rate-box">
-                                            <p class="review-form-one__rate-text">Rate this product?</p>
-                                            <div class="review-form-one__rate">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
+
+                                        <!-- show login hint if not logged in -->
+                                        <div th:if="${#strings.isEmpty(loggedInUserEmail)}">
+                                            <p>Please <a th:href="@{/login}">log in</a> to write a review.</p>
                                         </div>
-                                        <form action="assets/inc/sendemail.php"
-                                              class="review-form-one__form contact-form-validated"
-                                              novalidate="novalidate">
-                                            <div class="row">
-                                                <div class="col-xl-12">
-                                                    <div class="review-form-one__input-box text-message-box">
-                                                            <textarea name="message"
-                                                                      placeholder="Write a comment"></textarea>
+
+                                        <!-- show form if logged in and has not reviewed -->
+                                        <div th:if="${!#strings.isEmpty(loggedInUserEmail) and !userHasReviewed}">
+                                            <form th:action="@{'/cars/' + ${car.id} + '/reviews'}"
+                                                  th:object="${reviewDto}" method="post">
+
+                                                <input type="hidden" th:if="${_csrf != null}"
+                                                       th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                                <div class="review-form-one__rate-box">
+                                                    <p class="review-form-one__rate-text">Rate this car</p>
+                                                    <div class="review-form-one__rate">
+                                                        <label th:each="i : ${#numbers.sequence(1,5)}" style="margin-right:6px;">
+                                                            <input type="radio" th:field="*{rating}" th:value="${i}"/>
+                                                            <i class="fa fa-star"></i>
+                                                        </label>
+                                                        <div>
+                                                            <span class="text-danger" th:errors="*{rating}"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-6 col-lg-6">
-                                                    <div class="review-form-one__input-box">
-                                                        <input type="text" placeholder="Your name" name="name">
-                                                    </div>
+
+                                                <div class="review-form-one__input-box text-message-box">
+                                                    <textarea th:field="*{comment}" placeholder="Write a comment"></textarea>
+                                                    <div><span class="text-danger" th:errors="*{comment}"></span></div>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-6">
-                                                    <div class="review-form-one__input-box">
-                                                        <input type="email" placeholder="Email address"
-                                                               name="email">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-12">
-                                                    <button type="submit"
-                                                            class="thm-btn review-form-one__btn">Submit a review <span
-                                                            class="fas fa-arrow-right"></span></button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div class="result"></div>
+
+                                                <button type="submit" class="thm-btn review-form-one__btn">
+                                                    Submit A Review <span class="fas fa-arrow-right"></span>
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                        <!-- already reviewed -->
+                                        <div th:if="${!#strings.isEmpty(loggedInUserEmail) and userHasReviewed}">
+                                            <p>You’ve already reviewed this car.</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <!--End Review Form-->
+
                             </div>
+
+
+                            <!--                            reviewsdisplaying-->
                         </div>
                     </div>
                 </div>

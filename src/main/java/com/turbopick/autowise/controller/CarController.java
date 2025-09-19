@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -169,19 +170,14 @@ public class CarController {
         model.addAttribute("car", carOpt.get());
         model.addAttribute("reviews", reviewService.listForCar(id));
         model.addAttribute("avgRating", reviewService.averageForCar(id));
-        model.addAttribute("reviewDto", new ReviewDto());
-
-        boolean userHasReviewed = false;
-        if (email != null) {
-            userHasReviewed = userAccountService.findByEmail(email)
-                    .map(u -> reviewService.hasUserReviewedCar(id, u.getId()))
-                    .orElse(false);
-        }
-        model.addAttribute("userHasReviewed", userHasReviewed);
+        model.addAttribute("reviewDto", new ReviewDto());          // form-backing bean
+        model.addAttribute("loggedInUserEmail", email);            // to show/hide the form
+        model.addAttribute("userHasReviewed",
+                (email != null) ? reviewService.hasUserReviewedCar(
+                        id, userAccountService.findByEmailOrThrow(email).getId()) : false);
 
         return "listing-single";
     }
-
 
     @PostMapping("/cars/{id}/reviews")
     public String submitReview(@PathVariable Long id,
@@ -189,33 +185,37 @@ public class CarController {
                                BindingResult result,
                                @AuthenticationPrincipal(expression = "username") String email,
                                Model model) {
-
+        // must be logged in
         if (email == null) return "redirect:/login";
 
-        // ✅ get a UserAccount, not Optional<UserAccount>
-        UserAccount user = userAccountService.findByEmailOrThrow(email);
-        // or: UserAccount user = userAccountService.findByEmail(email)
-        //         .orElseThrow(() -> new UsernameNotFoundException("No user " + email));
+        var user = userAccountService.findByEmailOrThrow(email);
 
+        // server-side validation fallback
         if (result.hasErrors()) {
             model.addAttribute("car", carService.findByIdOrNull(id));
             model.addAttribute("reviews", reviewService.listForCar(id));
             model.addAttribute("avgRating", reviewService.averageForCar(id));
+            model.addAttribute("loggedInUserEmail", email);
+            model.addAttribute("userHasReviewed", reviewService.hasUserReviewedCar(id, user.getId()));
             return "listing-single";
         }
 
         try {
-            reviewService.addReview(id, user.getId(), reviewDto); // now compiles
-        } catch (IllegalStateException dup) {
+            reviewService.addReview(id, user.getId(), reviewDto);
+        } catch (IllegalStateException dup) { // already reviewed
             result.rejectValue("comment", "duplicate", "You already reviewed this car.");
             model.addAttribute("car", carService.findByIdOrNull(id));
             model.addAttribute("reviews", reviewService.listForCar(id));
             model.addAttribute("avgRating", reviewService.averageForCar(id));
+            model.addAttribute("loggedInUserEmail", email);
+            model.addAttribute("userHasReviewed", true);
             return "listing-single";
         }
 
         return "redirect:/car-detail/" + id;
     }
+
+
 
     // --- EDIT ---
     @GetMapping({"/editCar/{id}", "/admin/editCar/{id}"})

@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Data
 @Table(name = "user_accounts", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class UserAccount {
@@ -19,13 +22,12 @@ public class UserAccount {
     private String email;
 
     @NotBlank(message = "Password required")
-    private String passwordHash; // store the hash
+    private String passwordHash;
 
-    // very simple role model; you can expand to many-to-many
     @Column(nullable = false)
     private String role = "ROLE_USER";
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
-    private java.util.List<Review> reviews = new java.util.ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 }

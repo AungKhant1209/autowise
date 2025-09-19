@@ -65,5 +65,5 @@ public class Car {
     // in Car.java
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    private java.util.List<Review> reviews = new java.util.ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 }

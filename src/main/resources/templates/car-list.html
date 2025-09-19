@@ -42,21 +42,21 @@
                 <!-- LEFT COLUMN: CAR LIST -->
                 <div class="col-xl-9">
                     <div class="car-listing-page-one__left">
-                        <div class="row g-4">
+                        <div class="row g-4" id="carList">
+
 
                             <!-- SINGLE CAR CARD -->
                             <div class="col-xl-4 col-lg-4 col-md-6" th:each="car : ${cars}">
                                 <div class="listing-one__single">
-
                                     <!-- IMAGE -->
                                     <div class="listing-one__img">
                                         <img th:src="${#lists.isEmpty(car.imageUrls)
-                  ? '/assets/images/placeholder-car.jpg'
-                  : car.imageUrls.get(0)}"
+                                              ? '/assets/images/placeholder-car.jpg'
+                                              : car.imageUrls.get(0)}"
                                              alt="Car image"
                                              style="width:410px; height:250px; object-fit:cover; display:block;">
                                         <div class="listing-one__brand-name">
-                                            <p th:text="${car.name}">Car Name</p>
+                                            <p th:text="${car.name}" class="car-name">Car Name</p>
                                         </div>
                                     </div>
 
@@ -124,7 +124,7 @@
                             <!-- SEARCH -->
                             <div class="car-listing__search car-listing__sidebar-single">
                                 <form action="#">
-                                    <input type="text" placeholder="Search">
+                                    <input id="searchInput" type="text" placeholder="Search">
                                     <button type="submit"><i class="fa fa-search"></i></button>
                                 </form>
                             </div>
@@ -323,8 +323,8 @@
     <!-- /.search-popup__overlay -->
     <div class="search-popup__content">
         <form action="#">
-            <label for="search" class="sr-only">search here</label><!-- /.sr-only -->
-            <input type="text" id="search" placeholder="Search Here..." />
+            <label for="searchInput" class="sr-only">search here</label><!-- /.sr-only -->
+            <input type="text" id="searchInput" placeholder="Search Here..." />
             <button type="submit" aria-label="search submit" class="thm-btn">
                 <i class="fas fa-search"></i>
             </button>
@@ -338,7 +338,6 @@
     <span class="scroll-to-top__wrapper"><span class="scroll-to-top__inner"></span></span>
     <span class="scroll-to-top__text"> Go Back Top</span>
 </a>
-
 
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -364,12 +363,25 @@
 <script src="assets/js/timePicker.js"></script>
 <script src="assets/js/typed-2.0.11.js"></script>
 <script src="assets/js/aos.js"></script>
-
-
-
-
 <!-- template js -->
 <script src="assets/js/script.js"></script>
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        console.log("arrive to search bar")
+        let filter = this.value.toLowerCase();
+        let cars = document.querySelectorAll("#carList .listing-one__single");
+
+        cars.forEach(card => {
+            let name = card.querySelector(".car-name").textContent.toLowerCase();
+            if (name.includes(filter)) {
+                card.parentElement.style.display = "";
+            } else {
+                card.parentElement.style.display = "none";
+            }
+        });
+    });
+
+</script>
 </body>
 
 </html>
