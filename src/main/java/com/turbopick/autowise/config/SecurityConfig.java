@@ -5,21 +5,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
 
     @Bean
-    DaoAuthenticationProvider authProvider(CustomUserDetailsService uds, BCryptPasswordEncoder enc) {
+    public DaoAuthenticationProvider authProvider(CustomUserDetailsService uds, BCryptPasswordEncoder enc) {
         DaoAuthenticationProvider p = new DaoAuthenticationProvider();
         p.setUserDetailsService(uds);
         p.setPasswordEncoder(enc);
@@ -27,22 +26,31 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider provider) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider provider) throws Exception {
         http.authenticationProvider(provider);
 
         http.authorizeHttpRequests(auth -> auth
+                // public assets & public pages
                 .requestMatchers(
-                        "/login", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
+                        "/assets/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                 ).permitAll()
-                .requestMatchers("/admin/**").permitAll()   // 👈 added
+                .requestMatchers("/", "/home", "/about", "/contact").permitAll()
+
+                // login pages must be public to render (both share the same POST /login)
+                .requestMatchers("/login", "/register", "/admin/login",
+                        "/assets/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/cars/**", "/car-detail/**").hasAnyRole("USER","ADMIN")
+
+
                 .anyRequest().authenticated()
         );
 
         http.formLogin(form -> form
-                .loginPage("/login")
-                .usernameParameter("username") // must match form field name
+                .loginPage("/login")                 // single login endpoint
+                .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)
+                .successHandler(new RoleBasedSuccessHandler()) // ADMIN → /admin, else → /
                 .failureUrl("/login?error")
                 .permitAll()
         );
@@ -52,10 +60,8 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login?logout")
         );
 
-        // 👇 added
-        http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/admin/**")
-        );
+        http.csrf(Customizer.withDefaults());
+        http.exceptionHandling(ex -> ex.accessDeniedPage("/403"));
 
         return http.build();
     }
