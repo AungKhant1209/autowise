@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="admin/fragments/header :: adminHead('User Details')"></head>
+<body>
+<div th:replace="admin/fragments/navbartwo :: adminNavbar('users')"></div>
+
+<div class="container">
+    <h3 class="mb-3"><i class="fas fa-user mr-2"></i>User Details</h3>
+    <div class="card">
+        <div class="card-header">
+            <h5>User Information</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>ID:</strong> <span th:text="${user.id}">1</span></p>
+            <p><strong>Name:</strong> <span th:text="${user.name}">John Doe</span></p>
+            <p><strong>Email:</strong> <span th:text="${user.email}">john.doe@example.com</span></p>
+            <p><strong>Role:</strong> <span th:text="${user.role}">Admin</span></p>
+            <p><strong>Active:</strong> <span th:text="${user.active ? 'Yes' : 'No'}">Yes</span></p>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" th:href="@{/admin/users}">Back to User List</a>
+            <a class="btn btn-warning" th:href="@{/admin/users/edit/{id}(id=${user.id})}">Edit User</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

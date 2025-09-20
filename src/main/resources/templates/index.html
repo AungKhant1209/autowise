@@ -90,10 +90,35 @@
                     </div>
                 </li>
 
+                <!-- User Management -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userMenu"
+                       role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-users"></i> User Management
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="userMenu">
+                        <a class="dropdown-item" href="/admin/users/create"><i class="fas fa-user-plus"></i> User Register</a>
+                        <a class="dropdown-item" href="/admin/users"><i class="fas fa-list"></i> Show All Users</a>
+                    </div>
+                </li>
+
                 <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link" href="/home"><i class="fas fa-home"></i> Go to Home</a>
                 </li>
+
+                <!-- Logout Button in Navbar -->
+                <li class="nav-item">
+                    <form action="/logout" method="post" style="display: inline;">
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+
+                </li>
+
             </ul>
         </div>
     </nav>

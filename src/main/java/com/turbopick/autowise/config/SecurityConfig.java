@@ -4,21 +4,21 @@ import com.turbopick.autowise.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-    public DaoAuthenticationProvider authProvider(CustomUserDetailsService uds, BCryptPasswordEncoder enc) {
+    DaoAuthenticationProvider authProvider(CustomUserDetailsService uds, BCryptPasswordEncoder enc) {
         DaoAuthenticationProvider p = new DaoAuthenticationProvider();
         p.setUserDetailsService(uds);
         p.setPasswordEncoder(enc);
@@ -26,42 +26,42 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider provider) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider provider) throws Exception {
         http.authenticationProvider(provider);
 
+        // Authorization Rules
         http.authorizeHttpRequests(auth -> auth
-                // public assets & public pages
                 .requestMatchers(
-                        "/assets/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
+                        "/login", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                 ).permitAll()
-                .requestMatchers("/", "/home", "/about", "/contact").permitAll()
-
-                // login pages must be public to render (both share the same POST /login)
-                .requestMatchers("/login", "/register", "/admin/login",
-                        "/assets/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/cars/**", "/car-detail/**").hasAnyRole("USER","ADMIN")
-
-
-                .anyRequest().authenticated()
+                .requestMatchers("/admin/**").hasRole("ADMIN")   // Only ADMIN can access /admin paths
+                .requestMatchers("/user/**").hasRole("USER")     // Only USER can access user-specific paths (if needed)
+                .anyRequest().authenticated()  // All other requests require authentication
         );
 
+        // Login Configuration
         http.formLogin(form -> form
-                .loginPage("/login")                 // single login endpoint
-                .usernameParameter("email")
+                .loginPage("/login")  // Custom login page
+                .usernameParameter("username")  // Matches form field name
                 .passwordParameter("password")
-                .successHandler(new RoleBasedSuccessHandler()) // ADMIN → /admin, else → /
-                .failureUrl("/login?error")
+                .defaultSuccessUrl("/", true)  // Redirect to homepage after successful login
+                .failureUrl("/login?error")   // Redirect to login page on failure
                 .permitAll()
         );
 
+        // Logout Configuration
         http.logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutUrl("/logout")  // Default logout URL
+                .logoutSuccessUrl("/login?logout")  // Redirect to login page after successful logout
+                .invalidateHttpSession(true)  // Invalidate the session
+                .clearAuthentication(true)  // Clear authentication
+                .permitAll()
         );
 
-        http.csrf(Customizer.withDefaults());
-        http.exceptionHandling(ex -> ex.accessDeniedPage("/403"));
+        // CSRF Protection
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/admin/**")  // Optional: Ignore CSRF for admin paths if required
+        );
 
         return http.build();
     }

@@ -2,7 +2,6 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.dto.ReviewDto;
-import com.turbopick.autowise.model.User;
 import com.turbopick.autowise.model.UserAccount;
 import com.turbopick.autowise.service.*;
 import jakarta.validation.Valid;
