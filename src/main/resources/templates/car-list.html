@@ -46,71 +46,99 @@
 
 
                             <!-- SINGLE CAR CARD -->
-                            <div class="col-xl-4 col-lg-4 col-md-6" th:each="car : ${cars}">
-                                <div class="listing-one__single">
-                                    <!-- IMAGE -->
-                                    <div class="listing-one__img">
-                                        <img th:src="${#lists.isEmpty(car.imageUrls)
+                            <div class="col-xl-4 col-lg-4 col-md-6" th:each="car : ${carListViewDto.cars}">
+                            <div class="listing-one__single">
+                                <!-- IMAGE -->
+                                <div class="listing-one__img">
+                                    <img th:src="${#lists.isEmpty(car.imageUrls)
                                               ? '/assets/images/placeholder-car.jpg'
                                               : car.imageUrls.get(0)}"
-                                             alt="Car image"
-                                             style="width:410px; height:250px; object-fit:cover; display:block;">
-                                        <div class="listing-one__brand-name">
-                                            <p th:text="${car.name}" class="car-name">Car Name</p>
-                                        </div>
+                                         alt="Car image"
+                                         style="width:410px; height:250px; object-fit:cover; display:block;">
+                                    <div class="listing-one__brand-name">
+                                        <p th:text="${car.name}" class="car-name">Car Name</p>
                                     </div>
+                                </div>
 
-                                    <!-- CONTENT -->
-                                    <div class="listing-one__content">
-                                        <h3 class="listing-one__title">
-                                            <a th:href="@{/car-detail/{id}(id=${car.id})}" th:text="${car.name}">
-                                                Car Title
-                                            </a>
-                                        </h3>
-
-                                        <!-- META INFO -->
-                                        <div class="listing-one__meta-box-info">
-                                            <ul class="list-unstyled listing-one__meta">
-                                                <li>
-                                                    <div class="icon"><span class="icon-manual"></span></div>
-                                                    <div class="text"><p th:text="${car.transmission}">Manual</p></div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><span class="icon-mileage"></span></div>
-                                                    <div class="text"><p th:text="${car.driveType}">AWD</p></div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><span class="icon-fuel-type"></span></div>
-                                                    <div class="text"><p th:text="${car.fuelType}">Gasoline</p></div>
-                                                </li>
-                                            </ul>
-
-                                            <ul class="list-unstyled listing-one__meta listing-one__meta--two">
-                                                <li>
-                                                    <div class="icon"><span class="icon-test-drive"></span></div>
-                                                    <div class="text"><p>Basic</p></div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><span class="icon-avatar"></span></div>
-                                                    <div class="text"><p>Age 25</p></div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon"><span class="icon-in-person"></span></div>
-                                                    <div class="text"><p>5 Persons</p></div>
-                                                </li>
-                                            </ul>
-                                        </div><!-- /.listing-one__meta-box-info -->
-                                    </div><!-- /.listing-one__content -->
-
-                                    <!-- BUTTON -->
-                                    <div class="listing-one__btn-box">
-                                        <a th:href="@{/car-detail/{id}(id=${car.id})}" class="thm-btn">
-                                            Details Now <span class="fas fa-arrow-right"></span>
+                                <!-- CONTENT -->
+                                <div class="listing-one__content">
+                                    <h3 class="listing-one__title">
+                                        <a th:href="@{/car-detail/{id}(id=${car.id})}" th:text="${car.name}">
+                                            Car Title
                                         </a>
-                                    </div>
+                                    </h3>
+                                    <!-- META INFO -->
+                                    <div class="listing-one__meta-box-info">
+                                        <ul class="list-unstyled listing-one__meta">
+                                            <!-- Transmission -->
+                                            <li>
+                                                <div class="icon"><span class="icon-manual"></span></div>
+                                                <div class="text"><p th:text="${car.transmission}">Manual</p></div>
+                                            </li>
 
-                                </div><!-- /.listing-one__single -->
-                            </div><!-- /.col -->
+                                            <!-- Drive Type -->
+                                            <li>
+                                                <div class="icon"><span class="icon-mileage"></span></div>
+                                                <div class="text"><p th:text="${car.driveType}">AWD</p></div>
+                                            </li>
+
+                                            <!-- Fuel Type -->
+                                            <li>
+                                                <div class="icon"><span class="icon-fuel-type"></span></div>
+                                                <div class="text"><p th:text="${car.fuelType}">Gasoline</p></div>
+                                            </li>
+
+                                            <!-- Engine Size -->
+                                            <li>
+                                                <div class="icon"><span class="icon-engine"></span></div>
+                                                <div class="text"><p th:text="${car.engineSize}">2.0L</p></div>
+                                            </li>
+
+                                            <!-- Seats -->
+                                            <li>
+                                                <div class="icon"><span class="icon-seat"></span></div>
+                                                <div class="text"><p th:text="${car.seat} + ' Seats'">5 Seats</p></div>
+                                            </li>
+
+                                            <!-- Production Year -->
+                                            <li>
+                                                <div class="icon"><span class="icon-calendar"></span></div>
+                                                <div class="text"><p th:text="${car.productionYear}">2022</p></div>
+                                            </li>
+
+                                            <!-- Price -->
+                                            <li>
+                                                <div class="icon"><span class="icon-price">$ </span></div>
+                                                <div class="text"><p th:text="${#numbers.formatDecimal(car.price, 0, 'COMMA', 0, 'POINT')}  "></p></div>
+                                            </li>
+                                        </ul>
+
+
+                                    </div>
+                                </div><!-- /.listing-one__content -->
+
+                                <!-- BUTTON -->
+                                <div class="listing-one__btn-box d-flex justify-content-between">
+                                    <a th:href="@{/car-detail/{id}(id=${car.id})}"
+                                       class="thm-btn flex-fill me-2 text-center">
+                                        Details
+                                    </a>
+                                    <form th:action="@{/compare/add}" method="post" class="flex-fill"
+                                          th:with="selectedIds=${session.compareIds}">
+                                        <input type="hidden" name="id" th:value="${car.id}" />
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                        <button type="submit"
+                                                class="thm-btn w-100 text-center"
+                                                th:disabled="${selectedIds != null and selectedIds.contains(car.id)}"
+                                                th:text="${(selectedIds != null and selectedIds.contains(car.id)) ? 'Added' : 'Compare'}">
+                                            Compare
+                                        </button>
+                                    </form>
+                                </div>
+
+
+                            </div><!-- /.listing-one__single -->
+                        </div><!-- /.col -->
 
                         </div><!-- /.row g-4 -->
                     </div><!-- /.car-listing-page-one__left -->
@@ -119,134 +147,94 @@
                 <!-- RIGHT COLUMN: SIDEBAR -->
                 <div class="col-xl-3">
                     <div class="car-listing-page-one__right">
-                        <div class="car-listing__sidebar">
+                        <form th:action="@{/carList}" method="get" id="filterForm">
 
-                            <!-- SEARCH -->
+                            <!-- name search -->
                             <div class="car-listing__search car-listing__sidebar-single">
-                                <form action="#">
-                                    <input id="searchInput" type="text" placeholder="Search">
-                                    <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
+                                <input id="filterName" type="text" name="name" placeholder="Search"
+                                       th:value="${selectedName}">
+                                <button type="submit"><i class="fa fa-search"></i></button>
                             </div>
 
-                            <!-- FILTER PRICE -->
+                            <!-- price -->
                             <div class="car-listing__price-ranger car-listing__sidebar-single">
                                 <h3 class="car-listing__sidebar-title">Filter Price</h3>
                                 <div class="price-ranger">
-                                    <div id="slider-range"></div>
+<!--                                    <div id="slider-range"></div>-->
                                     <div class="ranger-min-max-block">
-                                        <input type="text" readonly class="min">
+                                        <input type="number" class="min" name="minPrice"
+                                               th:value="${selectedMinPrice}"
+                                               th:placeholder="${carListViewDto.minPrice}">
                                         <span>-</span>
-                                        <input type="text" readonly class="max">
+                                        <input type="number" class="max" name="maxPrice"
+                                               th:value="${selectedMaxPrice}"
+                                               th:placeholder="${carListViewDto.maxPrice}">
                                         <input type="submit" value="Filter">
                                     </div>
+
+
                                 </div>
                             </div>
 
-                            <!-- CATEGORIES -->
+                            <!-- brand -->
                             <div class="car-listing__category car-listing__sidebar-single">
-                                <h3 class="car-listing__sidebar-title">Categories</h3>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" id="cat-all">
-                                            <label for="cat-all"><span></span>All</label>
-                                        </div>
-                                        <div class="counts-box"><p>200</p></div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" id="cat-sport" checked>
-                                            <label for="cat-sport"><span></span>Sport Cars</label>
-                                        </div>
-                                        <div class="counts-box"><p>50</p></div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" id="cat-sedan">
-                                            <label for="cat-sedan"><span></span>Sedan</label>
-                                        </div>
-                                        <div class="counts-box"><p>100</p></div>
-                                    </li>
-                                    <!-- add more categories as needed -->
-                                </ul>
+                                <h3 class="car-listing__sidebar-title">Brands</h3>
+                                <select name="brandId" class="form-select">
+                                    <option value="">All</option>
+                                    <option th:each="b : ${carListViewDto.carBrands}"
+                                            th:value="${b.brandId}"
+                                            th:text="${b.brandName}"
+                                            th:selected="${selectedBrandId != null and selectedBrandId == b.brandId}">
+                                    </option>
+                                </select>
                             </div>
 
-                            <!-- FEATURES -->
+                            <!-- type -->
+                            <div class="car-listing__category car-listing__sidebar-single">
+                                <h3 class="car-listing__sidebar-title">Car Type</h3>
+                                <select name="typeId" class="form-select">
+                                    <option value="">All</option>
+                                    <option th:each="t : ${carListViewDto.types}"
+                                            th:value="${t.typeId}"
+                                            th:text="${t.typeName}"
+                                            th:selected="${selectedTypeId != null and selectedTypeId == t.typeId}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- fuel -->
+                            <div class="car-listing__category car-listing__sidebar-single">
+                                <h3 class="car-listing__sidebar-title">Fuel Type</h3>
+                                <select name="fuel" class="form-select" th:value="${selectedFuel}">
+                                    <option value="">All</option>
+                                    <option>Gasoline</option>
+                                    <option>Diesel</option>
+                                    <option>Hybrid</option>
+                                    <option>Plug-in Hybrid</option>
+                                    <option>Electric</option>
+                                </select>
+                            </div>
+
+                            <!-- features (multi) -->
                             <div class="car-listing__category car-listing__features car-listing__sidebar-single">
                                 <h3 class="car-listing__sidebar-title">Car Features</h3>
                                 <ul class="list-unstyled">
-                                    <li>
+                                    <li th:each="f : ${carListViewDto.features}">
                                         <div class="checked-box">
-                                            <input type="checkbox" id="feat-backup">
-                                            <label for="feat-backup"><span></span>Backup Camera</label>
+                                            <input type="checkbox"
+                                                   th:id="'feat-' + ${f.id}"
+                                                   name="featureIds"
+                                                   th:value="${f.id}"
+                                                   th:checked="${selectedFeatureIds != null and selectedFeatureIds.contains(f.id)}">
+                                            <label th:for="'feat-' + ${f.id}" th:text="${f.name}">Feature</label>
                                         </div>
-                                        <div class="counts-box"><p>2</p></div>
                                     </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" id="feat-blindspot" checked>
-                                            <label for="feat-blindspot"><span></span>Blindspot Warning</label>
-                                        </div>
-                                        <div class="counts-box"><p>2</p></div>
-                                    </li>
-                                    <!-- add more features as needed -->
                                 </ul>
                             </div>
 
-                            <!-- FUEL TYPE -->
-                            <div class="car-listing__category car-listing__fuel-type car-listing__sidebar-single">
-                                <h3 class="car-listing__sidebar-title">Fuel Type</h3>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" id="fuel-diesel">
-                                            <label for="fuel-diesel"><span></span>Diesel</label>
-                                        </div>
-                                        <div class="counts-box"><p>20</p></div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" id="fuel-gasoline" checked>
-                                            <label for="fuel-gasoline"><span></span>Gasoline</label>
-                                        </div>
-                                        <div class="counts-box"><p>25</p></div>
-                                    </li>
-                                    <!-- add more fuel types as needed -->
-                                </ul>
-                            </div>
-
-                            <!-- REVIEWS -->
-                            <div class="car-listing__rating car-listing__sidebar-single">
-                                <h3 class="car-listing__sidebar-title">Reviews</h3>
-                                <div class="car-listing__rating-box">
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <input type="radio" id="fivestar" name="rating" checked>
-                                            <label for="fivestar">
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="fourstar" name="rating">
-                                            <label for="fourstar">
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star gray"></span>
-                                            </label>
-                                        </li>
-                                        <!-- add more rating options if needed -->
-                                    </ul>
-                                </div>
-                            </div>
-
-                        </div><!-- /.car-listing__sidebar -->
+                            <button type="submit" class="thm-btn w-100">Apply Filters</button>
+                            <a th:href="@{/carList}" class="btn btn-link w-100 mt-2">Clear</a>
+                        </form><!-- /.car-listing__sidebar -->
                     </div><!-- /.car-listing-page-one__right -->
                 </div><!-- /.col-xl-3 -->
 
@@ -366,22 +354,42 @@
 <!-- template js -->
 <script src="assets/js/script.js"></script>
 <script>
-    document.getElementById("searchInput").addEventListener("keyup", function() {
-        console.log("arrive to search bar")
-        let filter = this.value.toLowerCase();
-        let cars = document.querySelectorAll("#carList .listing-one__single");
+    // If you use jQuery UI slider:
+    // $('#slider-range').slider({ ... update the two inputs named minPrice/maxPrice ... });
 
-        cars.forEach(card => {
-            let name = card.querySelector(".car-name").textContent.toLowerCase();
-            if (name.includes(filter)) {
-                card.parentElement.style.display = "";
-            } else {
-                card.parentElement.style.display = "none";
+    // Auto-submit when brand/type/fuel change
+    document.querySelectorAll('select[name="brandId"], select[name="typeId"], select[name="fuel"]')
+        .forEach(el => el.addEventListener('change', () => document.getElementById('filterForm').submit()));
+
+    // Debounced name search (enter key or short delay)
+    const search = document.getElementById('searchInput');
+    let t;
+    search.addEventListener('keyup', () => {
+        clearTimeout(t);
+        t = setTimeout(() => document.getElementById('filterForm').submit(), 400);
+    });
+    (function () {
+        const form  = document.getElementById('filterForm');
+        const input = document.getElementById('filterName');
+
+        // Submit on Enter
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (form.requestSubmit) form.requestSubmit(); else form.submit();
             }
         });
-    });
+
+        // Auto-submit select filters
+        document.querySelectorAll('select[name="brandId"], select[name="typeId"], select[name="fuel"]')
+            .forEach(el => el.addEventListener('change', () => {
+                if (form.requestSubmit) form.requestSubmit(); else form.submit();
+            }));
+    })();
 
 </script>
+
+
 </body>
 
 </html>

@@ -66,7 +66,6 @@ public class CarTypeController {
         return "redirect:/admin/carTypes";
     }
 
-    // --- EDIT ---
     @GetMapping("/admin/carTypesEdit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         CarType carType = carTypeService.findById(id);

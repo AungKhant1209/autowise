@@ -7,8 +7,6 @@ import java.util.Optional;
 
 public interface CarBrandRepository extends JpaRepository<CarBrand, Long> {
 
-    // Case-insensitive lookups by brandName
-    Optional<CarBrand> findByBrandNameIgnoreCase(String brandName);
 
     boolean existsByBrandNameIgnoreCase(String brandName);
 

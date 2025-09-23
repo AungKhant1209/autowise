@@ -1,77 +1,126 @@
 package com.turbopick.autowise.service;
 
 import com.turbopick.autowise.dto.CarDto;
+import com.turbopick.autowise.dto.CarListViewDto;
 import com.turbopick.autowise.model.Car;
 import com.turbopick.autowise.model.CarBrand;
 import com.turbopick.autowise.model.CarType;
 import com.turbopick.autowise.model.Feature;
+import com.turbopick.autowise.repository.CarBrandRepository;
 import com.turbopick.autowise.repository.CarRepository;
+import com.turbopick.autowise.repository.CarTypeRepository;
+import com.turbopick.autowise.repository.FeatureRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import com.turbopick.autowise.dto.CarListViewDto;
+import com.turbopick.autowise.model.Car;
+import com.turbopick.autowise.model.CarBrand;
+import com.turbopick.autowise.model.CarType;
+import com.turbopick.autowise.model.Feature;
+import com.turbopick.autowise.repository.*;
+import com.turbopick.autowise.spec.CarSpecs;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+
 
 @Service
+@AllArgsConstructor
 public class CarService {
-
     private final CarRepository carRepository;
-    public CarService(CarRepository carRepository) { this.carRepository = carRepository; }
+    private final CarBrandRepository carBrandRepository;
+    private final CarTypeRepository carTypeRepository;
+    private final FeatureRepository featureRepository;
 
-    /* ========= Name normalization & checks ========= */
 
-    /** Public so controller can reuse the same normalization. */
-    public String normalizeName(String s) {
-        if (s == null) return null;
-        // trim and collapse any internal whitespace sequences to a single space
-        return s.trim().replaceAll("\\s+", " ");
+    public CarListViewDto getCarsForListViewFiltered(
+            String name, Long minPrice, Long maxPrice,
+            Long brandId, Long typeId, String fuel,
+            List<Long> featureIds, Pageable pageable) {
+
+        Specification<Car> spec =
+                CarSpecs.nameLike(name)
+                        .and(CarSpecs.priceGte(minPrice))
+                        .and(CarSpecs.priceLte(maxPrice))
+                        .and(CarSpecs.brandIs(brandId))
+                        .and(CarSpecs.typeIs(typeId))
+                        .and(CarSpecs.fuelIs(fuel))
+                        .and(CarSpecs.hasAllFeatures(featureIds));
+
+        Page<Car> page = carRepository.findAll(spec, pageable);
+
+        // sidebar data
+        List<Feature> allFeatures = featureRepository.findAll();
+        List<CarBrand> carBrands  = carBrandRepository.findAll();
+        List<CarType>  carTypes   = carTypeRepository.findAll();
+
+        long min = carRepository.findAll().stream()
+                .filter(c -> c.getPrice() != null)
+                .mapToLong(Car::getPrice).min().orElse(0);
+        long max = carRepository.findAll().stream()
+                .filter(c -> c.getPrice() != null)
+                .mapToLong(Car::getPrice).max().orElse(0);
+
+        CarListViewDto dto = new CarListViewDto();
+        dto.setCars(page.getContent());
+        dto.setFeatures(allFeatures);
+        dto.setCarBrands(carBrands);
+        dto.setTypes(carTypes);
+        dto.setMinPrice(min);
+        dto.setMaxPrice(max);
+        return dto;
     }
 
-    public boolean nameExists(String raw) {
-        String n = normalizeName(raw);
-        return n != null && !n.isEmpty() && carRepository.existsByNameIgnoreCase(n);
-    }
 
-    public boolean nameExistsExcludingId(Long id, String raw) {
-        String n = normalizeName(raw);
-        return id != null && n != null && !n.isEmpty()
-                && carRepository.existsByNameIgnoreCaseAndIdNot(n, id);
-    }
 
-    /* ========= Create / Update ========= */
+   public CarListViewDto getCarsForListView(){
+       List<Car> cars = carRepository.findAll();
+       List<Feature> allFeatures = featureRepository.findAll();
+       List<CarBrand> carBrands = carBrandRepository.findAll();
+       List<CarType> carTypes = carTypeRepository.findAll();
+       long minPrice = cars.stream().filter(c -> c.getPrice()!=null).mapToLong(Car::getPrice).min().orElse(0);
+       long maxPrice = cars.stream().filter(c -> c.getPrice()!=null).mapToLong(Car::getPrice).max().orElse(0);
+       CarListViewDto carListViewDto = new CarListViewDto();
+       carListViewDto.setCars(cars);
+       carListViewDto.setFeatures(allFeatures);
+       carListViewDto.setCarBrands(carBrands);
+       carListViewDto.setTypes(carTypes);
+       carListViewDto.setMinPrice(minPrice);
+       carListViewDto.setMaxPrice(maxPrice);
+       return carListViewDto;
+   }
 
-    public Car save(Car car) {
-        // always persist normalized name
+
+
+    public Car buildCarForCreate(CarDto dto, CarType type, CarBrand brand, List<Feature> features) {
+        Car car = new Car();
+        applyDtoToEntity(car, dto, type, brand, features);
         car.setName(normalizeName(car.getName()));
-        return carRepository.save(car);
+        return car;
+    }
+    public List<Car> findAllById(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return carRepository.findAllById(ids);
     }
 
-    public List<Car> saveAll(List<Car> cars) {
-        cars.forEach(c -> c.setName(normalizeName(c.getName())));
-        return carRepository.saveAll(cars);
-    }
-
-    /* ========= Read ========= */
 
     public Optional<Car> findById(Long id) { return carRepository.findById(id); }
     public Car findByIdOrNull(Long id) { return carRepository.findById(id).orElse(null); }
 
-    public Car findByIdOrThrow(Long id) {
-        return carRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Car not found: " + id));
-    }
-
-    public Optional<Car> findByName(String name) {
-        String n = normalizeName(name);
-        return (n == null || n.isEmpty()) ? Optional.empty() : carRepository.findByNameIgnoreCase(n);
-    }
-
     public List<Car> findAll() { return carRepository.findAll(); }
-
-    public boolean existsById(Long id) { return carRepository.existsById(id); }
-
-    /* ========= Delete ========= */
 
     public void deleteById(Long id) { carRepository.deleteById(id); }
 
@@ -85,32 +134,14 @@ public class CarService {
                         new IllegalArgumentException("Car not found: " + car.getId()))
         );
     }
-
-    /* ========= Feature fetch ========= */
-
     @Transactional(readOnly = true)
     public Optional<Car> findByIdWithFeatures(Long id) {
         return carRepository.findByIdWithFeatures(id);
     }
 
-    @Transactional(readOnly = true)
-    public Car findByIdWithFeaturesOrNull(Long id) {
-        return findByIdWithFeatures(id).orElse(null);
-    }
 
-    /* ========= Mapping helpers ========= */
-
-    public Car buildCarForCreate(CarDto dto, CarType type, CarBrand brand, List<Feature> features) {
-        Car car = new Car();
-        applyDtoToEntity(car, dto, type, brand, features);
-        // ensure normalized on build as well (save() re-normalizes too)
-        car.setName(normalizeName(car.getName()));
-        return car;
-    }
-
-    /** Apply DTO onto an existing entity (useful for update). */
     public void applyDtoToEntity(Car target, CarDto dto, CarType type, CarBrand brand, List<Feature> features) {
-        // Scalars
+
         target.setName(dto.getName());
         target.setYoutubeLink(dto.getYoutubeLink());
         target.setPrice(dto.getPrice());
@@ -124,12 +155,9 @@ public class CarService {
         target.setDriveType(dto.getDriveType());
         target.setColor(dto.getColor());
         target.setDescription(dto.getDescription());
-
-        // Relations
         target.setCarType(type);
         target.setCarBrand(brand);
 
-        // Features (replace)
         target.getFeatures().clear();
         if (features != null && !features.isEmpty()) {
             target.getFeatures().addAll(new HashSet<>(features));
@@ -139,7 +167,6 @@ public class CarService {
         if (car == null) return null;
 
         CarDto dto = new CarDto();
-        // scalars
         dto.setName(car.getName());
         dto.setYoutubeLink(car.getYoutubeLink());
         dto.setPrice(car.getPrice());
@@ -154,7 +181,6 @@ public class CarService {
         dto.setColor(car.getColor());
         dto.setDescription(car.getDescription());
 
-        // relations (preselects)
         if (car.getCarType() != null) {
             dto.setCarTypeId(String.valueOf(car.getCarType().getTypeId()));
         }
@@ -162,7 +188,6 @@ public class CarService {
             dto.setCarBrandId(car.getCarBrand().getBrandId());
         }
 
-        // features (ids only)
         dto.setFeatureIds(
                 car.getFeatures() == null
                         ? java.util.Collections.emptyList()
@@ -172,5 +197,25 @@ public class CarService {
         );
 
         return dto;
+    }
+    public String normalizeName(String s) {
+        if (s == null) return null;
+        return s.trim().replaceAll("\\s+", " ");
+    }
+
+    public boolean nameExists(String raw) {
+        String n = normalizeName(raw);
+        return n != null && !n.isEmpty() && carRepository.existsByNameIgnoreCase(n);
+    }
+
+    public boolean nameExistsExcludingId(Long id, String raw) {
+        String n = normalizeName(raw);
+        return id != null && n != null && !n.isEmpty()
+                && carRepository.existsByNameIgnoreCaseAndIdNot(n, id);
+    }
+
+    public Car save(Car car) {
+        car.setName(normalizeName(car.getName()));
+        return carRepository.save(car);
     }
 }

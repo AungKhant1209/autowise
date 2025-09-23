@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Pull in your HEAD fragment -->
+<head th:replace="layout/headerLog :: headerLog"></head>
+
+<body class="custom-cursor">
+
+<!-- Pull in your NAVBAR fragment (note: your fragment is defined on <header/>) -->
+<header th:replace="layout/navbar :: navbar"></header>
+
+<!-- Tiny placeholder to confirm page renders -->
+<main class="container py-4">
+    <h1 class="h3 mb-4">Car Comparison</h1>
+
+    <div th:if="${#lists.isEmpty(cars)}">
+        <p>No cars selected. Go to the <a th:href="@{/carList}">car list</a> and add some.</p>
+    </div>
+
+    <table class="table table-bordered text-center" th:if="${!#lists.isEmpty(cars)}">
+        <thead class="table-light">
+        <tr>
+            <th>Feature</th>
+            <th th:each="car : ${cars}" th:text="${car.name}">Car Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Image</td>
+            <td th:each="car : ${cars}">
+                <img th:src="${#lists.isEmpty(car.imageUrls) ? '/assets/images/placeholder-car.jpg' : car.imageUrls.get(0)}"
+                     style="width:150px; height:auto;" alt="Car image">
+            </td>
+        </tr>
+        <tr>
+            <td>Price</td>
+            <td th:each="car : ${cars}" th:text="${#numbers.formatDecimal(car.price,0,'COMMA',0,'POINT')}"></td>
+        </tr>
+        <tr>
+            <td>Fuel Type</td>
+            <td th:each="car : ${cars}" th:text="${car.fuelType}"></td>
+        </tr>
+        <tr>
+            <td>Transmission</td>
+            <td th:each="car : ${cars}" th:text="${car.transmission}"></td>
+        </tr>
+        <tr>
+            <td>Drive Type</td>
+            <td th:each="car : ${cars}" th:text="${car.driveType}"></td>
+        </tr>
+        <tr>
+            <td>Engine</td>
+            <td th:each="car : ${cars}" th:text="${car.engineSize}"></td>
+        </tr>
+        <tr>
+            <td>Seats</td>
+            <td th:each="car : ${cars}" th:text="${car.seat}"></td>
+        </tr>
+        <tr>
+            <td>Production Year</td>
+            <td th:each="car : ${cars}" th:text="${car.productionYear}"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td th:each="car : ${cars}">
+                <form th:action="@{/compare/remove}" method="post">
+                    <input type="hidden" name="id" th:value="${car.id}" />
+                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

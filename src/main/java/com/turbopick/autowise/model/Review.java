@@ -13,12 +13,12 @@ public class Review {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)                 // <— points to UserAccount
-    @JoinColumn(name = "user_id", nullable = false)    // FK to user_accounts.id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserAccount user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", nullable = false)     // example: review belongs to a car
+    @JoinColumn(name = "car_id", nullable = false)
     private Car car;
 
     @Min(1) @Max(5)

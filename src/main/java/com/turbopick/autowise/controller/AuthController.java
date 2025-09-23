@@ -24,22 +24,22 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login-v1"; // templates/sign-in.html
+        return "login-v1";
     }
 
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("registerDto", new RegisterDto());
-        return "user-register-v1"; // templates/register.html
+        return "user-register-v1";
     }
     @GetMapping("/login-1")
     public String showLoginPage() {
-        return "sign-in"; // This matches sign-in.html
+        return "sign-in";
     }
 
     @GetMapping("/sign-up")
     public String showSignUpPage() {
-        return "sign-up"; // This matches sign-up.html
+        return "sign-up";
     }
 
     @PostMapping("/register")
