@@ -125,11 +125,7 @@
                     <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
                 </div>
 
-                <div class="form-group">
-                    <label for="files">Images</label>
-                    <!-- keep name="files" to match your controller binding -->
-                    <input id="files" type="file" name="files" accept="image/*" multiple class="form-control-file"/>
-                </div>
+
 
                 <div class="d-flex justify-content-between">
                     <a class="btn btn-outline-secondary" th:href="@{/admin/cars}"><i class="fas fa-arrow-left mr-1"></i>Back</a>
