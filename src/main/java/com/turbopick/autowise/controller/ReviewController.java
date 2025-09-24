@@ -14,20 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ReviewController {
-    @Autowired
-    private FeatureService featureService;
 
     @Autowired
     private CarService carService;
 
-    @Autowired
-    private CarTypeService carTypeService;
-
-    @Autowired
-    private CarBrandService carBrandService;
-
-    @Autowired
-    private S3Service s3Service;
 
    @Autowired
    private ReviewService reviewService;

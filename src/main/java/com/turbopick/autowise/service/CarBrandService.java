@@ -19,28 +19,18 @@ public class CarBrandService {
         this.carBrandRepository = carBrandRepository;
     }
 
-    /* ========= Create / Update ========= */
+
     public CarBrand save(CarBrand brand) {
         return carBrandRepository.save(brand);
     }
 
-    public List<CarBrand> saveAll(Collection<CarBrand> brands) {
-        return carBrandRepository.saveAll(brands);
-    }
 
-    /* ========= Read ========= */
+
     public Optional<CarBrand> findById(Long id) {
         return carBrandRepository.findById(id);
     }
 
-    public CarBrand findByIdOrNull(Long id) {
-        return carBrandRepository.findById(id).orElse(null);
-    }
 
-    public CarBrand findByIdOrThrow(Long id) {
-        return carBrandRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("CarBrand not found: " + id));
-    }
 
     public List<CarBrand> findAll() {
         return carBrandRepository.findAll();
@@ -50,7 +40,7 @@ public class CarBrandService {
         return carBrandRepository.existsById(id);
     }
 
-    /** Case-insensitive existence check (for create). */
+
     public boolean existsByBrandName(String brandName) {
         if (brandName == null) return false;
         String normalized = brandName.trim();
@@ -58,7 +48,6 @@ public class CarBrandService {
         return carBrandRepository.existsByBrandNameIgnoreCase(normalized);
     }
 
-    /** Case-insensitive check excluding a specific id (for edit). */
     public boolean existsByBrandNameExcludingId(Long brandId, String brandName) {
         if (brandName == null || brandId == null) return false;
         String normalized = brandName.trim();
@@ -66,13 +55,9 @@ public class CarBrandService {
         return carBrandRepository.existsByBrandNameIgnoreCaseAndBrandIdNot(normalized, brandId);
     }
 
-    /* ========= Delete ========= */
-    @Transactional
-    public void deleteById(Long id) {
-        carBrandRepository.deleteById(id);
-    }
 
-    /** Delete using an entity instance (reattach to ensure lifecycle callbacks). */
+
+
     @Transactional
     public void delete(CarBrand brand) {
         if (brand == null || brand.getBrandId() == null) {
@@ -83,9 +68,5 @@ public class CarBrandService {
         carBrandRepository.delete(managed);
     }
 
-    /** Fast path when you only have the id (skips a SELECT). */
-    @Transactional
-    public void deleteByIdFast(Long id) {
-        carBrandRepository.delete(carBrandRepository.getReferenceById(id));
-    }
+
 }

@@ -25,11 +25,11 @@ public class Car {
     private String youtubeLink;
     private Long price;
     private String fuelType;
-    private LocalDate productionYear; // or int if you only need year
+    private LocalDate productionYear;
     private String engineSize;
     private int seat;
     private int door;
-    private Long warranty;            // consider warrantyYears int
+    private Long warranty;
     private String transmission;
     private String driveType;
     private String color;
@@ -37,17 +37,14 @@ public class Car {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    // Removed cascade to avoid accidental operations on reference data during delete
-// Only the relation annotations shown here; leave everything else as you posted.
-    @ManyToOne(fetch = FetchType.EAGER)                 // no cascade
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_type_id")
     private CarType carType;
 
-    @ManyToOne(fetch = FetchType.EAGER)                 // no cascade
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "brand_id")
     private CarBrand carBrand;
 
-    // ManyToMany is fine; we’re deleting join rows explicitly before parent delete
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "car_feature",
@@ -56,10 +53,9 @@ public class Car {
     )
     private Set<Feature> features = new java.util.HashSet<>();
 
-
     @ElementCollection
     @CollectionTable(name = "car_images", joinColumns = @JoinColumn(name = "car_id"))
-    @Column(name = "image_url", length = 1024) // important for long S3 URLs
+    @Column(name = "image_url", length = 1024)
     private List<String> imageUrls = new ArrayList<>();
 
     // in Car.java

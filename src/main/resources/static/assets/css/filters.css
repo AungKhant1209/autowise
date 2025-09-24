@@ -1,0 +1,190 @@
+/* Dual-handle, single yellow track */
+.dual-price{position:relative;height:28px}
+.dual-price .track{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    height:6px;border-radius:4px;
+    /* grey outside, yellow between min..max (set by CSS vars) */
+    background:linear-gradient(to right,
+    #e7ebf2 var(--min,0%),
+    #ffc107 var(--min,0%),
+    #ffc107 var(--max,100%),
+    #e7ebf2 var(--max,100%)
+    );
+}
+.dual-price input[type=range]{
+    position:absolute;left:0;right:0;top:0;width:100%;height:28px;
+    background:none;pointer-events:none;-webkit-appearance:none;appearance:none
+}
+/* WebKit */
+.dual-price input[type=range]::-webkit-slider-runnable-track{height:6px;background:transparent}
+.dual-price input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:16px;height:16px;margin-top:-5px;
+    border-radius:50%;background:#ffc107;border:2px solid #ffb300;pointer-events:auto
+}
+/* Firefox */
+.dual-price input[type=range]::-moz-range-track{height:6px;background:transparent}
+.dual-price input[type=range]::-moz-range-progress{background:transparent}
+.dual-price input[type=range]::-moz-range-thumb{
+    width:16px;height:16px;border-radius:50%;
+    background:#ffc107;border:2px solid #ffb300;pointer-events:auto
+}
+/* Ensure all cards are equal height */
+.listing-one__single {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* fill column */
+}
+
+/* Content should expand to fill available space */
+.listing-one__content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push buttons to the bottom */
+.listing-one__btn-box {
+    margin-top: auto;
+}
+/* Base style for Compare button */
+.listing-one__btn-box button.thm-btn {
+    border: none;
+    outline: none;
+    background: #fcb900;   /* theme color */
+    color: #000;           /* default text color */
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+/* ==== Sidebar selects (Nice Select overrides) ==== */
+.car-listing__sidebar-single .nice-select {
+    width: 100%;
+    height: 44px;
+    line-height: 42px;
+    border: 1px solid #e9e9e9;
+    border-radius: 12px;
+    background: #fff;
+    padding: 0 14px;
+    color: #222;
+}
+
+.car-listing__sidebar-single .nice-select .current {
+    color: #222;
+}
+
+/* arrow color */
+.car-listing__sidebar-single .nice-select:after {
+    border-bottom: 2px solid #666;
+    border-right: 2px solid #666;
+}
+
+/* dropdown panel */
+.car-listing__sidebar-single .nice-select .list {
+    margin-top: 6px;
+    border: 1px solid #e9e9e9;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+/* each option row: remove weird orange shapes, set proper text/bg */
+.car-listing__sidebar-single .nice-select .option {
+    min-height: 40px;
+    line-height: 40px;
+    padding: 0 14px;
+    background: #fff;
+    color: #333;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+/* last option: no divider */
+.car-listing__sidebar-single .nice-select .option:last-child {
+    border-bottom: 0;
+}
+/* Force all dropdown text to black */
+.car-listing__sidebar-single .nice-select,
+.car-listing__sidebar-single .nice-select .current,
+.car-listing__sidebar-single .nice-select .option {
+    color: #000 !important;   /* black text */
+}
+
+/* hover/focus state */
+.car-listing__sidebar-single .nice-select .option:hover,
+.car-listing__sidebar-single .nice-select .option.focus {
+    background: #fffbe6;           /* soft highlight */
+}
+
+/* selected option: bold, no colored pill */
+.car-listing__sidebar-single .nice-select .option.selected {
+    font-weight: 600;
+    background: #fff;
+}
+
+/* IMPORTANT: kill the orange “pill” decorations some themes add */
+.car-listing__sidebar-single .nice-select .option::before,
+.car-listing__sidebar-single .nice-select .option::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Hover effect (match Details link button) */
+.listing-one__btn-box button.thm-btn:hover {
+    background: #e0a800;   /* darker yellow like Details */
+    color: #fff !important; /* force white text */
+}
+/* === FIX: show native checkboxes and align text in Features === */
+.car-listing__features .list-unstyled { margin: 0; padding: 0; list-style: none; }
+
+.car-listing__features .list-unstyled li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+.car-listing__features .list-unstyled li:last-child { border-bottom: 0; }
+
+.car-listing__features .checked-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* MAKE THE CHECKBOX VISIBLE (override template rules) */
+.car-listing__features .checked-box input[type="checkbox"] {
+    accent-color: #ffb200;
+    appearance: auto !important;
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    display: inline-block !important;
+    position: static !important;     /* prevent absolute off-screen */
+    margin: 0 6px 0 0 !important;
+    width: auto !important;
+    height: auto !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* RESET the pill background the theme applies to labels */
+.car-listing__features .checked-box label {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    display: inline-block !important;
+    line-height: 1.2;
+    color: #222;
+}
+
+/* If the theme injects a decorative square before text, hide it */
+.car-listing__features .checked-box label > span:first-child {
+    display: none !important;
+}

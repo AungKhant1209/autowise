@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/head-new :: head-new}"></head>
+<head th:replace="~{layout/head-new :: head-new}">
+
+</head>
 <body class="custom-cursor">
 
 <div class="custom-cursor__cursor"></div>
@@ -194,11 +196,6 @@
                                                     </ul>
 
                                                     <div class="listing-single__btn-and-video-box">
-                                                        <div class="listing-single__btn-box">
-                                                            <a th:href="@{/cars}" class="thm-btn">See All Photos
-                                                                <span class="fas fa-arrow-right"></span></a>
-                                                        </div>
-
                                                         <div class="listing-single__video-link" th:if="${car.youtubeLink != null}">
                                                             <a th:href="${car.youtubeLink}" class="video-popup" target="_blank" rel="noopener">
                                                                 <div class="listing-single__video-icon">
@@ -550,100 +547,145 @@
 
 
 <!--                            reviewsdisplaying-->
-                            <div class="listing-single__review-and-comment">
 
-                                <div class="review-one">
-                                    <div class="comments-area">
-                                        <div class="review-one__title">
-                                            <h3 th:text="${#lists.size(reviews)} + ' Reviews'">0 Reviews</h3>
-                                        </div>
+                            <section class="auw-reviews">
 
-                                        <!-- render each review -->
-                                        <!-- One review item -->
-                                        <div class="comment-box" th:each="r : ${reviews}">
-                                            <div class="comment">
-                                                <div class="review-one__content" style="width:100%">
-                                                    <div class="review-one__content-top" style="display:flex;justify-content:space-between;align-items:center;">
-                                                        <div class="info">
-                                                            <h2 style="margin:0;">
-                                                                <span th:text="${r.user != null ? r.user.name : 'User'}">User Name</span>
-                                                                <small class="text-muted"
-                                                                       style="font-weight:normal;margin-left:8px;"
-                                                                       th:text="${#temporals.format(r.createdAt, 'dd MMM, yyyy • h:mm a')}">
-                                                                    01 Jan, 2025 • 4:00 PM
-                                                                </small>
-                                                            </h2>
+                                <!-- local, namespaced styles so stars behave correctly -->
+                                <style>
+                                    /* Read-only stars (for displayed reviews) */
+                                    .auw-stars { white-space: nowrap; }
+                                    .auw-stars .auw-star { color:#d0d0d0; font-size:16px; }
+                                    .auw-stars .auw-star.filled { color:#f7b512; }
+
+                                    /* Rating widget (radio+label stars) */
+                                    .auw-rating {
+                                        display:inline-flex;
+                                        flex-direction: row-reverse;   /* 5 → 1 for sibling selector */
+                                        gap: 4px;
+                                    }
+                                    .auw-rating input { display:none; }
+                                    .auw-rating label {
+                                        font-size:22px; line-height:1; cursor:pointer;
+                                        color:#d0d0d0; user-select:none;
+                                    }
+                                    /* hover preview */
+                                    .auw-rating label:hover,
+                                    .auw-rating label:hover ~ label { color:#f7b512; }
+                                    /* selected state */
+                                    .auw-rating input:checked ~ label { color:#f7b512; }
+                                </style>
+
+                                <div class="listing-single__review-and-comment">
+
+                                    <!-- Reviews list -->
+                                    <div class="review-one">
+                                        <div class="comments-area">
+                                            <div class="review-one__title">
+                                                <h3 th:text="${#lists.size(reviews)} + ' Reviews'">0 Reviews</h3>
+                                            </div>
+
+                                            <!-- One review -->
+                                            <div class="comment-box" th:each="r : ${reviews}">
+                                                <div class="comment">
+                                                    <div class="review-one__content" style="width:100%">
+                                                        <div class="review-one__content-top" style="display:flex;justify-content:space-between;align-items:center;">
+                                                            <div class="info">
+                                                                <h2 style="margin:0;">
+                                                                    <span th:text="${r.user != null ? r.user.name : 'User'}">User Name</span>
+                                                                    <small class="text-muted" style="font-weight:normal;margin-left:8px;"
+                                                                           th:text="${#temporals.format(r.createdAt, 'dd MMM, yyyy • h:mm a')}">
+                                                                        01 Jan, 2025 • 4:00 PM
+                                                                    </small>
+                                                                </h2>
+                                                            </div>
+
+                                                            <!-- Read-only stars + numeric -->
+                                                            <div class="auw-stars" aria-label="rating">
+                  <span th:each="i : ${#numbers.sequence(1,5)}"
+                        class="auw-star"
+                        th:classappend="${i <= r.rating} ? ' filled' : ''">★</span>
+                                                                <span style="margin-left:6px;" th:text="'(' + ${r.rating} + '/5)'">(5/5)</span>
+                                                            </div>
                                                         </div>
 
-                                                        <!-- Stars and numeric rating -->
-                                                        <div class="reply-btn" aria-label="rating" style="white-space:nowrap;">
-          <span th:each="i : ${#numbers.sequence(1,5)}">
-            <i class="fa fa-star" th:classappend="${i <= r.rating} ? '' : ' text-muted'"></i>
-          </span>
-                                                            <span style="margin-left:6px;" th:text="'(' + r.rating + '/5)'">(5/5)</span>
+                                                        <div class="review-one__content-bottom" style="margin-top:8px;">
+                                                            <p th:text="${r.comment}">Comment…</p>
                                                         </div>
-                                                    </div>
-
-                                                    <div class="review-one__content-bottom" style="margin-top:8px;">
-                                                        <p th:text="${r.comment}">Comment…</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                            <!-- /One review -->
 
+                                            <!-- (Optional) no reviews yet -->
+                                            <p th:if="${#lists.isEmpty(reviews)}" class="text-muted">No reviews yet. Be the first!</p>
+                                        </div>
                                     </div>
-                                </div>
+                                    <!-- /Reviews list -->
 
-                                <!-- Add review -->
-                                <div class="review-form-one">
-                                    <div class="review-form-one__inner">
-                                        <h3 class="review-form-one__title">Add a review</h3>
+                                    <!-- Add review -->
+                                    <div class="review-form-one">
+                                        <div class="review-form-one__inner">
+                                            <h3 class="review-form-one__title">Add a review</h3>
 
-                                        <!-- show login hint if not logged in -->
-                                        <div th:if="${#strings.isEmpty(loggedInUserEmail)}">
-                                            <p>Please <a th:href="@{/login}">log in</a> to write a review.</p>
-                                        </div>
+                                            <!-- must log in -->
+                                            <div th:if="${#strings.isEmpty(loggedInUserEmail)}">
+                                                <p>Please <a th:href="@{/login}">log in</a> to write a review.</p>
+                                            </div>
 
-                                        <!-- show form if logged in and has not reviewed -->
-                                        <div th:if="${!#strings.isEmpty(loggedInUserEmail) and !userHasReviewed}">
-                                            <form th:action="@{'/cars/' + ${car.id} + '/reviews'}"
-                                                  th:object="${reviewDto}" method="post">
+                                            <!-- show form if logged in and not reviewed -->
+                                            <div th:if="${!#strings.isEmpty(loggedInUserEmail) and !userHasReviewed}">
+                                                <form th:action="@{'/cars/' + ${car.id} + '/reviews'}"
+                                                      th:object="${reviewDto}" method="post">
 
-                                                <input type="hidden" th:if="${_csrf != null}"
-                                                       th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                    <!-- CSRF (if enabled) -->
+                                                    <input type="hidden" th:if="${_csrf != null}"
+                                                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                                                <div class="review-form-one__rate-box">
-                                                    <p class="review-form-one__rate-text">Rate this car</p>
-                                                    <div class="review-form-one__rate">
-                                                        <label th:each="i : ${#numbers.sequence(1,5)}" style="margin-right:6px;">
-                                                            <input type="radio" th:field="*{rating}" th:value="${i}"/>
-                                                            <i class="fa fa-star"></i>
-                                                        </label>
-                                                        <div>
-                                                            <span class="text-danger" th:errors="*{rating}"></span>
+                                                    <div class="review-form-one__rate-box">
+                                                        <p class="review-form-one__rate-text">Rate this car</p>
+
+                                                        <!-- 5 → 1 so :checked ~ label works leftwards -->
+                                                        <div class="auw-rating">
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate5__' + ${car.id}" value="5"/>
+                                                            <label th:for="'rate5__' + ${car.id}" title="5 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate4__' + ${car.id}" value="4"/>
+                                                            <label th:for="'rate4__' + ${car.id}" title="4 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate3__' + ${car.id}" value="3"/>
+                                                            <label th:for="'rate3__' + ${car.id}" title="3 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate2__' + ${car.id}" value="2"/>
+                                                            <label th:for="'rate2__' + ${car.id}" title="2 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate1__' + ${car.id}" value="1"/>
+                                                            <label th:for="'rate1__' + ${car.id}" title="1 star">★</label>
                                                         </div>
+
+                                                        <div><span class="text-danger" th:errors="*{rating}"></span></div>
                                                     </div>
-                                                </div>
 
-                                                <div class="review-form-one__input-box text-message-box">
-                                                    <textarea th:field="*{comment}" placeholder="Write a comment"></textarea>
-                                                    <div><span class="text-danger" th:errors="*{comment}"></span></div>
-                                                </div>
+                                                    <div class="review-form-one__input-box text-message-box">
+                                                        <textarea th:field="*{comment}" placeholder="Write a comment"></textarea>
+                                                        <div><span class="text-danger" th:errors="*{comment}"></span></div>
+                                                    </div>
 
-                                                <button type="submit" class="thm-btn review-form-one__btn">
-                                                    Submit A Review <span class="fas fa-arrow-right"></span>
-                                                </button>
-                                            </form>
-                                        </div>
+                                                    <button type="submit" class="thm-btn review-form-one__btn">
+                                                        Submit A Review <span class="fas fa-arrow-right"></span>
+                                                    </button>
+                                                </form>
+                                            </div>
 
-                                        <!-- already reviewed -->
-                                        <div th:if="${!#strings.isEmpty(loggedInUserEmail) and userHasReviewed}">
-                                            <p>You’ve already reviewed this car.</p>
+                                            <!-- already reviewed -->
+                                            <div th:if="${!#strings.isEmpty(loggedInUserEmail) and userHasReviewed}">
+                                                <p>You’ve already reviewed this car.</p>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <!-- /Add review -->
 
-                            </div>
+                                </div>
+                            </section>
 
 
                             <!--                            reviewsdisplaying-->

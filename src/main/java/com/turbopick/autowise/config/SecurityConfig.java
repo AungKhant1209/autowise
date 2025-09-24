@@ -32,7 +32,7 @@ public class SecurityConfig {
         // Authorization Rules
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/login", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
+                        "/login","/compare", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                 ).permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")   // Only ADMIN can access /admin paths
                 .requestMatchers("/user/**").hasRole("USER")     // Only USER can access user-specific paths (if needed)

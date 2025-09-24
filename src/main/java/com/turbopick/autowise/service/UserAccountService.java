@@ -24,21 +24,14 @@ public class UserAccountService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /* ========= Create / Update ========= */
 
-    /**
-     * Saves a user. If a plain text password is provided, it will be encoded.
-     * If password is blank on update, keeps the existing hash.
-     */
     @Transactional
     public UserAccount save(UserAccount ua) {
         if (ua.getPasswordHash() != null && !ua.getPasswordHash().isBlank()) {
-            // encode only if it doesn't look already encoded
             if (!looksEncoded(ua.getPasswordHash())) {
                 ua.setPasswordHash(passwordEncoder.encode(ua.getPasswordHash()));
             }
         } else if (ua.getId() != null) {
-            // keep existing hash if password not provided during edit
             String existing = repo.findById(ua.getId())
                     .map(UserAccount::getPasswordHash)
                     .orElse(null);
@@ -48,12 +41,12 @@ public class UserAccountService {
     }
 
     private boolean looksEncoded(String pw) {
-        // Common bcrypt prefixes
+
         return pw.startsWith("{bcrypt}") || pw.startsWith("$2a$")
                 || pw.startsWith("$2b$") || pw.startsWith("$2y$");
     }
 
-    /* ========= Read ========= */
+
 
     @Transactional(readOnly = true)
     public List<UserAccount> findAll() {
@@ -76,12 +69,6 @@ public class UserAccountService {
         return repo.findByEmail(email);
     }
 
-    @Transactional(readOnly = true)
-    public boolean existsByEmail(String email) {
-        return repo.existsByEmail(email);
-    }
-
-    /* ========= Delete ========= */
 
     @Transactional
     public void delete(Long id) {

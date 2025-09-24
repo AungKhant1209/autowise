@@ -26,4 +26,25 @@ public class AdminController {
     }
 
 
+    @GetMapping("/cars")
+    public String getCars(Model model) {
+        var cars = carRepository.findAll();
+        model.addAttribute("cars", cars);
+        return "car-list";
+    }
+
+
+    @GetMapping("/carTypes")
+    public String getCarTypes(Model model) {
+        // TODO: add logic for car types
+        return "car-type-list";
+    }
+
+
+    @GetMapping("/carBrands")
+    public String getCarBrands(Model model) {
+        var brands = carBrandRepository.findAll();
+        model.addAttribute("carBrands", brands);
+        return "car-brand-list"; // Create car-brand-list.html template
+    }
 }

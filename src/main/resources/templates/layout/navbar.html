@@ -89,12 +89,10 @@
                         <div class="main-menu-three__search-box">
                             <a href="#" class="main-menu-three__search search-toggler icon-search"></a>
                         </div>
-                        <div class="main-menu-three__cart-box">
-                            <a href="cart.html" class="main-menu-three__cart">
-                                <span class="far fa-shopping-cart"></span>
-                                <span class="main-menu-three__cart-count">02</span>
-                            </a>
-                        </div>
+                        <a th:href="@{/compare}" class="main-menu-three__cart">
+                            <span class="fas fa-exchange-alt"></span>
+                            <span class="main-menu-three__cart-count" th:text="${compareCount}">0</span>
+                        </a>
                     </div>
                 </div>
                 <div class="main-menu-three__right">

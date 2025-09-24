@@ -1,9 +1,13 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.dto.CarDto;
+import com.turbopick.autowise.dto.CarListViewDto;
 import com.turbopick.autowise.dto.ReviewDto;
 import com.turbopick.autowise.model.*;
 import com.turbopick.autowise.service.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +42,6 @@ public class CarController {
     @Autowired
     private UserAccountService userAccountService;
 
-    // --- expose car types & brands to views ---
     @ModelAttribute("carTypes")
     public List<CarType> carTypes() {
         return carTypeService.findAll();
@@ -49,13 +52,43 @@ public class CarController {
         return carBrandService.findAll();
     }
 
-    // --- LIST ---
-    @GetMapping("/carList")
-    public String cars(Model model) {
-        List<Car> cars = carService.findAll();
-        model.addAttribute("cars", cars);
+    @GetMapping({"/carList", "/cars"})
+    public String carList(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Long minPrice,
+            @RequestParam(required = false) Long maxPrice,
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) Long typeId,
+            @RequestParam(required = false) String fuel,
+            @RequestParam(required = false, name = "featureIds") List<Long> featureIds,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        CarListViewDto dto = carService.getCarsForListViewFiltered(
+                name, minPrice, maxPrice, brandId, typeId, fuel, featureIds, pageable);
+
+        // Keep selected filters
+        model.addAttribute("selectedName", name);
+        model.addAttribute("selectedMinPrice", minPrice);
+        model.addAttribute("selectedMaxPrice", maxPrice);
+        model.addAttribute("selectedBrandId", brandId);
+        model.addAttribute("selectedTypeId", typeId);
+        model.addAttribute("selectedFuel", fuel);
+        model.addAttribute("selectedFeatureIds", featureIds);
+
+        model.addAttribute("carListViewDto", dto);
         return "car-list";
     }
+
+//    @GetMapping({"/carList", "/cars"})
+//    public String carList(Model model) {
+//        CarListViewDto carListViewDto=carService.getCarsForListView();
+//        model.addAttribute("carListViewDto", carListViewDto);
+//        return "car-list";
+//    }
 
     @GetMapping("/cars")
     public String legacyCarsRedirect() {
@@ -69,7 +102,7 @@ public class CarController {
         return "admin/cars";
     }
 
-    // --- CREATE ---
+
     @GetMapping({"/carCreate", "/admin/carsCreate"})
     public String showCarForm(Model model) {
         model.addAttribute("carDto", new CarDto());
@@ -82,7 +115,6 @@ public class CarController {
                             BindingResult result,
                             Model model) {
 
-        // === Normalize name early (same string used everywhere) ===
         String normalizedName = carService.normalizeName(carDto.getName());
         if (normalizedName == null || normalizedName.isEmpty()) {
             result.rejectValue("name", "required", "Car name is required");
@@ -90,7 +122,6 @@ public class CarController {
             result.rejectValue("name", "duplicate", "Car name already exists");
         }
 
-        // === Car Type Validation ===
         CarType type = null;
         String rawTypeId = carDto.getCarTypeId();
         if (rawTypeId == null || rawTypeId.trim().isEmpty()) {
@@ -108,7 +139,6 @@ public class CarController {
             }
         }
 
-        // === Car Brand Validation ===
         CarBrand brand = null;
         Long brandId = carDto.getCarBrandId();
         if (brandId == null) {
@@ -120,7 +150,6 @@ public class CarController {
             }
         }
 
-        // === Return to form on validation errors (re-add ALL lists used by the view) ===
         if (result.hasErrors()) {
             model.addAttribute("carTypes", carTypeService.findAll());
             model.addAttribute("carBrands", carBrandService.findAll());
@@ -128,17 +157,14 @@ public class CarController {
             return "admin/carCreate";
         }
 
-        // === Resolve features ===
         List<Feature> selected = (carDto.getFeatureIds() == null || carDto.getFeatureIds().isEmpty())
                 ? java.util.Collections.emptyList()
                 : featureService.findAllByIds(carDto.getFeatureIds());
 
-        // === Build & Save (uses normalized name) ===
         Car car = carService.buildCarForCreate(carDto, type, brand, selected);
-        car.setName(normalizedName); // enforce normalized value
+        car.setName(normalizedName);
         Car saved = carService.save(car);
 
-        // === Handle Image Uploads (left as in your code) ===
         MultipartFile[] files = carDto.getFiles();
         if (files != null && files.length > 0) {
             try {
@@ -148,18 +174,15 @@ public class CarController {
                     if (contentType == null || !contentType.startsWith("image/")) {
                         return "redirect:/admin/imageUpload?carId=" + saved.getId();
                     }
-                    // your actual upload/store logic here...
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                // optionally: return an error page
             }
         }
 
         return "redirect:/admin/cars";
     }
 
-    // --- DETAIL ---
     @GetMapping("/car-detail/{id}")
     public String carDetail(@PathVariable Long id,
                             @AuthenticationPrincipal(expression = "username") String email,
@@ -170,8 +193,8 @@ public class CarController {
         model.addAttribute("car", carOpt.get());
         model.addAttribute("reviews", reviewService.listForCar(id));
         model.addAttribute("avgRating", reviewService.averageForCar(id));
-        model.addAttribute("reviewDto", new ReviewDto());          // form-backing bean
-        model.addAttribute("loggedInUserEmail", email);            // to show/hide the form
+        model.addAttribute("reviewDto", new ReviewDto());
+        model.addAttribute("loggedInUserEmail", email);
         model.addAttribute("userHasReviewed",
                 (email != null) ? reviewService.hasUserReviewedCar(
                         id, userAccountService.findByEmailOrThrow(email).getId()) : false);
@@ -185,12 +208,10 @@ public class CarController {
                                BindingResult result,
                                @AuthenticationPrincipal(expression = "username") String email,
                                Model model) {
-        // must be logged in
         if (email == null) return "redirect:/login";
 
         var user = userAccountService.findByEmailOrThrow(email);
 
-        // server-side validation fallback
         if (result.hasErrors()) {
             model.addAttribute("car", carService.findByIdOrNull(id));
             model.addAttribute("reviews", reviewService.listForCar(id));
@@ -217,7 +238,6 @@ public class CarController {
 
 
 
-    // --- EDIT ---
     @GetMapping({"/editCar/{id}", "/admin/editCar/{id}"})
     public String editCar(@PathVariable Long id, Model model) {
         Car car = carService.findByIdOrNull(id);
@@ -242,7 +262,7 @@ public class CarController {
         Car existing = carService.findByIdOrNull(id);
         if (existing == null) return "redirect:/admin/cars";
 
-        // ===== Name (normalize + unique excluding current id) =====
+
         String normalizedName = carService.normalizeName(carDto.getName());
         if (normalizedName == null || normalizedName.isEmpty()) {
             result.rejectValue("name", "required", "Car name is required");
@@ -250,7 +270,6 @@ public class CarController {
             result.rejectValue("name", "duplicate", "Car name already exists");
         }
 
-        // ===== Car Type Validation =====
         CarType type = null;
         String rawTypeId = carDto.getCarTypeId();
         if (rawTypeId == null || rawTypeId.trim().isEmpty()) {
@@ -258,7 +277,7 @@ public class CarController {
         } else {
             try {
                 Long typeId = Long.parseLong(rawTypeId.trim());
-                type = carTypeService.findById(typeId); // return null if not found
+                type = carTypeService.findById(typeId);
                 if (type == null) {
                     result.rejectValue("carTypeId", "invalid", "Invalid car type");
                 }
@@ -267,7 +286,6 @@ public class CarController {
             }
         }
 
-        // ===== Car Brand Validation =====
         CarBrand brand = null;
         Long brandId = carDto.getCarBrandId();
         if (brandId == null) {
@@ -279,7 +297,6 @@ public class CarController {
             }
         }
 
-        // ===== On errors: re-add all lists used by the view =====
         if (result.hasErrors()) {
             model.addAttribute("carId", id);
             model.addAttribute("carTypes", carTypeService.findAll());
@@ -288,13 +305,13 @@ public class CarController {
             return "admin/carEdit";
         }
 
-        // ===== Resolve features =====
+
         List<Feature> selected = (carDto.getFeatureIds() == null || carDto.getFeatureIds().isEmpty())
                 ? java.util.Collections.emptyList()
                 : featureService.findAllByIds(carDto.getFeatureIds());
 
-        // ===== Apply DTO via service + save =====
-        carDto.setName(normalizedName); // ensure normalized value goes into entity
+
+        carDto.setName(normalizedName);
         carService.applyDtoToEntity(existing, carDto, type, brand, selected);
         carService.save(existing);
 
@@ -304,20 +321,14 @@ public class CarController {
     @GetMapping("/carDelete/{id}")
     public String deleteCar(@PathVariable Long id) {
         carService.findById(id).ifPresent(car -> {
-            // 1) Clear Many-to-Many to avoid join-table FK violations
             if (car.getFeatures() != null) {
                 car.getFeatures().clear();
             }
 
-        carService.deleteById(id); // clears join tables + hard deletes + flush
-
-            // 3) If you have other children (e.g., carImages), clear them here too
-            //    e.g., car.getImages().clear(); (and/or delete from image repo first)
-
-            // Persist the detach so join/FK rows are gone before delete
+        carService.deleteById(id);
             carService.save(car);
 
-            // Now it's safe to delete the car row
+
             carService.delete(car);
         });
         return "redirect:/admin/cars";
