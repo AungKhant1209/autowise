@@ -18,12 +18,12 @@ public class AdminController {
     @Autowired
     private CarBrandRepository carBrandRepository;
 
-    @GetMapping({"", "/"})
-    public String showAdminPage(Model model) {
-        var cars = carRepository.findAll();
-        model.addAttribute("cars", cars);
-        return "admin";
-    }
+//    @GetMapping({"", "/"})
+//    public String showAdminPage(Model model) {
+//        var cars = carRepository.findAll();
+//        model.addAttribute("cars", cars);
+//        return "admin";
+//    }
 
 
     @GetMapping("/cars")

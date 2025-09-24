@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AuthController {
-
     private final UserAccountRepository repo;
     private final BCryptPasswordEncoder encoder;
 
@@ -24,22 +23,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login-v1";
+        return "login-v1"; // your login page
     }
 
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("registerDto", new RegisterDto());
-        return "user-register-v1";
-    }
-    @GetMapping("/login-1")
-    public String showLoginPage() {
-        return "sign-in";
-    }
-
-    @GetMapping("/sign-up")
-    public String showSignUpPage() {
-        return "sign-up";
+        return "user-register-v1"; // your signup page
     }
 
     @PostMapping("/register")
