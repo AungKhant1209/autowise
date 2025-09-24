@@ -119,6 +119,16 @@
 .car-listing__sidebar-single .nice-select .option.focus {
     background: #fffbe6;           /* soft highlight */
 }
+.input-box input {
+    width: 100%;
+    height: 48px;          /* 👈 fixed same height for both */
+    padding: 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #f8faff;
+    box-sizing: border-box; /* ensures padding doesn’t shrink the box */
+}
 
 /* selected option: bold, no colored pill */
 .car-listing__sidebar-single .nice-select .option.selected {
@@ -187,4 +197,27 @@
 /* If the theme injects a decorative square before text, hide it */
 .car-listing__features .checked-box label > span:first-child {
     display: none !important;
+}
+.input-box input {
+    width: 100%;
+    height: 48px;
+    padding: 0 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #f8faff;
+    box-sizing: border-box;
+}
+.field-error { color:#e74c3c; font-size:13px; display:block; margin-top:6px; }
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: #f5a623;
+    border: none;
+    border-radius: 10px;
+    color: #111;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .3s;
 }
