@@ -41,13 +41,22 @@ public class SecurityConfig {
 
         // Login Configuration
         http.formLogin(form -> form
-                .loginPage("/login")  // Custom login page
-                .usernameParameter("username")  // Matches form field name
+                .loginPage("/login")
+                .usernameParameter("username")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/", true)  // Redirect to homepage after successful login
-                .failureUrl("/login?error")   // Redirect to login page on failure
+                .successHandler((request, response, authentication) -> {
+                    boolean isAdmin = authentication.getAuthorities().stream()
+                            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                    if (isAdmin) {
+                        response.sendRedirect("/");
+                    } else {
+                        response.sendRedirect("/home");
+                    }
+                })
+                .failureUrl("/login?error")
                 .permitAll()
         );
+
 
         // Logout Configuration
         http.logout(logout -> logout
