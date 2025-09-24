@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="admin/fragments/header :: adminHead('CarType – List')"></head>
+<body>
+<div th:replace="admin/fragments/navbartwo :: adminNavbar('types')"></div>
+
+<div class="container">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-cogs mr-2"></i>Car Types</h3>
+        <a class="btn btn-primary btn-sm ml-auto" th:href="@{/admin/carTypesCreate}">
+            <i class="fas fa-plus mr-1"></i> Create Type
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th style="min-width:240px;">Description</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="t : ${carTypes}">
+                        <td th:text="${t.typeId}">1</td>
+                        <td th:text="${t.typeName}">SUV</td>
+                        <td th:text="${t.description}">Sport Utility Vehicle</td>
+                        <td class="text-right">
+                            <a class="btn btn-sm btn-outline-secondary"
+                               th:href="@{/admin/carTypesEdit/{id}(id=${t.typeId})}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="btn btn-sm btn-outline-danger"
+                               th:href="@{/admin/carTypeDelete/{id}(id=${t.typeId})}"
+                               onclick="return confirm('Delete this type?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(carTypes)}">
+                        <td colspan="4" class="text-center text-muted py-4">No car types found.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

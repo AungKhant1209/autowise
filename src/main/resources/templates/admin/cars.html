@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="admin/fragments/header :: adminHead('Cars – List')"></head>
+<body>
+<div th:replace="admin/fragments/navbartwo :: adminNavbar('cars')"></div>
+
+<div class="container-fluid">
+    <!-- Alerts -->
+    <div th:if="${notice}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle mr-1"></i><span th:text="${notice}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    <div th:if="${alert}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle mr-1"></i><span th:text="${alert}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-list-ul mr-2"></i>Car List</h3>
+        <a href="/admin/carsCreate" class="btn btn-primary btn-sm ml-auto"><i class="fas fa-plus mr-1"></i>New</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped mb-0">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th class="yt-cell">YouTube</th>
+                        <th>Price</th>
+                        <th>Fuel</th>
+                        <th>Year</th>
+                        <th>Engine</th>
+                        <th>Seat</th>
+                        <th>Door</th>
+                        <th>Warranty</th>
+                        <th>Transmission</th>
+                        <th>Drive</th>
+                        <th>Color</th>
+                        <th style="min-width:220px;">Description</th>
+                        <th style="min-width:280px;">Features</th>
+                        <th>Type</th>
+                        <th>Brand</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="car : ${cars}">
+                        <td th:text="${car.id}">1</td>
+                        <td th:text="${car.name}">Name</td>
+
+                        <!-- YouTube: button + tiny truncated url -->
+                        <td class="yt-cell">
+                            <div class="d-flex align-items-center">
+                                <a th:href="${car.youtubeLink}" target="_blank" class="btn btn-sm btn-danger mr-2">
+                                    <i class="fab fa-youtube"></i> Watch
+                                </a>
+                            </div>
+                            <a th:href="${car.youtubeLink}" target="_blank" class="text-muted yt-link-truncate" th:text="${car.youtubeLink}">link</a>
+                        </td>
+
+                        <td th:text="${car.price}">0</td>
+                        <td th:text="${car.fuelType}">Fuel</td>
+                        <td th:text="${car.productionYear}">2024-01-01</td>
+                        <td th:text="${car.engineSize}">2.0</td>
+                        <td th:text="${car.seat}">5</td>
+                        <td th:text="${car.door}">4</td>
+                        <td th:text="${car.warranty}">36</td>
+                        <td th:text="${car.transmission}">AT</td>
+                        <td th:text="${car.driveType}">FWD</td>
+                        <td th:text="${car.color}">Red</td>
+
+                        <td>
+                            <div>
+                                <!-- short preview -->
+                                <span th:text="${#strings.length(car.description) > 50 ? #strings.substring(car.description,0,50) + '...' : car.description}">
+      Description
+    </span>
+
+                                <!-- toggle if longer than 50 chars -->
+                                <a class="btn btn-link p-0 desc-toggle"
+                                   th:if="${#strings.length(car.description) > 50}"
+                                   data-toggle="collapse"
+                                   th:attr="data-target=${'#desc-'+car.id}">
+                                    Show more
+                                </a>
+
+                                <!-- full description hidden -->
+                                <div class="collapse mt-2" th:id="'desc-'+${car.id}">
+                                    <span th:text="${car.description}">Full Description</span>
+                                </div>
+                            </div>
+                        </td>
+
+
+                        <!-- Features: show first 6 as badges + "+N more" collapse -->
+                        <td>
+                            <div class="features-wrap">
+                                <!-- first six -->
+                                <span th:each="f,iter : ${car.features}"
+                                      th:if="${iter.index} < 1"
+                                      class="badge-feature"
+                                      th:text="${f.name}">Feature</span>
+
+                                <!-- toggle only if more than 6 -->
+                                <a class="btn btn-link p-0 features-toggle"
+                                   th:if="${#lists.size(car.features) > 6}"
+                                   data-toggle="collapse"
+                                   th:attr="data-target=${'#feat-'+car.id}"
+                                   aria-expanded="false">
+                                    +<span th:text="${#lists.size(car.features) - 6}">0</span> more
+                                </a>
+
+                                <!-- the rest collapsed -->
+                                <div class="collapse mt-2" th:id="'feat-'+${car.id}">
+                  <span th:each="f,iter : ${car.features}"
+                        th:if="${iter.index} >= 6"
+                        class="badge-feature"
+                        th:text="${f.name}">Feature</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td th:text="${car.carType != null ? car.carType.typeName : '—'}">Type</td>
+                        <td th:text="${car.carBrand != null ? car.carBrand.brandName : '—'}">Brand</td>
+
+                        <td class="text-right actions">
+                            <a class="btn btn-sm btn-outline-secondary" th:href="@{/editCar/{id}(id=${car.id})}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form th:action="@{/carDelete/{id}(id=${car.id})}" method="post" class="d-inline">
+                                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this car?');">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(cars)}">
+                        <td colspan="18" class="text-center text-muted py-4">No cars found.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

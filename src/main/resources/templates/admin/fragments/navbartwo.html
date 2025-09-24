@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"
+     th:fragment="adminNavbar(active)">
+    <a class="navbar-brand" th:href="@{/admin}">Admin Dashboard</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+
+            <!-- Car Management -->
+            <li class="nav-item dropdown" th:classappend="${active}=='cars' ? ' active'">
+                <a class="nav-link dropdown-toggle" href="#" id="carMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-car"></i> Car Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="carMenu">
+                    <a class="dropdown-item" th:href="@{/admin/carsCreate}">
+                        <i class="fas fa-plus-circle"></i> Car Register
+                    </a>
+                    <a class="dropdown-item" th:href="@{/admin/imageUpload}">
+                        <i class="fas fa-plus-circle"></i> Image Upload
+                    </a>
+                    <a class="dropdown-item" th:href="@{/admin/cars}">
+                        <i class="fas fa-list-ul"></i> Show All Cars
+                    </a>
+                </div>
+            </li>
+
+            <!-- Car Type Management -->
+            <li class="nav-item dropdown" th:classappend="${active}=='types' ? ' active'">
+                <a class="nav-link dropdown-toggle" href="#" id="carTypeMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-cogs"></i> Car Type Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="carTypeMenu">
+                    <a class="dropdown-item" th:href="@{/admin/carTypesCreate}">
+                        <i class="fas fa-plus-circle"></i> Car Type Register
+                    </a>
+                    <a class="dropdown-item" th:href="@{/admin/carTypes}">
+                        <i class="fas fa-list-ul"></i> Show All Car Types
+                    </a>
+                </div>
+            </li>
+
+            <!-- Car Brand Management -->
+            <li class="nav-item dropdown" th:classappend="${active}=='brands' ? ' active'">
+                <a class="nav-link dropdown-toggle" href="#" id="carBrandMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-industry"></i> Car Brand Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="carBrandMenu">
+                    <a class="dropdown-item" th:href="@{/admin/carBrandsCreate}">
+                        <i class="fas fa-plus-circle"></i> Car Brand Register
+                    </a>
+                    <a class="dropdown-item" th:href="@{/admin/carBrands}">
+                        <i class="fas fa-list-ul"></i> Show All Car Brands
+                    </a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userMenu"
+                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-users"></i> User Management
+                </a>
+                <div class="dropdown-menu" aria-labelledby="userMenu">
+                    <a class="dropdown-item" href="/admin/users/create"><i class="fas fa-user-plus"></i> User Register</a>
+                    <a class="dropdown-item" href="/admin/users"><i class="fas fa-list"></i> Show All Users</a>
+                </div>
+            </li>
+            <!-- Home -->
+            <li class="nav-item" th:classappend="${active}=='home' ? ' active'">
+                <a class="nav-link" th:href="@{/home}">
+                    <i class="fas fa-home"></i> Go to Home
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <form action="/logout" method="post" style="display: inline;">
+                    <!-- CSRF Token -->
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </form>
+
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>

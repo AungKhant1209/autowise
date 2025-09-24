@@ -30,444 +30,220 @@
         <div class="page-header__shape-1"
              th:style="'background-image: url(' + @{/assets/images/shapes/page-header-shape-1.png} + ');'">
         </div>
-        <div class="container">
-            <div class="page-header__inner">
-                <h3>Car List V-1</h3>
-                <div class="thm-breadcrumb__inner">
-                    <ul class="thm-breadcrumb list-unstyled">
-                        <li><a href="index.html">Home</a></li>
-                        <li><span class="icon-arrow-left"></span></li>
-                        <li>Car List V-1</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+
     </section>
     <!--Page Header End -->
 
     <!--Car Listing page One Start -->
     <section class="car-listing-page-one">
         <div class="container">
-            <div class="row">
+            <div class="row"><!-- MAIN ROW -->
+
+                <!-- LEFT COLUMN: CAR LIST -->
                 <div class="col-xl-9">
                     <div class="car-listing-page-one__left">
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-4 col-md-6" th:each="car : ${cars}">
-                                <div class="listing-one__single">
-                                    <div class="listing-one__img">
-                                        <img src="assets/images/listing/listing-1-1.jpg" alt="">
-                                        <div class="listing-one__brand-name">
-                                            <p th:text="${car.getName()}">Acura</p>
-                                        </div>
-                                    </div>
-                                    <div class="listing-one__content">
-                                        <h3 class="listing-one__title"><a href="listing-single.html">Acura
-                                            Sport Version</a></h3>
-                                        <div class="listing-one__meta-box-info">
-                                            <ul class="list-unstyled listing-one__meta">
-                                                <li>
-                                                    <div class="icon">
-                                                        <span class="icon-manual"></span>
-                                                    </div>
-                                                    <div class="text">
-                                                        <p th:text="${car.getTransmission()}">Acura</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon">
-                                                        <span class="icon-mileage"></span>
-                                                    </div>
-                                                    <div class="text">
-                                                        <p th:text="${car.getDriveType()}">Acura</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon">
-                                                        <span class="icon-fuel-type"></span>
-                                                    </div>
-                                                    <div class="text">
-                                                        <p th:text="${car.getFuelType()}">Acura</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <ul class="list-unstyled listing-one__meta listing-one__meta--two">
-                                                <li>
-                                                    <div class="icon">
-                                                        <span class="icon-test-drive"></span>
-                                                    </div>
-                                                    <div class="text">
-                                                        <p>Basic</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon">
-                                                        <span class="icon-avatar"></span>
-                                                    </div>
-                                                    <div class="text">
-                                                        <p>Age 25</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="icon">
-                                                        <span class="icon-in-person"></span>
-                                                    </div>
-                                                    <div class="text">
-                                                        <p>5 Persons</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        </div>
-                                        <div class="listing-one__btn-box">
-                                            <a th:href="@{/car-detail/{id}(id=${car.id})}" class="thm-btn">Details Now<span class="fas fa-arrow-right"></span></a>
+                        <div class="row g-4" id="carList">
 
-                                        </div>
+
+                            <!-- SINGLE CAR CARD -->
+                            <div class="col-xl-4 col-lg-4 col-md-6" th:each="car : ${carListViewDto.cars}">
+                            <div class="listing-one__single">
+                                <!-- IMAGE -->
+                                <div class="listing-one__img">
+                                    <img th:src="${#lists.isEmpty(car.imageUrls)
+                                              ? '/assets/images/placeholder-car.jpg'
+                                              : car.imageUrls.get(0)}"
+                                         alt="Car image"
+                                         style="width:410px; height:250px; object-fit:cover; display:block;">
+                                    <div class="listing-one__brand-name">
+                                        <p th:text="${car.name}" class="car-name">Car Name</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+
+                                <!-- CONTENT -->
+                                <div class="listing-one__content">
+                                    <h3 class="listing-one__title">
+                                        <a th:href="@{/car-detail/{id}(id=${car.id})}" th:text="${car.name}">
+                                            Car Title
+                                        </a>
+                                    </h3>
+                                    <!-- META INFO -->
+                                    <div class="listing-one__meta-box-info">
+                                        <ul class="list-unstyled listing-one__meta">
+                                            <!-- Transmission -->
+                                            <li>
+                                                <div class="icon"><span class="icon-manual"></span></div>
+                                                <div class="text"><p th:text="${car.transmission}">Manual</p></div>
+                                            </li>
+
+                                            <!-- Drive Type -->
+                                            <li>
+                                                <div class="icon"><span class="icon-mileage"></span></div>
+                                                <div class="text"><p th:text="${car.driveType}">AWD</p></div>
+                                            </li>
+
+                                            <!-- Fuel Type -->
+                                            <li>
+                                                <div class="icon"><span class="icon-fuel-type"></span></div>
+                                                <div class="text"><p th:text="${car.fuelType}">Gasoline</p></div>
+                                            </li>
+
+                                            <!-- Engine Size -->
+                                            <li>
+                                                <div class="icon"><span class="icon-engine"></span></div>
+                                                <div class="text"><p th:text="${car.engineSize}">2.0L</p></div>
+                                            </li>
+
+                                            <!-- Seats -->
+                                            <li>
+                                                <div class="icon"><span class="icon-seat"></span></div>
+                                                <div class="text"><p th:text="${car.seat} + ' Seats'">5 Seats</p></div>
+                                            </li>
+
+                                            <!-- Production Year -->
+                                            <li>
+                                                <div class="icon"><span class="icon-calendar"></span></div>
+                                                <div class="text"><p th:text="${car.productionYear}">2022</p></div>
+                                            </li>
+
+                                            <!-- Price -->
+                                            <li>
+                                                <div class="icon"><span class="icon-price">$ </span></div>
+                                                <div class="text"><p th:text="${#numbers.formatDecimal(car.price, 0, 'COMMA', 0, 'POINT')}  "></p></div>
+                                            </li>
+                                        </ul>
+
+
+                                    </div>
+                                </div><!-- /.listing-one__content -->
+
+                                <!-- BUTTON -->
+                                <div class="listing-one__btn-box d-flex justify-content-between">
+                                    <a th:href="@{/car-detail/{id}(id=${car.id})}"
+                                       class="thm-btn flex-fill me-2 text-center">
+                                        Details
+                                    </a>
+                                    <form th:action="@{/compare/add}" method="post" class="flex-fill"
+                                          th:with="selectedIds=${session.compareIds}">
+                                        <input type="hidden" name="id" th:value="${car.id}" />
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                        <button type="submit"
+                                                class="thm-btn w-100 text-center"
+                                                th:disabled="${selectedIds != null and selectedIds.contains(car.id)}"
+                                                th:text="${(selectedIds != null and selectedIds.contains(car.id)) ? 'Added' : 'Compare'}">
+                                            Compare
+                                        </button>
+                                    </form>
+                                </div>
+
+
+                            </div><!-- /.listing-one__single -->
+                        </div><!-- /.col -->
+
+                        </div><!-- /.row g-4 -->
+                    </div><!-- /.car-listing-page-one__left -->
+                </div><!-- /.col-xl-9 -->
+
+                <!-- RIGHT COLUMN: SIDEBAR -->
                 <div class="col-xl-3">
                     <div class="car-listing-page-one__right">
-                        <div class="car-listing__sidebar">
+                        <form th:action="@{/carList}" method="get" id="filterForm">
+
+                            <!-- name search -->
                             <div class="car-listing__search car-listing__sidebar-single">
-                                <form action="#">
-                                    <input type="text" placeholder="Search">
-                                    <button type="submit"><i class="fa fa-search"></i></button>
-                                </form>
+                                <input id="filterName" type="text" name="name" placeholder="Search"
+                                       th:value="${selectedName}">
+                                <button type="submit"><i class="fa fa-search"></i></button>
                             </div>
+
+                            <!-- price -->
                             <div class="car-listing__price-ranger car-listing__sidebar-single">
                                 <h3 class="car-listing__sidebar-title">Filter Price</h3>
                                 <div class="price-ranger">
-                                    <div id="slider-range"></div>
+<!--                                    <div id="slider-range"></div>-->
                                     <div class="ranger-min-max-block">
-                                        <input type="text" readonly class="min">
+                                        <input type="number" class="min" name="minPrice"
+                                               th:value="${selectedMinPrice}"
+                                               th:placeholder="${carListViewDto.minPrice}">
                                         <span>-</span>
-                                        <input type="text" readonly class="max">
+                                        <input type="number" class="max" name="maxPrice"
+                                               th:value="${selectedMaxPrice}"
+                                               th:placeholder="${carListViewDto.maxPrice}">
                                         <input type="submit" value="Filter">
                                     </div>
+
+
                                 </div>
                             </div>
+
+                            <!-- brand -->
                             <div class="car-listing__category car-listing__sidebar-single">
-                                <h3 class="car-listing__sidebar-title">Categories</h3>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper1" id="skipper">
-                                            <label for="skipper"><span></span>All</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>200</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper2" id="skipper2" checked="">
-                                            <label for="skipper2"><span></span>sport cars</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>50</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper3" id="skipper3">
-                                            <label for="skipper3"><span></span>sedan</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>100</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper4" id="skipper4">
-                                            <label for="skipper4"><span></span>luxury cars</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>150</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper5" id="skipper5">
-                                            <label for="skipper5"><span></span>Minibus</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>80</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper6" id="skipper6">
-                                            <label for="skipper6"><span></span>Coupes</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>60</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="skipper7" id="skipper7">
-                                            <label for="skipper7"><span></span>Trucks</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>90</p>
-                                        </div>
-                                    </li>
-                                </ul>
+                                <h3 class="car-listing__sidebar-title">Brands</h3>
+                                <select name="brandId" class="form-select">
+                                    <option value="">All</option>
+                                    <option th:each="b : ${carListViewDto.carBrands}"
+                                            th:value="${b.brandId}"
+                                            th:text="${b.brandName}"
+                                            th:selected="${selectedBrandId != null and selectedBrandId == b.brandId}">
+                                    </option>
+                                </select>
                             </div>
+
+                            <!-- type -->
+                            <div class="car-listing__category car-listing__sidebar-single">
+                                <h3 class="car-listing__sidebar-title">Car Type</h3>
+                                <select name="typeId" class="form-select">
+                                    <option value="">All</option>
+                                    <option th:each="t : ${carListViewDto.types}"
+                                            th:value="${t.typeId}"
+                                            th:text="${t.typeName}"
+                                            th:selected="${selectedTypeId != null and selectedTypeId == t.typeId}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- fuel -->
+                            <div class="car-listing__category car-listing__sidebar-single">
+                                <h3 class="car-listing__sidebar-title">Fuel Type</h3>
+                                <select name="fuel" class="form-select" th:value="${selectedFuel}">
+                                    <option value="">All</option>
+                                    <option>Gasoline</option>
+                                    <option>Diesel</option>
+                                    <option>Hybrid</option>
+                                    <option>Plug-in Hybrid</option>
+                                    <option>Electric</option>
+                                </select>
+                            </div>
+
+                            <!-- features (multi) -->
                             <div class="car-listing__category car-listing__features car-listing__sidebar-single">
                                 <h3 class="car-listing__sidebar-title">Car Features</h3>
                                 <ul class="list-unstyled">
-                                    <li>
+                                    <li th:each="f : ${carListViewDto.features}">
                                         <div class="checked-box">
-                                            <input type="checkbox" name="c_features1" id="c_features1">
-                                            <label for="c_features1"><span></span>Backup Camera</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>2</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="c_features2" id="c_features2" checked="">
-                                            <label for="c_features2"><span></span>Blindspot warning</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>2</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="c_features4" id="c_features4">
-                                            <label for="c_features4"><span></span>Airbags</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>2</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="c_features5" id="c_features5">
-                                            <label for="skipper5"><span></span>Parking sensors</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>1</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="c_features6" id="c_features6">
-                                            <label for="c_features6"><span></span>Head-up display</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>2</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="c_features7" id="c_features7">
-                                            <label for="c_features7"><span></span>Heated seats</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>20</p>
+                                            <input type="checkbox"
+                                                   th:id="'feat-' + ${f.id}"
+                                                   name="featureIds"
+                                                   th:value="${f.id}"
+                                                   th:checked="${selectedFeatureIds != null and selectedFeatureIds.contains(f.id)}">
+                                            <label th:for="'feat-' + ${f.id}" th:text="${f.name}">Feature</label>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="car-listing__category car-listing__tuel-type car-listing__sidebar-single">
-                                <h3 class="car-listing__sidebar-title">Fuel Type</h3>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="f_type1" id="f_type1">
-                                            <label for="f_type1"><span></span>Diesel</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>20</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="f_type2" id="f_type2" checked="">
-                                            <label for="f_type2"><span></span>Gasoline</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>25</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="f_type3" id="f_type3">
-                                            <label for="f_type3"><span></span>Petrol</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>29</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="f_type4" id="f_type4">
-                                            <label for="f_type4"><span></span>Electric Vehicle</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>40</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="f_type5" id="f_type5">
-                                            <label for="f_type5"><span></span>Ethanol</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>20</p>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="checked-box">
-                                            <input type="checkbox" name="f_type6" id="f_type6">
-                                            <label for="f_type6"><span></span>Hybrid</label>
-                                        </div>
-                                        <div class="counts-box">
-                                            <p>27</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="car-listing__rating car-listing__sidebar-single">
-                                <h3 class="car-listing__sidebar-title">Reviews</h3>
-                                <div class="car-listing__rating-box">
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <input type="radio" id="fivestar" name="rating" checked="checked">
-                                            <label for="fivestar">
-                                                <i></i>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="fourstar" name="rating">
-                                            <label for="fourstar">
-                                                <i></i>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star gray"></span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="threestar" name="rating">
-                                            <label for="threestar">
-                                                <i></i>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star gray"></span>
-                                                <span class="fas fa-star gray"></span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="twostar" name="rating">
-                                            <label for="twostar">
-                                                <i></i>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star gray"></span>
-                                                <span class="fas fa-star gray"></span>
-                                                <span class="fas fa-star gray"></span>
-                                            </label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="onestar" name="rating">
-                                            <label for="onestar">
-                                                <i></i>
-                                                <span class="fas fa-star"></span>
-                                                <span class="fas fa-star gray"></span>
-                                                <span class="fas fa-star gray"></span>
-                                                <span class="fas fa-star gray"></span>
-                                                <span class="fas fa-star gray"></span>
-                                            </label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+                            <button type="submit" class="thm-btn w-100">Apply Filters</button>
+                            <a th:href="@{/carList}" class="btn btn-link w-100 mt-2">Clear</a>
+                        </form><!-- /.car-listing__sidebar -->
+                    </div><!-- /.car-listing-page-one__right -->
+                </div><!-- /.col-xl-3 -->
+
+            </div><!-- /.row -->
     </section>
     <!--Car Listing page One End -->
 
     <!--Gallery One Start -->
-    <section class="gallery-one">
-        <div class="gallery-one__carousel owl-theme owl-carousel">
-            <!--Gallery One Single Start-->
-            <div class="item">
-                <div class="gallery-one__single">
-                    <div class="gallery-one__img">
-                        <img src="assets/images/gallery/gallery-1-1.jpg" alt="">
-                        <a href="cars.html"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-            <!--Gallery One Single End-->
-            <!--Gallery One Single Start-->
-            <div class="item">
-                <div class="gallery-one__single">
-                    <div class="gallery-one__img">
-                        <img src="assets/images/gallery/gallery-1-2.jpg" alt="">
-                        <a href="cars.html"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-            <!--Gallery One Single End-->
-            <!--Gallery One Single Start-->
-            <div class="item">
-                <div class="gallery-one__single">
-                    <div class="gallery-one__img">
-                        <img src="assets/images/gallery/gallery-1-3.jpg" alt="">
-                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-            <!--Gallery One Single End-->
-            <!--Gallery One Single Start-->
-            <div class="item">
-                <div class="gallery-one__single">
-                    <div class="gallery-one__img">
-                        <img src="assets/images/gallery/gallery-1-4.jpg" alt="">
-                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-            <!--Gallery One Single End-->
-            <!--Gallery One Single Start-->
-            <div class="item">
-                <div class="gallery-one__single">
-                    <div class="gallery-one__img">
-                        <img src="assets/images/gallery/gallery-1-5.jpg" alt="">
-                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-            <!--Gallery One Single End-->
-            <!--Gallery One Single Start-->
-            <div class="item">
-                <div class="gallery-one__single">
-                    <div class="gallery-one__img">
-                        <img src="assets/images/gallery/gallery-1-6.jpg" alt="">
-                        <a href="cart.html"><span class="fab fa-instagram"></span></a>
-                    </div>
-                </div>
-            </div>
-            <!--Gallery One Single End-->
-        </div>
-    </section>
+
     <!--Gallery One End -->
 
     <!--Site Footer Start-->
@@ -475,101 +251,10 @@
         <div class="site-footer__bg" style="background-image: url(assets/images/backgrounds/site-footer-bg.jpg);">
         </div>
         <div class="site-footer__top">
-            <div class="container">
-                <div class="site-footer__top-inner">
-                    <div class="row">
-                        <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
-                            <div class="footer-widget__about">
-                                <div class="footer-widget__about-logo">
-                                    <a href="index.html"><img src="assets/images/resources/footer-logo.png"
-                                                              alt=""></a>
-                                </div>
-                                <p class="footer-widget__about-text">Car Is Where Early Adopters And Innovation
-                                    Seekers Find Lively
-                                    Imaginative Tech.</p>
-                                <form class="footer-widget__form">
-                                    <div class="footer-widget__input">
-                                        <input type="email" placeholder="Your Email">
-                                    </div>
-                                    <button type="submit" class="footer-widget__btn"><i
-                                            class="icon-right-arrow"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
-                            <div class="footer-widget__links">
-                                <h4 class="footer-widget__title">Quick links</h4>
-                                <ul class="footer-widget__links-list list-unstyled">
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="services.html">Our Services</a></li>
-                                    <li><a href="drivers.html">Our Drivers</a></li>
-                                    <li><a href="blog.html">Our Blog</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                            <div class="footer-widget__services">
-                                <h4 class="footer-widget__title">Services</h4>
-                                <ul class="footer-widget__links-list list-unstyled">
-                                    <li><a href="car-list-v-1.html">Your Reliable Ride</a></li>
-                                    <li><a href="car-list-v-2.html">Express Shuttle</a></li>
-                                    <li><a href="car-list-v-3.html">Travel in Style</a></li>
-                                    <li><a href="cars.html">Rental List</a></li>
-                                    <li><a href="listing-single.html">Dash Transport</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
-                            <div class="footer-widget__contact">
-                                <h3 class="footer-widget__title">Contact Us</h3>
-                                <ul class="footer-widget__contact-list list-unstyled">
-                                    <li>
-                                        <div class="icon">
-                                            <span class="icon-pin"></span>
-                                        </div>
-                                        <p>4140 Parker Rd. Allentown, New
-                                            <br> Mexico 31134</p>
-                                    </li>
-                                    <li>
-                                        <div class="icon">
-                                            <span class="icon-call"></span>
-                                        </div>
-                                        <p><a href="tel:2195550114">(219) 555-0114</a></p>
-                                    </li>
-                                    <li>
-                                        <div class="icon">
-                                            <span class="icon-envelope"></span>
-                                        </div>
-                                        <p><a href="mailto:gorent@gmail.com">gorent@gmail.com</a></p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
         <div class="site-footer__bottom">
             <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="site-footer__bottom-inner">
-                            <div class="site-footer__copyright">
-                                <p class="site-footer__copyright-text">© 2025 Gorent By <a
-                                        href="https://themeforest.net/user/dreamlayout">Dreamlayout.</a> All
-                                    Rights
-                                    Reserved.</p>
-                            </div>
-                            <div class="site-footer__bottom-menu-box">
-                                <ul class="list-unstyled site-footer__bottom-menu">
-                                    <li><a href="about.html">Terms of Service</a></li>
-                                    <li><a href="about.html">Privacy policy</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </footer>
@@ -626,8 +311,8 @@
     <!-- /.search-popup__overlay -->
     <div class="search-popup__content">
         <form action="#">
-            <label for="search" class="sr-only">search here</label><!-- /.sr-only -->
-            <input type="text" id="search" placeholder="Search Here..." />
+            <label for="searchInput" class="sr-only">search here</label><!-- /.sr-only -->
+            <input type="text" id="searchInput" placeholder="Search Here..." />
             <button type="submit" aria-label="search submit" class="thm-btn">
                 <i class="fas fa-search"></i>
             </button>
@@ -641,7 +326,6 @@
     <span class="scroll-to-top__wrapper"><span class="scroll-to-top__inner"></span></span>
     <span class="scroll-to-top__text"> Go Back Top</span>
 </a>
-
 
 <script src="assets/js/jquery-3.6.0.min.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -667,12 +351,45 @@
 <script src="assets/js/timePicker.js"></script>
 <script src="assets/js/typed-2.0.11.js"></script>
 <script src="assets/js/aos.js"></script>
-
-
-
-
 <!-- template js -->
 <script src="assets/js/script.js"></script>
+<script>
+    // If you use jQuery UI slider:
+    // $('#slider-range').slider({ ... update the two inputs named minPrice/maxPrice ... });
+
+    // Auto-submit when brand/type/fuel change
+    document.querySelectorAll('select[name="brandId"], select[name="typeId"], select[name="fuel"]')
+        .forEach(el => el.addEventListener('change', () => document.getElementById('filterForm').submit()));
+
+    // Debounced name search (enter key or short delay)
+    const search = document.getElementById('searchInput');
+    let t;
+    search.addEventListener('keyup', () => {
+        clearTimeout(t);
+        t = setTimeout(() => document.getElementById('filterForm').submit(), 400);
+    });
+    (function () {
+        const form  = document.getElementById('filterForm');
+        const input = document.getElementById('filterName');
+
+        // Submit on Enter
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (form.requestSubmit) form.requestSubmit(); else form.submit();
+            }
+        });
+
+        // Auto-submit select filters
+        document.querySelectorAll('select[name="brandId"], select[name="typeId"], select[name="fuel"]')
+            .forEach(el => el.addEventListener('change', () => {
+                if (form.requestSubmit) form.requestSubmit(); else form.submit();
+            }));
+    })();
+
+</script>
+
+
 </body>
 
 </html>

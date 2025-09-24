@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{layout/headerLog :: headerLog}"></div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/head-new :: head-new}">
+
+</head>
 <body class="custom-cursor">
+
 <div class="custom-cursor__cursor"></div>
 <div class="custom-cursor__cursor-two"></div>
 
@@ -14,7 +16,7 @@
 
     <section class="page-header">
         <div class="page-header__bg"
-             th:style="'background-image: url(' + @{/assets/images/backgrounds/page-header-bg.jpg} + ');'">
+             th:style="'background-image: url(' + @{/assets/images/types/autowise1.png} + ');'">
         </div>
 
         <div class="page-header__shape-1"
@@ -22,13 +24,9 @@
         </div>
         <div class="container">
             <div class="page-header__inner">
-                <h3>Car List V-1</h3>
+                <h3><span style="color:#FFC107">Autowise</span> — Explore Our Fleet</h3>
                 <div class="thm-breadcrumb__inner">
-                    <ul class="thm-breadcrumb list-unstyled">
-                        <li><a href="index.html">Home</a></li>
-                        <li><span class="icon-arrow-left"></span></li>
-                        <li>Car List V-1</li>
-                    </ul>
+
                 </div>
             </div>
         </div>
@@ -46,54 +44,43 @@
                         <ul class="list-unstyled listing-single__car-details">
                             <li>
                                 <span class="icon-date"></span>
-                                <p>2025</p>
-                            </li>
-                            <li>
-                                <span class="icon-mileage"></span>
-                                <p>80 Miles</p>
+                                <p th:text="${#temporals.format(car.productionYear, 'yyyy')}">2025</p>
                             </li>
                             <li>
                                 <span class="icon-Carrier"></span>
-                                <p>Automatic</p>
+                                <p th:text="${car.transmission}">Automatic</p>
                             </li>
                             <li>
                                 <span class="icon-fuel-type"></span>
-                                <p>Petrol</p>
+                                <p th:text="${car.fuelType}">Petrol</p>
                             </li>
                         </ul>
                         <ul class="list-unstyled listing-single__car-details">
                             <li>
                                 <span class="icon-seat"></span>
-                                <p>7 seats</p>
+                                <p th:text="${car.seat + ' seats'}">7 seats</p>
                             </li>
                             <li>
                                 <span class="icon-door"></span>
-                                <p>4 Doors</p>
+                                <p th:text="${car.door + ' Doors'}">4 Doors</p>
                             </li>
                             <li>
-                                <span class="icon-fuel-type"></span>
-                                <p>2.5L</p>
-                            </li>
-                            <li>
-                                <span class="icon-car-insurance"></span>
-                                <p>3 Large bags</p>
+                                <span class="icon-engine"></span>
+                                <p th:text="${car.engineSize}">2.5L</p>
                             </li>
                         </ul>
                     </div>
+
                 </div>
                 <div class="listing-single__top-right">
-                    <div class="listing-single__tag">
-                        <a href="#">Share <span class="icon-arrow-up-from"></span> </a>
-                        <a href="#">Save <span class="icon-bookmark"></span> </a>
-                        <a href="#">Compare <span class="icon-compress"></span> </a>
-                    </div>
+
                     <h2 class="listing-single__price" th:text="'$' + ${car.price}"></h2>
                     <div class="listing-single__offer-price">
                         <div class="icon">
                             <span class="icon-tag-2"></span>
                         </div>
                         <div class="text">
-                            <p>Make An Offer Price</p>
+                            <p>Price</p>
                         </div>
                     </div>
                 </div>
@@ -105,65 +92,120 @@
                             <div class="swiper-slide">
                                 <div class="listing-single__main-content-inner">
                                     <div class="row">
-                                        <div class="col-xl-5 col-lg-5">
-                                            <div class="listing-single__left">
-                                                <div class="listing-single__img">
-                                                    <img src="assets/images/listing/listing-single-1-1.jpg" alt="">
+                                        <div class="row">
+                                            <div class="col-xl-5 col-lg-5">
+                                                <div class="listing-single__left">
+                                                    <div class="listing-single__img">
+                                                        <img th:src="${#lists.isEmpty(car.imageUrls)
+                        ? '/assets/images/placeholder-car.jpg'
+                        : car.imageUrls.get(0)}"
+                                                             alt="Car image"
+                                                             style="width:100%;height:325px;object-fit:cover;display:block;">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-7 col-lg-7">
-                                            <div class="listing-single__right">
-                                                <h3 class="listing-single__title-two">2025 Toyota Corolla Preview
-                                                    What's Coming Next Car</h3>
-                                                <p class="listing-single__text">The Toyota Corolla Hybrid is the
-                                                    high-performance
-                                                    version of the 2 Series 2-door coupé. The first generation of
-                                                    the M2 is the F87 coupé and is powered by turbocharged.</p>
-                                                <ul class="list-unstyled listing-single__meta">
-                                                    <li>
-                                                        <div class="icon">
-                                                            <span class="fas fa-map-marker-alt"></span>
-                                                        </div>
-                                                        <div class="text">
-                                                            <p>Las Vegas, USA</p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="icon">
-                                                            <span class="fas fa-map-marked-alt"></span>
-                                                        </div>
-                                                        <div class="text">
-                                                            <p><a href="#">Show on map</a></p>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="icon">
-                                                            <span class="fas fa-map"></span>
-                                                        </div>
-                                                        <div class="text">
-                                                            <p>Fleet Code:<a href="#"><span>BMW-4525</span></a></p>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                                <div class="listing-single__btn-and-video-box">
-                                                    <div class="listing-single__btn-box">
-                                                        <a href="cars.html" class="thm-btn">See All Photo<span
-                                                                class="fas fa-arrow-right"></span></a>
+
+                                            <!-- MIDDLE: three thumbs -->
+                                            <div class="col-xl-2 col-lg-2">
+                                                <div th:with="count=${car.imageUrls != null ? car.imageUrls.size() : 0},
+                  end=${T(java.lang.Math).min(3, count)}">
+
+                                                    <!-- real images -->
+                                                    <div th:each="url : ${count > 0 ? car.imageUrls.subList(0, end) : {}}">
+                                                        <img th:src="${url}" alt="Thumb"
+                                                             style="width:161px;height:161px;object-fit:cover;display:block;margin-bottom:10px;">
                                                     </div>
-                                                    <div class="listing-single__video-link">
-                                                        <a href="https://www.youtube.com/watch?v=Get7rqXYrbQ"
-                                                           class="video-popup">
-                                                            <div class="listing-single__video-icon">
-                                                                <span class="icon-play-2"></span>
-                                                                <i class="ripple"></i>
+
+                                                    <!-- placeholders if < 3 -->
+                                                    <div th:each="i : ${end < 3 ? #numbers.sequence(1, 3 - end) : {}}">
+                                                        <img src="/assets/images/placeholder-car.jpg" alt="No image"
+                                                             style="width:161px;height:161px;object-fit:cover;display:block;margin-bottom:10px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- RIGHT: dynamic details -->
+                                            <div class="col-xl-5 col-lg-5">
+                                                <div class="listing-single__right">
+                                                    <h3 class="listing-single__title-two" th:text="${car.name}">Car Name</h3>
+
+                                                    <p class="listing-single__text"
+                                                       th:text="${car.description != null ? car.description : 'No description provided.'}">
+                                                        Description goes here…
+                                                    </p>
+
+                                                    <ul class="list-unstyled listing-single__meta">
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-tag"></span></div>
+                                                            <div class="text">
+                                                                <p th:text="${car.price != null ? #numbers.formatInteger(car.price, 3, 'COMMA') + ' USD' : '—'}">Price</p>
                                                             </div>
-                                                        </a>
-                                                        <h4 class="listing-single__video-title">Watch Video</h4>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-calendar"></span></div>
+                                                            <div class="text">
+                                                                <p th:text="${car.productionYear}">Year</p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-car-side"></span></div>
+                                                            <div class="text">
+                                                                <p>Type: <span th:text="${car.carType != null ? car.carType.typeName : '—'}">Type</span></p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-gas-pump"></span></div>
+                                                            <div class="text">
+                                                                <p>Fuel: <span th:text="${car.fuelType != null ? car.fuelType : '—'}">Fuel</span></p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-cogs"></span></div>
+                                                            <div class="text">
+                                                                <p>Transmission: <span th:text="${car.transmission != null ? car.transmission : '—'}">Transmission</span></p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-tachometer-alt"></span></div>
+                                                            <div class="text">
+                                                                <p>Engine: <span th:text="${car.engineSize != null ? car.engineSize : '—'}">Engine</span></p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-users"></span></div>
+                                                            <div class="text">
+                                                                <p>Seats: <span th:text="${car.seat}">0</span></p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-door-open"></span></div>
+                                                            <div class="text">
+                                                                <p>Doors: <span th:text="${car.door}">0</span></p>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="icon"><span class="fas fa-palette"></span></div>
+                                                            <div class="text">
+                                                                <p>Color: <span th:text="${car.color != null ? car.color : '—'}">Color</span></p>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+
+                                                    <div class="listing-single__btn-and-video-box">
+                                                        <div class="listing-single__video-link" th:if="${car.youtubeLink != null}">
+                                                            <a th:href="${car.youtubeLink}" class="video-popup" target="_blank" rel="noopener">
+                                                                <div class="listing-single__video-icon">
+                                                                    <span class="icon-play-2"></span>
+                                                                    <i class="ripple"></i>
+                                                                </div>
+                                                            </a>
+                                                            <h4 class="listing-single__video-title">Watch Video</h4>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div><!-- /.swiper-slide -->
@@ -213,7 +255,7 @@
                                                 </ul>
                                                 <div class="listing-single__btn-and-video-box">
                                                     <div class="listing-single__btn-box">
-                                                        <a href="cars.html" class="thm-btn">See All Photo<span
+                                                        <a href="admin/cars.html" class="thm-btn">See All Photo<span
                                                                 class="fas fa-arrow-right"></span></a>
                                                     </div>
                                                     <div class="listing-single__video-link">
@@ -278,7 +320,7 @@
                                                 </ul>
                                                 <div class="listing-single__btn-and-video-box">
                                                     <div class="listing-single__btn-box">
-                                                        <a href="cars.html" class="thm-btn">See All Photo<span
+                                                        <a href="admin/cars.html" class="thm-btn">See All Photo<span
                                                                 class="fas fa-arrow-right"></span></a>
                                                     </div>
                                                     <div class="listing-single__video-link">
@@ -299,14 +341,6 @@
                             </div><!-- /.swiper-slide -->
                         </div>
                     </div>
-                    <div class="listing-single__nav">
-                        <div class="swiper-button-next" id="listing-single__swiper-button-prev">
-                            <i class="far fa-long-arrow-left"></i>
-                        </div>
-                        <div class="swiper-button-prev" id="listing-single__swiper-button-next">
-                            <i class="far fa-long-arrow-right"></i>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="listing-single__thumb-box">
@@ -315,7 +349,7 @@
                             <div class="swiper-slide">
                                 <div class="listing-single__img-holder-box">
                                     <div class="listing-single__img-holder">
-                                        <img src="assets/images/listing/listing-single-thamb-1-1.jpg" alt="">
+                                        <img src="assets/images/types/pickup.png" alt="">
                                     </div>
                                 </div>
                             </div><!-- /.swiper-slide -->
@@ -339,120 +373,92 @@
             </div>
             <div class="listing-single__bottom">
                 <div class="row">
-                    <div class="col-xl-8 col-lg-7">
+                    <div class="col-xl-12 col-lg-7">
                         <div class="listing-single__bottom-left">
                             <div class="listing-single__car-overview">
                                 <h3 class="listing-single__car-overview-title">Car Overview</h3>
                                 <div class="listing-single__car-overview-points-box">
                                     <ul class="list-unstyled listing-single__car-overview-point">
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-car1"></i>
-                                                <p>Body</p>
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-car1"></i><p>Body</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>SUV</p>
+                                                <p th:text="${car.carType != null ? car.carType.typeName : '—'}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-mileage"></i>
-                                                <p>Mileage</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-fuel-type"></i><p>Fuel Type</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>50</p>
+                                                <p th:text="${car.fuelType}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-fuel-type"></i>
-                                                <p>Fuel Type</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-date"></i><p>Year</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>Petrol</p>
+                                                <p th:text="${car.productionYear != null ? #temporals.format(car.productionYear,'yyyy') : '—'}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-date"></i>
-                                                <p>Year</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-Carrier"></i><p>Transmission</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>2024</p>
+                                                <p th:text="${car.transmission}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-Carrier"></i>
-                                                <p>Transmission</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-test-drive"></i><p>Drive Type</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>Automatic</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-test-drive"></i>
-                                                <p>Drive Type</p>
-                                            </div>
-                                            <div class="listing-single__car-overview-point-right">
-                                                <p>Drive (AWD/4WD)</p>
+                                                <p th:text="${car.driveType}"></p>
                                             </div>
                                         </li>
                                     </ul>
+
                                     <ul class="list-unstyled listing-single__car-overview-point">
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-avatar"></i>
-                                                <p>Condition</p>
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-engine"></i><p>Engine Size</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>New</p>
+                                                <p th:text="${car.engineSize}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-engine"></i>
-                                                <p>Engine Size</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-door"></i><p>Door</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>4.5</p>
+                                                <p th:text="${car.door + ' Doors'}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-door"></i>
-                                                <p>Door</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-color"></i><p>Color</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>4 Doors</p>
+                                                <p th:text="${car.color}"></p>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-range"></i>
-                                                <p>Range</p>
+
+                                        <li style="display:flex;align-items:center;gap:16px;">
+                                            <div class="listing-single__car-overview-point-left" style="display:flex;align-items:center;gap:10px;min-width:180px;">
+                                                <i class="icon-seat"></i><p>Seats</p>
                                             </div>
                                             <div class="listing-single__car-overview-point-right">
-                                                <p>$1700</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-color"></i>
-                                                <p>Color</p>
-                                            </div>
-                                            <div class="listing-single__car-overview-point-right">
-                                                <p>Blue, Gold, Red</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="listing-single__car-overview-point-left">
-                                                <i class="icon-seat"></i>
-                                                <p>Seats</p>
-                                            </div>
-                                            <div class="listing-single__car-overview-point-right">
-                                                <p>05</p>
+                                                <p th:text="${car.seat}"></p>
                                             </div>
                                         </li>
                                     </ul>
@@ -460,15 +466,9 @@
                             </div>
                             <div class="listing-single__description">
                                 <h3 class="listing-single__description-title">Description</h3>
-                                <p class="listing-single__description-text-1">Lorem ipsum is simply ipun txns mane
-                                    so dummy text of free available in market the printing and typesetting industry
-                                    has been the industry's standard dummy text ever. Lorem ipsum is simply ipun
-                                    txns mane. Lorem ipsum is simply ipun txns mane
-                                    so dummy text of free available in market the printing and typesetting industry
-                                    has been the industry's standard dummy text ever.</p>
-                                <p class="listing-single__description-text-2">Lorem ipsum is simply ipun txns mane
-                                    so dummy text of free available in market the printing and typesetting industry
-                                    has been the industry's standard dummy text ever.</p>
+                                <p class="listing-single__description-text-1" th:text="${car.description}">
+                                    Lorem ipsum placeholder…
+                                </p>
                             </div>
                             <div class="listing-single__feature">
                                 <h3 class="listing-single__feature-title">Features</h3>
@@ -540,323 +540,151 @@
 
                                 </div>
                             </div>
-                            <div class="listing-single__review-and-comment">
-                                <!--Review One Start-->
-                                <div class="review-one">
-                                    <div class="comments-area">
-                                        <div class="review-one__title">
-                                            <h3>2 Reviews</h3>
-                                        </div>
-                                        <!--Start Comment Box-->
-                                        <div class="comment-box">
-                                            <div class="comment">
-                                                <div class="author-thumb">
-                                                    <figure class="thumb"><img
-                                                            src="assets/images/shop/review-1-1.jpg" alt="">
-                                                    </figure>
-                                                </div>
 
-                                                <div class="review-one__content">
-                                                    <div class="review-one__content-top">
-                                                        <div class="info">
-                                                            <h2>Kevin martin <span>20 Oct, 2022 . 4:00
-                                                                        pm</span></h2>
-                                                        </div>
-                                                        <div class="reply-btn">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="review-one__content-bottom">
-                                                        <p>Lorem ipsum dolor sit amet, cibo mundi ea duo, vim exerci
-                                                            phaedrum. There are many variations of passages of Lorem
-                                                            Ipsum available, but the majority have alteration in
-                                                            some injected or words which don't look even slightly
-                                                            believable. If you are going to use a passage of Lorem
-                                                            Ipsum, you need to be sure there isn't anything
-                                                            embarrang hidden in the middle of text.</p>
+<!--                            reviewsdisplaying-->
+
+                            <section class="auw-reviews">
+
+                                <!-- local, namespaced styles so stars behave correctly -->
+                                <style>
+                                    /* Read-only stars (for displayed reviews) */
+                                    .auw-stars { white-space: nowrap; }
+                                    .auw-stars .auw-star { color:#d0d0d0; font-size:16px; }
+                                    .auw-stars .auw-star.filled { color:#f7b512; }
+
+                                    /* Rating widget (radio+label stars) */
+                                    .auw-rating {
+                                        display:inline-flex;
+                                        flex-direction: row-reverse;   /* 5 → 1 for sibling selector */
+                                        gap: 4px;
+                                    }
+                                    .auw-rating input { display:none; }
+                                    .auw-rating label {
+                                        font-size:22px; line-height:1; cursor:pointer;
+                                        color:#d0d0d0; user-select:none;
+                                    }
+                                    /* hover preview */
+                                    .auw-rating label:hover,
+                                    .auw-rating label:hover ~ label { color:#f7b512; }
+                                    /* selected state */
+                                    .auw-rating input:checked ~ label { color:#f7b512; }
+                                </style>
+
+                                <div class="listing-single__review-and-comment">
+
+                                    <!-- Reviews list -->
+                                    <div class="review-one">
+                                        <div class="comments-area">
+                                            <div class="review-one__title">
+                                                <h3 th:text="${#lists.size(reviews)} + ' Reviews'">0 Reviews</h3>
+                                            </div>
+
+                                            <!-- One review -->
+                                            <div class="comment-box" th:each="r : ${reviews}">
+                                                <div class="comment">
+                                                    <div class="review-one__content" style="width:100%">
+                                                        <div class="review-one__content-top" style="display:flex;justify-content:space-between;align-items:center;">
+                                                            <div class="info">
+                                                                <h2 style="margin:0;">
+                                                                    <span th:text="${r.user != null ? r.user.name : 'User'}">User Name</span>
+                                                                    <small class="text-muted" style="font-weight:normal;margin-left:8px;"
+                                                                           th:text="${#temporals.format(r.createdAt, 'dd MMM, yyyy • h:mm a')}">
+                                                                        01 Jan, 2025 • 4:00 PM
+                                                                    </small>
+                                                                </h2>
+                                                            </div>
+
+                                                            <!-- Read-only stars + numeric -->
+                                                            <div class="auw-stars" aria-label="rating">
+                  <span th:each="i : ${#numbers.sequence(1,5)}"
+                        class="auw-star"
+                        th:classappend="${i <= r.rating} ? ' filled' : ''">★</span>
+                                                                <span style="margin-left:6px;" th:text="'(' + ${r.rating} + '/5)'">(5/5)</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="review-one__content-bottom" style="margin-top:8px;">
+                                                            <p th:text="${r.comment}">Comment…</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- /One review -->
+
+                                            <!-- (Optional) no reviews yet -->
+                                            <p th:if="${#lists.isEmpty(reviews)}" class="text-muted">No reviews yet. Be the first!</p>
                                         </div>
-                                        <!--End Comment Box-->
-
-                                        <!--Start Comment Box-->
-                                        <div class="comment-box">
-                                            <div class="comment">
-                                                <div class="author-thumb">
-                                                    <figure class="thumb"><img
-                                                            src="assets/images/shop/review-1-2.jpg" alt="">
-                                                    </figure>
-                                                </div>
-
-                                                <div class="review-one__content">
-                                                    <div class="review-one__content-top">
-                                                        <div class="info">
-                                                            <h2>Sarah albert <span>20 Oct, 2022 . 4:00
-                                                                        pm</span></h2>
-                                                        </div>
-                                                        <div class="reply-btn">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="review-one__content-bottom">
-                                                        <p>It has survived not only five centuries, but also
-                                                            the leap into electronic
-                                                            typesetting unchanged. It was popularised in the
-                                                            sheets containing lorem ipsum
-                                                            is simply free text. Class aptent taciti
-                                                            sociosqu ad litora torquent per conubia
-                                                            nostra, per inceptos himenaeos. Vestibulum
-                                                            sollicitudin varius mauris non
-                                                            dignissim.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--End Comment Box-->
                                     </div>
-                                </div>
-                                <!--Review One End-->
+                                    <!-- /Reviews list -->
 
-                                <!--Start Review Form-->
-                                <div class="review-form-one">
-                                    <div class="review-form-one__inner">
-                                        <h3 class="review-form-one__title">Add a review</h3>
-                                        <div class="review-form-one__rate-box">
-                                            <p class="review-form-one__rate-text">Rate this product?</p>
-                                            <div class="review-form-one__rate">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                    <!-- Add review -->
+                                    <div class="review-form-one">
+                                        <div class="review-form-one__inner">
+                                            <h3 class="review-form-one__title">Add a review</h3>
+
+                                            <!-- must log in -->
+                                            <div th:if="${#strings.isEmpty(loggedInUserEmail)}">
+                                                <p>Please <a th:href="@{/login}">log in</a> to write a review.</p>
                                             </div>
-                                        </div>
-                                        <form action="assets/inc/sendemail.php"
-                                              class="review-form-one__form contact-form-validated"
-                                              novalidate="novalidate">
-                                            <div class="row">
-                                                <div class="col-xl-12">
+
+                                            <!-- show form if logged in and not reviewed -->
+                                            <div th:if="${!#strings.isEmpty(loggedInUserEmail) and !userHasReviewed}">
+                                                <form th:action="@{'/cars/' + ${car.id} + '/reviews'}"
+                                                      th:object="${reviewDto}" method="post">
+
+                                                    <!-- CSRF (if enabled) -->
+                                                    <input type="hidden" th:if="${_csrf != null}"
+                                                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                                    <div class="review-form-one__rate-box">
+                                                        <p class="review-form-one__rate-text">Rate this car</p>
+
+                                                        <!-- 5 → 1 so :checked ~ label works leftwards -->
+                                                        <div class="auw-rating">
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate5__' + ${car.id}" value="5"/>
+                                                            <label th:for="'rate5__' + ${car.id}" title="5 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate4__' + ${car.id}" value="4"/>
+                                                            <label th:for="'rate4__' + ${car.id}" title="4 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate3__' + ${car.id}" value="3"/>
+                                                            <label th:for="'rate3__' + ${car.id}" title="3 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate2__' + ${car.id}" value="2"/>
+                                                            <label th:for="'rate2__' + ${car.id}" title="2 stars">★</label>
+
+                                                            <input type="radio" th:field="*{rating}" th:id="'rate1__' + ${car.id}" value="1"/>
+                                                            <label th:for="'rate1__' + ${car.id}" title="1 star">★</label>
+                                                        </div>
+
+                                                        <div><span class="text-danger" th:errors="*{rating}"></span></div>
+                                                    </div>
+
                                                     <div class="review-form-one__input-box text-message-box">
-                                                            <textarea name="message"
-                                                                      placeholder="Write a comment"></textarea>
+                                                        <textarea th:field="*{comment}" placeholder="Write a comment"></textarea>
+                                                        <div><span class="text-danger" th:errors="*{comment}"></span></div>
                                                     </div>
-                                                </div>
+
+                                                    <button type="submit" class="thm-btn review-form-one__btn">
+                                                        Submit A Review <span class="fas fa-arrow-right"></span>
+                                                    </button>
+                                                </form>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-xl-6 col-lg-6">
-                                                    <div class="review-form-one__input-box">
-                                                        <input type="text" placeholder="Your name" name="name">
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-6 col-lg-6">
-                                                    <div class="review-form-one__input-box">
-                                                        <input type="email" placeholder="Email address"
-                                                               name="email">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-xl-12">
-                                                    <button type="submit"
-                                                            class="thm-btn review-form-one__btn">Submit a review <span
-                                                            class="fas fa-arrow-right"></span></button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div class="result"></div>
-                                    </div>
-                                </div>
-                                <!--End Review Form-->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="listing-single__sidebar">
-                            <div class="listing-single__rent-car-daily-price listing-single__single-box">
-                                <p>Daily rate</p>
-                                <h3>$150</h3>
-                            </div>
-                            <div class="listing-single__rent-car listing-single__single-box">
-                                <h3 class="listing-single__rent-car-title">Rent This Car</h3>
-                                <div class="listing-single__rent-car-content">
-                                    <div class="listing-single__rent-car-content-form">
-                                        <div class="listing-single__rent-car-date-box">
-                                            <p class="listing-single__rent-car-date-title">Pick-Up
-                                            </p>
-                                            <div class="listing-single__rent-car-date-time-box">
-                                                <input type="text" placeholder="mm/dd/yyy" name="date"
-                                                       id="datepicker">
-                                                <input type="text" name="time" placeholder="Time"
-                                                       class="listing-single__rent-car-time-box">
+
+                                            <!-- already reviewed -->
+                                            <div th:if="${!#strings.isEmpty(loggedInUserEmail) and userHasReviewed}">
+                                                <p>You’ve already reviewed this car.</p>
                                             </div>
                                         </div>
-                                        <div class="listing-single__rent-car-date-box">
-                                            <p class="listing-single__rent-car-date-title">Drop-Off
-                                            </p>
-                                            <div class="listing-single__rent-car-date-time-box">
-                                                <input type="text" placeholder="mm/dd/yyy" name="date"
-                                                       id="datepicker-2">
-                                                <input type="text" name="time" placeholder="Time"
-                                                       class="listing-single__rent-car-time-box">
-                                            </div>
-                                        </div>
-                                        <div class="listing-single__rent-car-extra">
-                                            <h3 class="listing-single__rent-car-extra-title">Add Extra:</h3>
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra1" id="f_extra1">
-                                                        <label for="f_extra1"><span></span>Bluetooth</label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$20</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra2" id="f_extra2"
-                                                               checked="">
-                                                        <label for="f_extra2"><span></span>GPS System </label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$20</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra3" id="f_extra3">
-                                                        <label for="f_extra3"><span></span>Additional Driver
-                                                        </label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$100</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="checked-box">
-                                                        <input type="checkbox" name="f_extra4" id="f_extra4">
-                                                        <label for="f_extra4"><span></span>Central Lock</label>
-                                                    </div>
-                                                    <div class="counts-box">
-                                                        <p>$150</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="listing-single__rent-car-price-box">
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <div class="title">
-                                                        <p>Subtotal</p>
-                                                    </div>
-                                                    <div class="price">
-                                                        <p>$150.00</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">
-                                                        <p>Sale discount</p>
-                                                    </div>
-                                                    <div class="price">
-                                                        <p>$140.00</p>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="title">
-                                                        <p>Total Payable</p>
-                                                    </div>
-                                                    <div class="price">
-                                                        <p>$160.00</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </div>
+                                    <!-- /Add review -->
+
                                 </div>
-                                <div class="listing-single__btn-box-2">
-                                    <a href="listing-single.html" class="thm-btn">Rent Now<span
-                                            class="fas fa-arrow-right"></span></a>
-                                </div>
-                            </div>
-                            <div class="listing-single__contact-info listing-single__single-box">
-                                <div class="listing-single__contact-phone">
-                                    <a href="tel:15502505260" class="listing-single__contact-phone-number"> <span
-                                            class="icon-call-3"></span> +1 (550) 250 5260</a>
-                                    <p class="listing-single__contact-phone-text">Click here to reveal phone number.
-                                    </p>
-                                </div>
-                                <div class="listing-single__contact-btn-box">
-                                    <a href="#"> <i class="icon-steering-wheel"></i>Schedule Test Drive </a>
-                                    <a href="#"> <i class="fab fa-whatsapp"></i>Whatsapp</a>
-                                    <a href="#"> <i class="far fa-envelope"></i>Email Address</a>
-                                </div>
-                            </div>
-                            <div class="listing-single__seller-info listing-single__single-box">
-                                <div class="listing-single__seller-info-details">
-                                    <div class="listing-single__seller-info-img">
-                                        <img src="assets/images/listing/listing-single-seller-info-img-1.jpg"
-                                             alt="">
-                                    </div>
-                                    <div class="listing-single__seller-info-content">
-                                        <p>Add by:</p>
-                                        <h5>Kevin Obrain <span class="icon-cheack"></span> </h5>
-                                    </div>
-                                </div>
-                                <div class="listing-single__seller-contact-info">
-                                    <ul class="list-unstyled listing-single__seller-contact-info-list">
-                                        <li>
-                                            <div class="icon">
-                                                <i class="far fa-phone"></i>
-                                            </div>
-                                            <div class="text">
-                                                <p><a href="tel:15502505260">+1 (550) 250 5260</a>
-                                                </p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="icon">
-                                                <i class="far fa-envelope"></i>
-                                            </div>
-                                            <div class="text">
-                                                <p><a
-                                                        href="mailto:kevin.gilbert@gmail.com">kevin.obrain@gmail.com</a>
-                                                </p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="icon">
-                                                <i class="fas fa-map-marker-alt"></i>
-                                            </div>
-                                            <div class="text">
-                                                <p>Las Vegas, USA</p>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="icon">
-                                                <i class="fas fa-globe"></i>
-                                            </div>
-                                            <div class="text">
-                                                <p><a href="#">www.kevin.com</a></p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="listing-single__seller-profile">
-                                    <a href="#" class="thm-btn">View Profile <span
-                                            class="fas fa-arrow-right"></span></a>
-                                </div>
-                            </div>
+                            </section>
+
+
+                            <!--                            reviewsdisplaying-->
                         </div>
                     </div>
                 </div>
@@ -873,7 +701,7 @@
                 <div class="gallery-one__single">
                     <div class="gallery-one__img">
                         <img src="assets/images/gallery/gallery-1-1.jpg" alt="">
-                        <a href="cars.html"><span class="fab fa-instagram"></span></a>
+                        <a href="admin/cars.html"><span class="fab fa-instagram"></span></a>
                     </div>
                 </div>
             </div>
@@ -883,7 +711,7 @@
                 <div class="gallery-one__single">
                     <div class="gallery-one__img">
                         <img src="assets/images/gallery/gallery-1-2.jpg" alt="">
-                        <a href="cars.html"><span class="fab fa-instagram"></span></a>
+                        <a href="admin/cars.html"><span class="fab fa-instagram"></span></a>
                     </div>
                 </div>
             </div>
@@ -937,100 +765,11 @@
         <div class="site-footer__bg" style="background-image: url(assets/images/backgrounds/site-footer-bg.jpg);">
         </div>
         <div class="site-footer__top">
-            <div class="container">
-                <div class="site-footer__top-inner">
-                    <div class="row">
-                        <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
-                            <div class="footer-widget__about">
-                                <div class="footer-widget__about-logo">
-                                    <a href="index.html"><img src="assets/images/resources/footer-logo.png"
-                                                              alt=""></a>
-                                </div>
-                                <p class="footer-widget__about-text">Car Is Where Early Adopters And Innovation
-                                    Seekers Find Lively
-                                    Imaginative Tech.</p>
-                                <form class="footer-widget__form">
-                                    <div class="footer-widget__input">
-                                        <input type="email" placeholder="Your Email">
-                                    </div>
-                                    <button type="submit" class="footer-widget__btn"><i
-                                            class="icon-right-arrow"></i></button>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="200ms">
-                            <div class="footer-widget__links">
-                                <h4 class="footer-widget__title">Quick links</h4>
-                                <ul class="footer-widget__links-list list-unstyled">
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="services.html">Our Services</a></li>
-                                    <li><a href="drivers.html">Our Drivers</a></li>
-                                    <li><a href="blog.html">Our Blog</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="400ms">
-                            <div class="footer-widget__services">
-                                <h4 class="footer-widget__title">Services</h4>
-                                <ul class="footer-widget__links-list list-unstyled">
-                                    <li><a href="car-list-v-1.html">Your Reliable Ride</a></li>
-                                    <li><a href="car-list-v-2.html">Express Shuttle</a></li>
-                                    <li><a href="car-list-v-3.html">Travel in Style</a></li>
-                                    <li><a href="cars.html">Rental List</a></li>
-                                    <li><a href="listing-single.html">Dash Transport</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
-                            <div class="footer-widget__contact">
-                                <h3 class="footer-widget__title">Contact Us</h3>
-                                <ul class="footer-widget__contact-list list-unstyled">
-                                    <li>
-                                        <div class="icon">
-                                            <span class="icon-pin"></span>
-                                        </div>
-                                        <p>4140 Parker Rd. Allentown, New
-                                            <br> Mexico 31134</p>
-                                    </li>
-                                    <li>
-                                        <div class="icon">
-                                            <span class="icon-call"></span>
-                                        </div>
-                                        <p><a href="tel:2195550114">(219) 555-0114</a></p>
-                                    </li>
-                                    <li>
-                                        <div class="icon">
-                                            <span class="icon-envelope"></span>
-                                        </div>
-                                        <p><a href="mailto:gorent@gmail.com">gorent@gmail.com</a></p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="site-footer__bottom">
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-12">
-                        <div class="site-footer__bottom-inner">
-                            <div class="site-footer__copyright">
-                                <p class="site-footer__copyright-text">© 2025 Gorent By <a
-                                        href="https://themeforest.net/user/dreamlayout">Dreamlayout.</a> All
-                                    Rights
-                                    Reserved.</p>
-                            </div>
-                            <div class="site-footer__bottom-menu-box">
-                                <ul class="list-unstyled site-footer__bottom-menu">
-                                    <li><a href="about.html">Terms of Service</a></li>
-                                    <li><a href="about.html">Privacy policy</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>

@@ -2,12 +2,14 @@ package com.turbopick.autowise.repository;
 
 import com.turbopick.autowise.model.CarBrand;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface CarBrandRepository extends JpaRepository<CarBrand, Long> {
-    boolean existsByBrandName(String brandName);
 
-    // Use this when updating to ensure the new name isn't already used by another brand
-    boolean existsByBrandNameAndBrandIdNot(String brandName, Long brandId);
+
+    boolean existsByBrandNameIgnoreCase(String brandName);
+
+    // For edits: same name exists on a DIFFERENT id
+    boolean existsByBrandNameIgnoreCaseAndBrandIdNot(String brandName, Long brandId);
 }

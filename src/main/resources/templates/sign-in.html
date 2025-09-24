@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login | Autowise</title>
+    <style>
+        :root {
+            --brand: #f7b500; /* yellow */
+            --ink: #111319;
+            --muted: #838792;
+            --bg: #ffffff;
+            --panel: #f7f8fb;
+            --shadow: 0 20px 60px rgba(17,19,25,0.08);
+            --radius: 18px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--ink); background: var(--bg);
+        }
+        /* Hero */
+        .hero {
+            background: #2f3038;
+            color: #fff;
+            padding: 48px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero h1 { margin: 0; font-size: 42px; letter-spacing: 1px; }
+        .crumbs { margin-top: 8px; font-size: 14px; color: #cfd2da; }
+        .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+        /* Card */
+        .auth {
+            display: grid; place-items: center;
+            padding: 56px 20px 80px;
+        }
+        .card {
+            width: 100%; max-width: 520px;
+            background: var(--panel);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+        }
+        .card h2 {
+            margin: 0 0 18px; text-align: center; font-size: 28px;
+        }
+        /* Toggle */
+        .seg {
+            display: grid; grid-template-columns: 1fr 1fr;
+            background: #e9ecf3; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 18px;
+        }
+        .seg input { display:none; }
+        .seg label {
+            display: grid; place-items: center; padding: 10px 12px;
+            border-radius: 10px; cursor: pointer; font-weight: 600; color: #4b5160;
+        }
+        .seg input:checked + label {
+            background: #fff; color: var(--ink); box-shadow: 0 4px 16px rgba(17,19,25,0.08);
+        }
+        /* Form */
+        .field { margin-bottom: 14px; }
+        .field input {
+            width: 100%; height: 48px; border-radius: 12px; border: 1px solid #dde1ea;
+            background: #fff; padding: 0 14px; font-size: 15px; outline: none;
+        }
+        .field input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(247,181,0,0.15); }
+        .row {
+            display: flex; align-items: center; justify-content: space-between; margin: 10px 2px 20px;
+            font-size: 14px; color: var(--muted);
+        }
+        .row a { color: var(--ink); text-decoration: none; }
+        .btn {
+            width: 100%; height: 50px; border: 0; border-radius: 12px; cursor: pointer;
+            background: var(--brand); color: #1b1300; font-weight: 700; font-size: 16px;
+        }
+        .aux { margin-top: 14px; text-align: center; font-size: 14px; color: var(--muted); }
+        .aux a { color: var(--ink); text-decoration: none; font-weight: 600; }
+        /* Alerts */
+        .alert {
+            padding: 10px 12px; border-radius: 10px; margin-bottom: 14px; font-size: 14px;
+        }
+        .alert.error { background: #ffe8e8; color: #7a0000; border: 1px solid #ffc9c9; }
+        .alert.ok { background: #eaf8ea; color: #0c5e17; border: 1px solid #c9f0cf; }
+    </style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="wrap">
+        <h1>LOGIN</h1>
+        <div class="crumbs">HOME &nbsp;›&nbsp; LOGIN</div>
+    </div>
+</section>
+
+<!-- AUTH CARD -->
+<section class="auth">
+    <div class="card">
+        <h2 id="title">Sign in <span id="who">Here</span></h2>
+
+
+        <!-- Alerts -->
+        <div th:if="${param.error}" class="alert error">Invalid credentials. Please try again.</div>
+        <div th:if="${param.logout}" class="alert ok">You have been logged out.</div>
+        <div th:if="${param.registered}" class="alert ok">Registration successful. Please sign in.</div>
+
+        <!-- Form posts to Spring Security /login -->
+        <form method="post" action="/login">
+            <input type="hidden" name="roleHint" id="roleHint" value="USER">
+            <div class="field">
+                <!-- IMPORTANT: name="username" to match SecurityConfig -->
+                <input type="text" name="username" placeholder="Email..." autocomplete="username" required>
+            </div>
+            <div class="field">
+                <input type="password" name="password" placeholder="Password..." autocomplete="current-password" required>
+            </div>
+
+            <!-- CSRF -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="row">
+                <label><input type="checkbox" name="remember" style="margin-right:8px;"> Remember me</label>
+                <a href="#" aria-disabled="true">Forgot password?</a>
+            </div>
+
+            <button class="btn" type="submit">Login Here →</button>
+        </form>
+
+        <div class="aux">
+            Not registered yet?
+            <a th:href="@{/register}">Create an Account</a>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    const who = document.getElementById('who');
+    const roleHint = document.getElementById('roleHint');
+    document.getElementById('asUser').addEventListener('change', e => {
+        if (e.target.checked) { who.textContent = 'User'; roleHint.value = 'USER'; }
+    });
+    document.getElementById('asAdmin').addEventListener('change', e => {
+        if (e.target.checked) { who.textContent = 'Admin'; roleHint.value = 'ADMIN'; }
+    });
+</script>
+</body>
+</html>

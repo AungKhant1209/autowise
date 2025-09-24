@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="admin/fragments/header :: adminHead('CarType – Edit')"></head>
+<body>
+<div th:replace="admin/fragments/navbartwo :: adminNavbar('types')"></div>
+
+<div class="container">
+    <div class="d-flex align-items-center mb-3">
+        <h3 class="mb-0"><i class="fas fa-edit mr-2"></i>Edit Car Type</h3>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <strong>Type Information</strong>
+        </div>
+        <div class="card-body">
+            <!-- FIXED: use carType.typeId, not carType.id -->
+            <form th:action="@{/admin/carTypesEdit/{id}(id=${carType.typeId})}"
+                  th:object="${carTypeDto}" method="post">
+                <!-- CSRF (optional if security enabled) -->
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="form-group">
+                    <label for="typeName">Type Name</label>
+                    <input id="typeName" class="form-control" th:field="*{typeName}" placeholder="e.g., Sedan"/>
+                    <small class="text-danger" th:if="${#fields.hasErrors('typeName')}" th:errors="*{typeName}"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control" th:field="*{description}" rows="4" placeholder="Describe this car type"></textarea>
+                    <small class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-outline-secondary" th:href="@{/admin/carTypes}">
+                        <i class="fas fa-arrow-left mr-1"></i>Back
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-1"></i>Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

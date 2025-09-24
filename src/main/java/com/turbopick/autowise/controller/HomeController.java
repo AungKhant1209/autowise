@@ -16,20 +16,16 @@ public class HomeController {
     @GetMapping("/home")
     public String hello(Model model) {
         model.addAttribute("name", "Aung Khant");
-        List<CarType> carTypes=carTypeService.findAllCarTypes();
+        List<CarType> carTypes=carTypeService.findAll();
         model.addAttribute("carTypes",carTypes);
         System.out.println("CarTypeController.carList"+ carTypes.size());
         return "home";
     }
-//    @GetMapping("/login")
-//    public String login(Model model) {
-//        model.addAttribute("name", "Aung Khant");
-//        return "login";
-//    }
-//    @GetMapping("/sign-up")
-//    public String signup(Model model) {
-//        model.addAttribute("name", "Aung Khant");
-//        return "sign-up";
-//    }
+    @GetMapping("/sign-in")
+    public String login(Model model) {
+        model.addAttribute("name", "Aung Khant");
+        return "sign-in";
+    }
+
 
 }

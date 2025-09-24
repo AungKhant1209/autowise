@@ -24,13 +24,15 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login() {
-        return "login-v1"; // templates/login.html
+        return "sign-in"; // templates/sign-in.html
     }
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("registerDto", new RegisterDto());
-        return "user-register-v1"; // templates/register.html
+        RegisterDto dto = new RegisterDto();
+        dto.setRole("USER"); // default
+        model.addAttribute("registerDto", dto);
+        return "sign-up";
     }
 
     @PostMapping("/register")
@@ -40,22 +42,19 @@ public class AuthController {
         if (!dto.getPassword().equals(dto.getConfirmPassword())) {
             result.addError(new FieldError("registerDto", "confirmPassword", "Passwords do not match"));
         }
-
         if (repo.existsByEmail(dto.getEmail())) {
             result.addError(new FieldError("registerDto", "email", "Email already in use"));
         }
-
-        if (result.hasErrors()) {
-            return "user-register-v1";
-        }
+        if (result.hasErrors()) return "sign-up";
 
         UserAccount ua = new UserAccount();
         ua.setName(dto.getName());
         ua.setEmail(dto.getEmail());
         ua.setPasswordHash(encoder.encode(dto.getPassword()));
-        ua.setRole("ROLE_USER");
+        ua.setRole("ADMIN".equalsIgnoreCase(dto.getRole()) ? "ROLE_ADMIN" : "ROLE_USER");
 
         repo.save(ua);
         return "redirect:/login?registered";
     }
+
 }

@@ -17,37 +17,45 @@ import java.util.List;
 
 @Controller
 public class CarTypeController {
+
     @Autowired
     private CarTypeService carTypeService;
+
     @Autowired
     private CarTypeRepository carTypeRepository;
 
-    @GetMapping("/carTypes")
-    public String carTypes(Model model) {
-        List<CarType>carTypes=carTypeService.findAllCarTypes();
-        model.addAttribute("carTypes",carTypes);
-        System.out.println("CarTypeController.carList"+ carTypes.size());
-        return "carTypes";
+    // --- LIST ---
+    @GetMapping("/admin/carTypes")
+    public String legacyCarTypesRedirect() {
+        return "redirect:/carTypes";
     }
 
-    @GetMapping("/carTypesCreate")
-    public String create(Model model) {
-        CarTypeDto carTypeDto=new CarTypeDto();
-        model.addAttribute("carTypeDto",carTypeDto);
-        return "carTypesCreate";
+    @GetMapping("/carTypes")
+    public String carTypes(Model model) {
+        List<CarType>carTypes=carTypeService.findAll();
+        model.addAttribute("carTypes",carTypes);
+        System.out.println("CarTypeController.carList"+ carTypes.size());
+        return "admin/carTypes";
     }
-    @PostMapping("/carTypesCreate")
+
+    // --- CREATE ---
+    @GetMapping("/admin/carTypesCreate")
+    public String create(Model model) {
+        model.addAttribute("carTypeDto", new CarTypeDto());
+        return "admin/carTypesCreate";
+    }
+
+    @PostMapping("/admin/carTypesCreate")
     public String createCarType(@Valid @ModelAttribute("carTypeDto") CarTypeDto carTypeDto,
                                 BindingResult result) {
 
-        // unique name check
         CarType existing = carTypeRepository.findByTypeName(carTypeDto.getTypeName());
         if (existing != null) {
             result.addError(new FieldError("carTypeDto","typeName","Type name already exists"));
         }
 
         if (result.hasErrors()) {
-            return "carTypesCreate";
+            return "admin/carTypesCreate";
         }
 
         CarType carType = new CarType();
@@ -55,57 +63,56 @@ public class CarTypeController {
         carType.setDescription(carTypeDto.getDescription());
         carTypeRepository.save(carType);
 
-        return "redirect:/carTypes";
+        return "redirect:/admin/carTypes";
     }
-    @GetMapping("/carTypesEdit/{id}")
+
+    @GetMapping("/admin/carTypesEdit/{id}")
     public String edit(@PathVariable Long id, Model model) {
         CarType carType = carTypeService.findById(id);
-        if (carType == null) return "redirect:/carTypes";
+        if (carType == null) return "redirect:/admin/carTypes";
 
         CarTypeDto dto = new CarTypeDto();
         dto.setTypeName(carType.getTypeName());
         dto.setDescription(carType.getDescription());
 
-        model.addAttribute("carType", carType);   // used by th:action for {id}
+        model.addAttribute("carType", carType);   // for th:action id
         model.addAttribute("carTypeDto", dto);    // form-backing bean
-        return "carTypesEdit";
+        return "admin/carTypesEdit";
     }
 
-    @PostMapping("/carTypesEdit/{id}")
+    @PostMapping("/admin/carTypesEdit/{id}")
     public String editCarType(@PathVariable Long id,
                               @Valid @ModelAttribute("carTypeDto") CarTypeDto carTypeDto,
                               BindingResult result,
                               Model model) {
         CarType existing = carTypeService.findById(id);
-        if (existing == null) return "redirect:/carTypes";
+        if (existing == null) return "redirect:/admin/carTypes";
 
         if (result.hasErrors()) {
-            model.addAttribute("carType", existing); // keep id for th:action
-            return "carTypesEdit";
+            model.addAttribute("carType", existing);
+            return "admin/carTypesEdit";
         }
 
         existing.setTypeName(carTypeDto.getTypeName());
         existing.setDescription(carTypeDto.getDescription());
         carTypeRepository.save(existing);
-        return "redirect:/carTypes";
+        return "redirect:/admin/carTypes";
     }
-    @GetMapping("/carTypeDelete/{id}")
-    public String deleteCarType(@PathVariable Long id,
-                                RedirectAttributes ra) {
+
+    // --- DELETE ---
+    @GetMapping("/admin/carTypeDelete/{id}")
+    public String deleteCarType(@PathVariable Long id, RedirectAttributes ra) {
         try {
             CarType ct = carTypeService.findById(id);
             if (ct == null) {
                 ra.addFlashAttribute("alert", "Car type not found.");
-                return "redirect:/carTypes";
+                return "redirect:/admin/carTypes";
             }
             carTypeRepository.deleteById(id);
             ra.addFlashAttribute("notice", "Car type deleted.");
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             ra.addFlashAttribute("alert", "Cannot delete: this car type is in use.");
         }
-        return "redirect:/carTypes";
+        return "redirect:/admin/carTypes";
     }
-
-
-
 }

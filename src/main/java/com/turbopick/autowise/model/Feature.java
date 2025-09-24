@@ -23,7 +23,6 @@ public class Feature {
     private String category;
     private String description;
 
-    // Inverse side
     @ManyToMany(mappedBy = "features", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Set<Car> cars = new HashSet<>();

@@ -3,44 +3,20 @@
     <div class="main-menu__top">
         <div class="main-menu__top-inner">
             <ul class="list-unstyled main-menu__contact-list">
-                <li>
-                    <div class="icon">
-                        <i class="icon-call-2"></i>
-                    </div>
-                    <div class="text">
 
-                    </div>
-                </li>
-                <li>
-                    <div class="icon">
-                        <i class="icon-envelope-2"></i>
-                    </div>
-                    <div class="text">
-
-                    </div>
-                </li>
-                <li>
-                    <div class="icon">
-                        <i class="icon-pin-2"></i>
-                    </div>
-                    <div class="text">
-
-                    </div>
-                </li>
             </ul>
             <div class="main-menu__top-right">
 
-                <div class="main-menu__top-login-reg-box">
-                    <a href="/login">Login</a>
-                    <p>or</p>
-                    <a href="/sign-up">Register</a>
-                </div>
-                <div class="main-menu__social">
-                    <a href="#"><i class="icon-facebook"></i></a>
-                    <a href="#"><i class="icon-twitter"></i></a>
-                    <a href="#"><i class="icon-instagram"></i></a>
-                    <a href="#"><i class="icon-youtube"></i></a>
-                </div>
+
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                        <button type="submit" class="nav-link" style="background:none;border:none;color:#fff;cursor:pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+
             </div>
         </div>
     </div>
@@ -49,7 +25,13 @@
             <div class="main-menu-three__wrapper-inner">
                 <div class="main-menu-three__left">
                     <div class="main-menu-three__logo">
-                        <a href="index.html"><img src="assets/images/car101/autowise_resized_logo.png" alt=""></a>
+                        <a href="index.html"><img
+                                src="/assets/images/types/logoautowise.png"
+                                alt="Autowise"
+                                style="height:44px; width:auto; display:block;"
+                                decoding="async"
+                        /></a>
+
                     </div>
                 </div>
                 <div class="main-menu-three__middle-box">
@@ -70,15 +52,11 @@
                         </ul>
                     </div>
                     <div class="main-menu-three__search-cart-box">
-                        <div class="main-menu-three__search-box">
-                            <a href="#" class="main-menu-three__search search-toggler icon-search"></a>
-                        </div>
-                        <div class="main-menu-three__cart-box">
-                            <a href="cart.html" class="main-menu-three__cart">
-                                <span class="far fa-shopping-cart"></span>
-                                <span class="main-menu-three__cart-count">02</span>
-                            </a>
-                        </div>
+
+                        <a th:href="@{/compare}" class="main-menu-three__cart">
+                            <span class="fas fa-exchange-alt"></span>
+                            <span class="main-menu-three__cart-count" th:text="${compareCount}">0</span>
+                        </a>
                     </div>
                 </div>
                 <div class="main-menu-three__right">
