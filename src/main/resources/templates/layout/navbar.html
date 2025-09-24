@@ -42,6 +42,15 @@
                     <a href="#"><i class="icon-instagram"></i></a>
                     <a href="#"><i class="icon-youtube"></i></a>
                 </div>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" style="display:inline;">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                        <button type="submit" class="nav-link" style="background:none;border:none;color:#fff;cursor:pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
+
             </div>
         </div>
     </div>
