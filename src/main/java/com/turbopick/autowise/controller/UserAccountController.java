@@ -14,55 +14,54 @@ public class UserAccountController {
 
     private final UserAccountService userAccountService;
 
-    // Constructor-based Dependency Injection for UserAccountService
+
     public UserAccountController(UserAccountService userAccountService) {
         this.userAccountService = userAccountService;
     }
 
-    // List all users
+
     @GetMapping
     public String list(Model model) {
         model.addAttribute("users", userAccountService.findAll());
         return "admin/userList";  // Points to userList.html
     }
 
-    // View a specific user
+
     @GetMapping("/view/{id}")
     public String viewUser(@PathVariable Long id, Model model) {
         model.addAttribute("user", userAccountService.findByIdOrThrow(id));
         return "admin/userView";  // Points to userView.html
     }
 
-    // Create a new user (GET)
+
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("user", new UserAccount());
-        return "admin/userCreate";  // Points to userCreate.html
+        return "admin/userCreate";
     }
 
-    // Create a new user (POST)
+
     @PostMapping("/create")
     public String createSubmit(@Valid @ModelAttribute UserAccount user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin/userCreate";  // Return to form if there are validation errors
+            return "admin/userCreate";
         }
         userAccountService.save(user);
-        return "redirect:/admin/users";  // Redirect to the user list after successful creation
+        return "redirect:/admin/users";
     }
 
-    // Edit user (GET)
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         UserAccount user = userAccountService.findByIdOrThrow(id);
         model.addAttribute("user", user);
-        return "admin/userEdit";  // Points to userEdit.html
+        return "admin/userEdit";
     }
 
-    // Edit user (POST)
+
     @PostMapping("/edit/{id}")
     public String editSubmit(@PathVariable Long id, @Valid @ModelAttribute UserAccount form, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "admin/userEdit";  // Return to the form if there are validation errors
+            return "admin/userEdit";
         }
 
         UserAccount existingUser = userAccountService.findByIdOrThrow(id);
@@ -70,16 +69,15 @@ public class UserAccountController {
         existingUser.setEmail(form.getEmail());
         existingUser.setPasswordHash(form.getPasswordHash());  // Update password if provided
         existingUser.setRole(form.getRole() != null ? form.getRole() : existingUser.getRole());
-        existingUser.setActive(form.isActive());  // Update active status
+        existingUser.setActive(form.isActive());
 
-        userAccountService.save(existingUser);  // Save the updated user details
-        return "redirect:/admin/users";  // Redirect to the user list page after successful update
+        userAccountService.save(existingUser);
+        return "redirect:/admin/users";
     }
 
-    // Delete user (using POST to override DELETE method)
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         userAccountService.delete(id);
-        return "redirect:/admin/users";  // Redirect to user list after successful deletion
+        return "redirect:/admin/users";
     }
 }

@@ -26,10 +26,6 @@ public class HomeController {
         model.addAttribute("name", "Aung Khant");
         return "sign-in";
     }
-//    @GetMapping("/sign-up")
-//    public String signup(Model model) {
-//        model.addAttribute("name", "Aung Khant");
-//        return "sign-up";
-//    }
+
 
 }

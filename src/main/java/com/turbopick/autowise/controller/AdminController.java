@@ -22,29 +22,8 @@ public class AdminController {
     public String showAdminPage(Model model) {
         var cars = carRepository.findAll();
         model.addAttribute("cars", cars);
-        return "admin"; // Render the admin.html page (dashboard)
+        return "admin";
     }
 
-    // --- Cars ---
-    @GetMapping("/cars")
-    public String getCars(Model model) {
-        var cars = carRepository.findAll();
-        model.addAttribute("cars", cars);
-        return "car-list";  // Assuming you already have a car-list.html
-    }
 
-    // --- Car Types ---
-    @GetMapping("/carTypes")
-    public String getCarTypes(Model model) {
-        // TODO: add logic for car types
-        return "car-type-list"; // Assuming you have car-type-list.html
-    }
-
-    // --- Car Brands ---
-    @GetMapping("/carBrands")
-    public String getCarBrands(Model model) {
-        var brands = carBrandRepository.findAll();
-        model.addAttribute("carBrands", brands);
-        return "car-brand-list"; // Create car-brand-list.html template
-    }
 }
