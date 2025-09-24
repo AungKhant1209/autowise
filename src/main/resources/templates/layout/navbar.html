@@ -3,45 +3,11 @@
     <div class="main-menu__top">
         <div class="main-menu__top-inner">
             <ul class="list-unstyled main-menu__contact-list">
-                <li>
-                    <div class="icon">
-                        <i class="icon-call-2"></i>
-                    </div>
-                    <div class="text">
 
-                    </div>
-                </li>
-                <li>
-                    <div class="icon">
-                        <i class="icon-envelope-2"></i>
-                    </div>
-                    <div class="text">
-
-                    </div>
-                </li>
-                <li>
-                    <div class="icon">
-                        <i class="icon-pin-2"></i>
-                    </div>
-                    <div class="text">
-
-                    </div>
-                </li>
             </ul>
             <div class="main-menu__top-right">
 
-                <div class="main-menu__top-login-reg-box">
-                    <a th:href="@{/sign-in}">Login</a>
-                    <p>or</p>
-                    <a th:href="@{/sign-up}">Register</a>
 
-                </div>
-                <div class="main-menu__social">
-                    <a href="#"><i class="icon-facebook"></i></a>
-                    <a href="#"><i class="icon-twitter"></i></a>
-                    <a href="#"><i class="icon-instagram"></i></a>
-                    <a href="#"><i class="icon-youtube"></i></a>
-                </div>
                 <li class="nav-item">
                     <form th:action="@{/logout}" method="post" style="display:inline;">
                         <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
@@ -86,9 +52,7 @@
                         </ul>
                     </div>
                     <div class="main-menu-three__search-cart-box">
-                        <div class="main-menu-three__search-box">
-                            <a href="#" class="main-menu-three__search search-toggler icon-search"></a>
-                        </div>
+
                         <a th:href="@{/compare}" class="main-menu-three__cart">
                             <span class="fas fa-exchange-alt"></span>
                             <span class="main-menu-three__cart-count" th:text="${compareCount}">0</span>
