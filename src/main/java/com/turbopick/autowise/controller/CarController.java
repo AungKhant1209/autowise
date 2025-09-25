@@ -36,8 +36,6 @@ public class CarController {
     @Autowired
     private CarBrandService carBrandService;
 
-
-
     @Autowired
     private S3Service s3Service;
     @Autowired
