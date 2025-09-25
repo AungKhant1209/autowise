@@ -3,6 +3,7 @@ package com.turbopick.autowise.config;
 import com.turbopick.autowise.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,6 +35,7 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/login","/compare", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                 ).permitAll()
+                .requestMatchers(HttpMethod.POST, "/admin/cars/*/delete").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")   // Only ADMIN can access /admin paths
                 .requestMatchers("/user/**").hasRole("USER")     // Only USER can access user-specific paths (if needed)
                 .anyRequest().authenticated()  // All other requests require authentication
