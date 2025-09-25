@@ -81,6 +81,18 @@ public class CarService {
         dto.setMaxPrice(max);
         return dto;
     }
+    @Transactional
+    public void deleteByIdWithCleanup(Long id) {
+        carRepository.findById(id).ifPresent(car -> {
+            // Clear ManyToMany to remove join rows first
+            if (car.getFeatures() != null) {
+                car.getFeatures().clear();
+                carRepository.save(car); // flush join-table changes
+            }
+            // Now delete the car (will cascade @OneToMany reviews, and remove @ElementCollection images)
+            carRepository.delete(car);
+        });
+    }
 
 
 

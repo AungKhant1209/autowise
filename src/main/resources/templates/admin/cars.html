@@ -130,9 +130,10 @@
                             <a class="btn btn-sm btn-outline-secondary" th:href="@{/editCar/{id}(id=${car.id})}">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form th:action="@{/carDelete/{id}(id=${car.id})}" method="post" class="d-inline">
+                            <form th:action="@{/admin/cars/{id}/delete(id=${car.id})}" method="post" class="d-inline">
                                 <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this car?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Delete this car?');">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>

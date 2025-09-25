@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -318,19 +319,10 @@ public class CarController {
         return "redirect:/admin/cars";
     }
     // Delete
-    @GetMapping("/carDelete/{id}")
-    public String deleteCar(@PathVariable Long id) {
-        carService.findById(id).ifPresent(car -> {
-            if (car.getFeatures() != null) {
-                car.getFeatures().clear();
-            }
-
-        carService.deleteById(id);
-            carService.save(car);
-
-
-            carService.delete(car);
-        });
+    @PostMapping("/admin/cars/{id}/delete")
+    public String deleteCar(@PathVariable Long id, RedirectAttributes ra) {
+        carService.deleteByIdWithCleanup(id);
+        ra.addFlashAttribute("msg", "Car deleted.");
         return "redirect:/admin/cars";
     }
 
