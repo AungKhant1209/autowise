@@ -48,27 +48,28 @@
                         </div>
 
                         <!-- Category -->
+                        <!-- Category (fixed choices) -->
                         <div class="form-group">
                             <label for="category">Category <span class="text-danger">*</span></label>
-                            <!-- You can keep this as a free-text input OR use a select with common categories -->
                             <select id="category" class="form-control" th:field="*{category}" required>
-                                <option value="" disabled selected>Select a category</option>
-                                <option>Safety</option>
-                                <option>Comfort & Convenience</option>
-                                <option>Interior</option>
-
+                                <!-- Placeholder shows only when no value yet -->
+                                <option value="" th:if="${#strings.isEmpty(*{category})}" disabled selected>
+                                    Select a category
+                                </option>
+                                <option th:value="'Safety'">Safety</option>
+                                <option th:value="'Comfort & Convenience'">Comfort & Convenience</option>
+                                <option th:value="'Interior'">Interior</option>
                             </select>
-                            <!-- If you prefer free text instead of select, swap the select for:
-                            <input id="category" type="text" class="form-control" th:field="*{category}" placeholder="e.g., Safety" required>
-                            -->
                             <small class="text-danger" th:errors="*{category}"></small>
                         </div>
 
                         <!-- Description -->
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea id="description" class="form-control" th:field="*{description}" rows="3"
-                                      placeholder="Optional details about this feature..."></textarea>
+                            <textarea id="description" class="form-control"
+                                      th:field="*{description}" rows="3"
+                                      placeholder="Optional details about this feature…"
+                                      maxlength="500"></textarea>
                             <small class="text-danger" th:errors="*{description}"></small>
                         </div>
 
@@ -78,9 +79,6 @@
                                 <i class="fas fa-save"></i> Save Feature
                             </button>
                         </div>
-                    </form>
-                </div>
-            </div>
 
             <!-- Optional success flash -->
             <div class="alert alert-success mt-3" th:if="${msg != null}" th:text="${msg}"></div>
