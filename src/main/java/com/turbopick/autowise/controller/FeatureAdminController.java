@@ -33,12 +33,11 @@ public class FeatureAdminController {
         model.addAttribute("features", featureService.findAll());  // <-- use "features"
         return "admin/featureList";
     }
-
     // ===== CREATE (form) =====
     @GetMapping("/featureCreate")
     public String createForm(Model model) {
-        model.addAttribute("feature", new Feature());              // <-- th:object needs this
-        return "admin/featureCreate";
+        model.addAttribute("feature", new Feature()); // <-- th:object needs this
+        return "admin/featureCreate";                 // <-- resolves to templates/admin/featureCreate.html
     }
 
     // ===== CREATE (submit) =====
@@ -47,12 +46,13 @@ public class FeatureAdminController {
                                BindingResult result,
                                RedirectAttributes ra) {
         if (result.hasErrors()) {
-            return "admin/featureCreate";                          // re-render with errors
+            return "admin/featureCreate";            // re-render with errors
         }
         featureService.save(form);
         ra.addFlashAttribute("ok", "Feature created.");
         return "redirect:/admin/featureList";
     }
+
 
     // ===== EDIT (form) =====
     @GetMapping("/features/{id}/edit")

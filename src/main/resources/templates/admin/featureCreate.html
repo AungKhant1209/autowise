@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/fragments/header :: adminHead('Feature - Create')}"></head>
+<head th:replace="~{admin/fragments/header :: adminHead('Feature – Create')}"></head>
 <body>
 <div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
 
@@ -12,19 +12,17 @@
         </div>
 
         <div class="card-body">
-            <!-- action must match controller: POST /admin/features -->
+            <!-- action MUST match POST /admin/features -->
             <form th:action="@{/admin/features}" th:object="${feature}" method="post">
                 <input type="hidden" th:if="${_csrf != null}"
-                       th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                       th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                <!-- Global errors -->
                 <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
                     <ul class="mb-0">
                         <li th:each="e : ${#fields.errors()}" th:text="${e}">Error</li>
                     </ul>
                 </div>
 
-                <!-- Name -->
                 <div class="form-group">
                     <label for="name">Feature Name <span class="text-danger">*</span></label>
                     <input id="name" type="text" class="form-control"
@@ -32,7 +30,6 @@
                     <small class="text-danger" th:errors="*{name}"></small>
                 </div>
 
-                <!-- Category (fixed choices) -->
                 <div class="form-group">
                     <label for="category">Category <span class="text-danger">*</span></label>
                     <select id="category" class="form-control" th:field="*{category}" required>
@@ -46,7 +43,6 @@
                     <small class="text-danger" th:errors="*{category}"></small>
                 </div>
 
-                <!-- Description -->
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea id="description" class="form-control"
@@ -65,7 +61,5 @@
         </div>
     </div>
 </div>
-
-<script th:src="@{/assets/js/bootstrap.min.js}"></script>
 </body>
 </html>
