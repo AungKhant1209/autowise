@@ -326,7 +326,7 @@ public class CarController {
         // Add a cache-buster to be 100% sure you see fresh list
         return "redirect:/admin/cars?ts=" + System.currentTimeMillis();
     }
-    @GetMapping("/admin/featuresCreate")
+    @GetMapping("/admin/featureCreate")
     public String featureCreateForm(Model model) {
         model.addAttribute("feature", new Feature());
         return "admin/featureCreate";

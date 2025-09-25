@@ -45,7 +45,7 @@ public class FeatureAdminController {
                 form.setId(id);          // ensure we update
                 featureService.save(form);
                 ra.addFlashAttribute("ok", "Feature updated.");
-                return "redirect:/admin/features";
+                return "redirect:/admin/featureList";
             }
         } catch (IllegalArgumentException | IllegalStateException ex) {
             result.rejectValue("name", "invalid", ex.getMessage());
