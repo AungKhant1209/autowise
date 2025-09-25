@@ -57,7 +57,7 @@
                                     Select a category
                                 </option>
                                 <option th:value="'Safety'">Safety</option>
-                                <option th:value="'Comfort & Convenience'">Comfort & Convenience</option>
+                                <option th:value="'Comfort & Convenience'">Comfort &amp; Convenience</option>
                                 <option th:value="'Interior'">Interior</option>
                             </select>
                             <small class="text-danger" th:errors="*{category}"></small>
@@ -66,15 +66,17 @@
                         <!-- Description -->
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea id="description" class="form-control"
-                                      th:field="*{description}" rows="3"
+                            <textarea id="description"
+                                      class="form-control"
+                                      th:field="*{description}"
+                                      rows="3"
                                       placeholder="Optional details about this feature…"
                                       maxlength="500"></textarea>
                             <small class="text-danger" th:errors="*{description}"></small>
                         </div>
 
                         <div class="d-flex justify-content-end">
-                            <a th:href="@{/admin/features}" class="btn btn-light mr-2">Cancel</a>
+                            <a th:href="@{/admin/featureList}" class="btn btn-light mr-2">Cancel</a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Save Feature
                             </button>

@@ -332,14 +332,14 @@ public class CarController {
         return "admin/featureCreate";
     }
 
-    @PostMapping("/admin/featuresCreate")
+    @PostMapping("/admin/featureCreate")
     public String featureCreateSubmit(@Valid @ModelAttribute("feature") Feature feature,
                                       BindingResult result,
                                       RedirectAttributes ra) {
         if (result.hasErrors()) return "admin/featureCreate";
         featureService.save(feature);
         ra.addFlashAttribute("msg", "Feature created.");
-        return "redirect:/admin/features";
+        return "redirect:/admin/featureList";
     }
 
 

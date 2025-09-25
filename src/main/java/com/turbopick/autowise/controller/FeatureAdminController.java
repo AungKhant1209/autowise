@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/admin/features")
+@RequestMapping("/admin/featureList")
 public class FeatureAdminController {
 
     private final FeatureService featureService;
@@ -59,6 +59,6 @@ public class FeatureAdminController {
     public String delete(@PathVariable Long id, RedirectAttributes ra) {
         featureService.deleteById(id);
         ra.addFlashAttribute("ok", "Feature deleted.");
-        return "redirect:/admin/features";
+        return "redirect:/admin/featureList";
     }
 }
