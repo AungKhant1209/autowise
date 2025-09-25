@@ -8,7 +8,7 @@
 <div class="container mt-4" style="max-width:720px">
     <h2 class="mb-3">Edit Feature</h2>
 
-    <form th:action="@{|/admin/features/${feature.id}/edit|}" th:object="${feature}" method="post">
+    <form th:action="@{|/admin/featureList/${feature.id}/edit|}" th:object="${feature}" method="post">
         <input type="hidden" th:if="${_csrf != null}"
                th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
@@ -34,7 +34,7 @@
             <button class="btn btn-primary" type="submit">
                 <i class="fas fa-save"></i> Save Changes
             </button>
-            <a th:href="@{/admin/features}" class="btn btn-secondary">Cancel</a>
+            <a th:href="@{/admin/featureList}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

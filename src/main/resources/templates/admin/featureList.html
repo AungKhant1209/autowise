@@ -11,9 +11,7 @@
     <div th:if="${ok}" class="alert alert-success" th:text="${ok}"></div>
 
     <div class="mb-3">
-        <a class="btn btn-primary" th:href="@{/admin/featureCreate}">
-            <i class="fas fa-plus-circle"></i> New Feature
-        </a>
+
     </div>
 
     <div class="table-responsive">
@@ -28,17 +26,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="f : ${features}">
+            <tr th:each="f : ${featureList}">
                 <td th:text="${f.id}">1</td>
                 <td th:text="${f.name}">Airbags</td>
                 <td th:text="${f.category}">Safety</td>
                 <td th:text="${f.description}">Front & side airbags</td>
                 <td>
-                    <a th:href="@{|/admin/features/${f.id}/edit|}" class="btn btn-sm btn-outline-secondary">
+                    <a th:href="@{|/admin/featureList/${f.id}/edit|}" class="btn btn-sm btn-outline-secondary">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form th:action="@{|/admin/features/${f.id}/delete|}" method="post"
+                    <form th:action="@{|/admin/featureList/${f.id}/delete|}" method="post"
                           class="d-inline" onsubmit="return confirm('Delete this feature?')">
                         <input type="hidden" th:if="${_csrf != null}"
                                th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -48,7 +46,7 @@
                     </form>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(features)}">
+            <tr th:if="${#lists.isEmpty(featureList)}">
                 <td colspan="5" class="text-center text-muted">No features yet.</td>
             </tr>
             </tbody>

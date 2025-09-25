@@ -22,14 +22,12 @@
             <div class="card shadow-sm">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">Register New Feature</h5>
-                    <a th:href="@{/admin/features}" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-list-ul"></i> Back to List
-                    </a>
+
                 </div>
 
                 <div class="card-body">
                     <!-- Bind to a model attribute 'feature' (Feature entity or DTO) -->
-                    <form th:action="@{/admin/featuresCreate}" th:object="${feature}" method="post">
+                    <form th:action="@{/admin/featureCreate}" th:object="${feature}" method="post">
 
                         <!-- CSRF -->
                         <input type="hidden" th:if="${_csrf != null}"
@@ -65,13 +63,8 @@
 
                         <!-- Description -->
                         <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea id="description"
-                                      class="form-control"
-                                      th:field="*{description}"
-                                      rows="3"
-                                      placeholder="Optional details about this feature…"
-                                      maxlength="500"></textarea>
+                            <label for="name">Description <span class="text-danger">*</span></label>
+                            <input id="description" type="text" class="form-control" th:field="*{description}" placeholder="e.g., Blindspot Warning" required>
                             <small class="text-danger" th:errors="*{description}"></small>
                         </div>
 
@@ -84,6 +77,7 @@
 
             <!-- Optional success flash -->
             <div class="alert alert-success mt-3" th:if="${msg != null}" th:text="${msg}"></div>
+
 
         </div>
     </div>
