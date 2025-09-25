@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Feature Register</title>
+    <!-- If you have a shared head fragment, keep this; otherwise remove -->
+    <div th:replace="~{admin/fragments/header :: adminHead('Features – Create')}"></div>
+    <!-- Or include your CSS directly
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    -->
+</head>
+<body>
+
+<!-- Admin Navbar -->
+<div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
+
+<div class="container mt-5 pt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Register New Feature</h5>
+                    <a th:href="@{/admin/features}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-list-ul"></i> Back to List
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    <!-- Bind to a model attribute 'feature' (Feature entity or DTO) -->
+                    <form th:action="@{/admin/featuresCreate}" th:object="${feature}" method="post">
+
+                        <!-- CSRF -->
+                        <input type="hidden" th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <!-- Global error summary -->
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                            <strong>Please fix the errors below.</strong>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="form-group">
+                            <label for="name">Feature Name <span class="text-danger">*</span></label>
+                            <input id="name" type="text" class="form-control" th:field="*{name}" placeholder="e.g., Blindspot Warning" required>
+                            <small class="text-danger" th:errors="*{name}"></small>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="form-group">
+                            <label for="category">Category <span class="text-danger">*</span></label>
+                            <!-- You can keep this as a free-text input OR use a select with common categories -->
+                            <select id="category" class="form-control" th:field="*{category}" required>
+                                <option value="" disabled selected>Select a category</option>
+                                <option>Safety</option>
+                                <option>Comfort & Convenience</option>
+                                <option>Interior</option>
+
+                            </select>
+                            <!-- If you prefer free text instead of select, swap the select for:
+                            <input id="category" type="text" class="form-control" th:field="*{category}" placeholder="e.g., Safety" required>
+                            -->
+                            <small class="text-danger" th:errors="*{category}"></small>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" class="form-control" th:field="*{description}" rows="3"
+                                      placeholder="Optional details about this feature..."></textarea>
+                            <small class="text-danger" th:errors="*{description}"></small>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <a th:href="@{/admin/features}" class="btn btn-light mr-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Feature
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Optional success flash -->
+            <div class="alert alert-success mt-3" th:if="${msg != null}" th:text="${msg}"></div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Scripts (if not included in header fragment) -->
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> -->
+</body>
+</html>

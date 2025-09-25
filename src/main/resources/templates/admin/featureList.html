@@ -1,0 +1,61 @@
+<!-- src/main/resources/templates/admin/featureList.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/header :: adminHead('Features – List')}"></head>
+<body>
+<div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
+
+<div class="container mt-4">
+    <h2 class="mb-3">Features</h2>
+
+    <div th:if="${ok}" class="alert alert-success" th:text="${ok}"></div>
+
+    <div class="mb-3">
+        <a class="btn btn-primary" th:href="@{/admin/features/create}">
+            <i class="fas fa-plus-circle"></i> New Feature
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-striped align-middle">
+            <thead class="thead-dark">
+            <tr>
+                <th style="width:10%">ID</th>
+                <th style="width:25%">Name</th>
+                <th style="width:20%">Category</th>
+                <th>Description</th>
+                <th style="width:14%">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="f : ${features}">
+                <td th:text="${f.id}">1</td>
+                <td th:text="${f.name}">Airbags</td>
+                <td th:text="${f.category}">Safety</td>
+                <td th:text="${f.description}">Front & side airbags</td>
+                <td>
+                    <a th:href="@{|/admin/features/${f.id}/edit|}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <form th:action="@{|/admin/features/${f.id}/delete|}" method="post"
+                          class="d-inline" onsubmit="return confirm('Delete this feature?')">
+                        <input type="hidden" th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <button class="btn btn-sm btn-outline-danger" type="submit">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(features)}">
+                <td colspan="5" class="text-center text-muted">No features yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://kit.fontawesome.com/a2d9d5f0a1.js" crossorigin="anonymous"></script>
+</body>
+</html>

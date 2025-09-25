@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/fragments/header :: adminHead('Images – List')"></head>
 <head>
     <meta charset="UTF-8"/>
     <title>Upload Car Images</title>
@@ -18,6 +19,7 @@
     </style>
 </head>
 <body>
+<div th:replace="admin/fragments/navbartwo :: adminNavbar('images')"></div>
 
 <h1>Upload Images to S3</h1>
 
