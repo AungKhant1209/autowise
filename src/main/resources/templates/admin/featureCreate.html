@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/fragments/header :: adminHead('Feature – Create')}"></head>
+<head th:replace="~{admin/fragments/header :: adminHead('Feature - Create')}"></head>
 <body>
-<!-- FIX: pass 'features' so the nav highlights correct section -->
 <div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
 
 <div class="container my-4" style="max-width:720px;">
@@ -13,17 +12,19 @@
         </div>
 
         <div class="card-body">
-            <!-- FIX: action must be /admin/features -->
+            <!-- action must match controller: POST /admin/features -->
             <form th:action="@{/admin/features}" th:object="${feature}" method="post">
                 <input type="hidden" th:if="${_csrf != null}"
                        th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
+                <!-- Global errors -->
                 <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
                     <ul class="mb-0">
                         <li th:each="e : ${#fields.errors()}" th:text="${e}">Error</li>
                     </ul>
                 </div>
 
+                <!-- Name -->
                 <div class="form-group">
                     <label for="name">Feature Name <span class="text-danger">*</span></label>
                     <input id="name" type="text" class="form-control"
@@ -31,6 +32,7 @@
                     <small class="text-danger" th:errors="*{name}"></small>
                 </div>
 
+                <!-- Category (fixed choices) -->
                 <div class="form-group">
                     <label for="category">Category <span class="text-danger">*</span></label>
                     <select id="category" class="form-control" th:field="*{category}" required>
@@ -44,17 +46,16 @@
                     <small class="text-danger" th:errors="*{category}"></small>
                 </div>
 
+                <!-- Description -->
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea id="description" class="form-control"
                               th:field="*{description}" rows="3"
-                              placeholder="Optional details about this feature…"
-                              maxlength="500"></textarea>
+                              placeholder="Optional details about this feature…" maxlength="500"></textarea>
                     <small class="text-danger" th:errors="*{description}"></small>
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <!-- FIX: cancel should go to list page -->
                     <a th:href="@{/admin/featureList}" class="btn btn-light mr-2">Cancel</a>
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Save Feature

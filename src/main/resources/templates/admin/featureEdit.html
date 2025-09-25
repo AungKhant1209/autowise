@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/fragments/header :: adminHead('Features – Edit')}"></head>
+<head th:replace="~{admin/fragments/header :: adminHead('Features - Edit')}"></head>
 <body>
 <div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
 
 <div class="container mt-4" style="max-width:720px">
     <h2 class="mb-3">Edit Feature</h2>
 
-    <!-- FIX: action must be /admin/features/{id}/edit -->
-    <form th:action="@{|/admin/features/${feature.id}/edit|}"
-          th:object="${feature}" method="post">
+    <form th:action="@{|/admin/features/${feature.id}/edit|}" th:object="${feature}" method="post">
         <input type="hidden" th:if="${_csrf != null}"
                th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         <div class="form-group mb-3">
             <label for="name">Name</label>
-            <input th:field="*{name}" id="name" class="form-control" placeholder="e.g. Airbags" required>
+            <input th:field="*{name}" id="name" class="form-control" placeholder="e.g. Airbags">
             <small class="text-danger" th:errors="*{name}"></small>
         </div>
 
-        <!-- FIX: use select with fixed choices -->
         <div class="form-group mb-3">
             <label for="category">Category</label>
-            <select id="category" class="form-control" th:field="*{category}" required>
-                <option value="" th:if="${#strings.isEmpty(*{category})}" disabled selected>
-                    Select a category
-                </option>
+            <select th:field="*{category}" id="category" class="form-control">
                 <option value="Safety">Safety</option>
                 <option value="Comfort & Convenience">Comfort &amp; Convenience</option>
                 <option value="Interior">Interior</option>
@@ -35,8 +29,8 @@
 
         <div class="form-group mb-4">
             <label for="description">Description</label>
-            <textarea th:field="*{description}" id="description" class="form-control"
-                      rows="3" placeholder="Optional details"></textarea>
+            <textarea th:field="*{description}" id="description" class="form-control" rows="3"
+                      placeholder="Optional details"></textarea>
             <small class="text-danger" th:errors="*{description}"></small>
         </div>
 
@@ -48,7 +42,5 @@
         </div>
     </form>
 </div>
-
-<script src="https://kit.fontawesome.com/a2d9d5f0a1.js" crossorigin="anonymous"></script>
 </body>
 </html>

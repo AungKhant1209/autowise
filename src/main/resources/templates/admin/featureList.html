@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{admin/fragments/header :: adminHead('Features – List')}"></head>
+<head th:replace="~{admin/fragments/header :: adminHead('Features - List')}"></head>
 <body>
 <div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
 
 <div class="container mt-4">
+    <div th:if="${ok}" class="alert alert-success" th:text="${ok}"></div>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0">Features</h2>
-        <!-- FIX: link to the create form -->
         <a class="btn btn-primary" th:href="@{/admin/featureCreate}">
-            <i class="fas fa-plus-circle"></i> New Feature
+            <i class="fas fa-plus-circle"></i> Feature Register
         </a>
     </div>
-
-    <div th:if="${ok}" class="alert alert-success" th:text="${ok}"></div>
 
     <div class="table-responsive">
         <table class="table table-sm table-striped align-middle">
@@ -27,19 +26,16 @@
             </tr>
             </thead>
             <tbody>
-            <!-- FIX: controller sets model attribute name 'features' -->
             <tr th:each="f : ${features}">
                 <td th:text="${f.id}">1</td>
                 <td th:text="${f.name}">Airbags</td>
                 <td th:text="${f.category}">Safety</td>
-                <td th:text="${f.description}">Front & side airbags</td>
+                <td th:text="${f.description}">Front &amp; side airbags</td>
                 <td>
-                    <!-- FIX: edit link must be /admin/features/{id}/edit -->
                     <a th:href="@{|/admin/features/${f.id}/edit|}" class="btn btn-sm btn-outline-secondary">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <!-- FIX: delete action must be /admin/features/{id}/delete -->
                     <form th:action="@{|/admin/features/${f.id}/delete|}" method="post"
                           class="d-inline" onsubmit="return confirm('Delete this feature?')">
                         <input type="hidden" th:if="${_csrf != null}"
@@ -50,7 +46,6 @@
                     </form>
                 </td>
             </tr>
-
             <tr th:if="${#lists.isEmpty(features)}">
                 <td colspan="5" class="text-center text-muted">No features yet.</td>
             </tr>

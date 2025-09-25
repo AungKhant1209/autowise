@@ -21,7 +21,7 @@ public class FeatureAdminController {
         this.featureService = featureService;
     }
 
-    /** Shared list for the category <select> */
+    /** For the category <select> (optional—use in edit page if you like) */
     @ModelAttribute("featureCategories")
     public List<String> featureCategories() {
         return List.of("Safety", "Comfort & Convenience", "Interior");
@@ -30,14 +30,14 @@ public class FeatureAdminController {
     // ===== LIST =====
     @GetMapping("/featureList")
     public String list(Model model) {
-        model.addAttribute("features", featureService.findAll());
+        model.addAttribute("features", featureService.findAll());  // <-- use "features"
         return "admin/featureList";
     }
 
     // ===== CREATE (form) =====
     @GetMapping("/featureCreate")
     public String createForm(Model model) {
-        model.addAttribute("feature", new Feature());
+        model.addAttribute("feature", new Feature());              // <-- th:object needs this
         return "admin/featureCreate";
     }
 
@@ -45,10 +45,9 @@ public class FeatureAdminController {
     @PostMapping("/features")
     public String createSubmit(@Valid @ModelAttribute("feature") Feature form,
                                BindingResult result,
-                               RedirectAttributes ra,
-                               Model model) {
+                               RedirectAttributes ra) {
         if (result.hasErrors()) {
-            return "admin/featureCreate";
+            return "admin/featureCreate";                          // re-render with errors
         }
         featureService.save(form);
         ra.addFlashAttribute("ok", "Feature created.");
@@ -67,12 +66,11 @@ public class FeatureAdminController {
     public String editSubmit(@PathVariable Long id,
                              @Valid @ModelAttribute("feature") Feature form,
                              BindingResult result,
-                             RedirectAttributes ra,
-                             Model model) {
+                             RedirectAttributes ra) {
         if (result.hasErrors()) {
             return "admin/featureEdit";
         }
-        form.setId(id); // ensure update
+        form.setId(id);
         featureService.save(form);
         ra.addFlashAttribute("ok", "Feature updated.");
         return "redirect:/admin/featureList";
