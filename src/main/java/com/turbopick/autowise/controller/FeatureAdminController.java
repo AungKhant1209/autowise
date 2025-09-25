@@ -12,7 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin")  // <<-- important so /admin/featureCreate resolves
 public class FeatureAdminController {
 
     private final FeatureService featureService;
@@ -21,23 +21,11 @@ public class FeatureAdminController {
         this.featureService = featureService;
     }
 
-    /** For the category <select> (optional—use in edit page if you like) */
-    @ModelAttribute("featureCategories")
-    public List<String> featureCategories() {
-        return List.of("Safety", "Comfort & Convenience", "Interior");
-    }
-
-    // ===== LIST =====
-    @GetMapping("/featureList")
-    public String list(Model model) {
-        model.addAttribute("features", featureService.findAll());  // <-- use "features"
-        return "admin/featureList";
-    }
     // ===== CREATE (form) =====
     @GetMapping("/featureCreate")
     public String createForm(Model model) {
-        model.addAttribute("feature", new Feature()); // <-- th:object needs this
-        return "admin/featureCreate";                 // <-- resolves to templates/admin/featureCreate.html
+        model.addAttribute("feature", new Feature());
+        return "admin/featureCreate";
     }
 
     // ===== CREATE (submit) =====
@@ -46,13 +34,19 @@ public class FeatureAdminController {
                                BindingResult result,
                                RedirectAttributes ra) {
         if (result.hasErrors()) {
-            return "admin/featureCreate";            // re-render with errors
+            return "admin/featureCreate";
         }
         featureService.save(form);
         ra.addFlashAttribute("ok", "Feature created.");
         return "redirect:/admin/featureList";
     }
 
+    // ===== LIST (for Cancel button target) =====
+    @GetMapping("/featureList")
+    public String featureList(Model model) {
+        model.addAttribute("features", featureService.findAll());
+        return "admin/featureList";
+    }
 
     // ===== EDIT (form) =====
     @GetMapping("/features/{id}/edit")
@@ -75,7 +69,6 @@ public class FeatureAdminController {
         ra.addFlashAttribute("ok", "Feature updated.");
         return "redirect:/admin/featureList";
     }
-
     // ===== DELETE =====
     @PostMapping("/features/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes ra) {
