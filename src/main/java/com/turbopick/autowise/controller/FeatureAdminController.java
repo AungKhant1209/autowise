@@ -1,79 +1,118 @@
 package com.turbopick.autowise.controller;
 
 import com.turbopick.autowise.model.Feature;
-import com.turbopick.autowise.service.FeatureService;
-import jakarta.validation.Valid;
+import com.turbopick.autowise.repository.FeatureRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/admin")  // <<-- important so /admin/featureCreate resolves
+@RequestMapping("/admin/features")
 public class FeatureAdminController {
 
-    private final FeatureService featureService;
+    private final FeatureRepository featureRepository;
 
-    public FeatureAdminController(FeatureService featureService) {
-        this.featureService = featureService;
+    public FeatureAdminController(FeatureRepository featureRepository) {
+        this.featureRepository = featureRepository;
+    }
+
+    // ===== LIST =====
+    @GetMapping
+    public String list(Model model, @ModelAttribute("ok") String okMsg) {
+        model.addAttribute("features", featureRepository.findAll());
+        return "admin/feature-list";
     }
 
     // ===== CREATE (form) =====
-    @GetMapping("/featureCreate")
+    @GetMapping("/new")
     public String createForm(Model model) {
         model.addAttribute("feature", new Feature());
-        return "admin/featureCreate";
+        model.addAttribute("formTitle", "Create Feature");
+        model.addAttribute("formAction", "/admin/features"); // POST create
+        return "admin/feature-form";
     }
 
     // ===== CREATE (submit) =====
-    @PostMapping("/features")
-    public String createSubmit(@Valid @ModelAttribute("feature") Feature form,
+    @PostMapping
+    public String createSubmit(@ModelAttribute("feature") Feature form,
                                BindingResult result,
-                               RedirectAttributes ra) {
-        if (result.hasErrors()) {
-            return "admin/featureCreate";
-        }
-        featureService.save(form);
-        ra.addFlashAttribute("ok", "Feature created.");
-        return "redirect:/admin/featureList";
-    }
+                               RedirectAttributes ra,
+                               Model model) {
 
-    // ===== LIST (for Cancel button target) =====
-    @GetMapping("/featureList")
-    public String featureList(Model model) {
-        model.addAttribute("features", featureService.findAll());
-        return "admin/featureList";
+        // (Optional) simple checks; add Bean Validation on entity if you want
+        if (isBlank(form.getName()) || isBlank(form.getCategory())) {
+            result.reject("field.missing", "Name and Category are required.");
+        }
+        if (result.hasErrors()) {
+            model.addAttribute("formTitle", "Create Feature");
+            model.addAttribute("formAction", "/admin/features");
+            return "admin/feature-form";
+        }
+
+        featureRepository.save(form);
+        ra.addFlashAttribute("ok", "Feature created.");
+        return "redirect:/admin/features";
     }
 
     // ===== EDIT (form) =====
-    @GetMapping("/features/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        model.addAttribute("feature", featureService.findByIdOrThrow(id));
-        return "admin/featureEdit";
+        Feature feature = featureRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Feature not found: " + id));
+        model.addAttribute("feature", feature);
+        model.addAttribute("formTitle", "Edit Feature");
+        model.addAttribute("formAction", "/admin/features/" + id); // POST update
+        return "admin/feature-form";
     }
 
     // ===== EDIT (submit) =====
-    @PostMapping("/features/{id}/edit")
+    @PostMapping("/{id}")
     public String editSubmit(@PathVariable Long id,
-                             @Valid @ModelAttribute("feature") Feature form,
+                             @ModelAttribute("feature") Feature form,
                              BindingResult result,
-                             RedirectAttributes ra) {
-        if (result.hasErrors()) {
-            return "admin/featureEdit";
+                             RedirectAttributes ra,
+                             Model model) {
+
+        if (isBlank(form.getName()) || isBlank(form.getCategory())) {
+            result.reject("field.missing", "Name and Category are required.");
         }
-        form.setId(id);
-        featureService.save(form);
+        if (result.hasErrors()) {
+            model.addAttribute("formTitle", "Edit Feature");
+            model.addAttribute("formAction", "/admin/features/" + id);
+            return "admin/feature-form";
+        }
+
+        Feature existing = featureRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Feature not found: " + id));
+
+        existing.setName(form.getName());
+        existing.setCategory(form.getCategory());
+        existing.setDescription(form.getDescription());
+        // cars is ManyToMany on Car side; we don't touch it here.
+
+        featureRepository.save(existing);
         ra.addFlashAttribute("ok", "Feature updated.");
-        return "redirect:/admin/featureList";
+        return "redirect:/admin/features";
     }
+
     // ===== DELETE =====
-    @PostMapping("/features/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes ra) {
-        featureService.deleteById(id);
-        ra.addFlashAttribute("ok", "Feature deleted.");
-        return "redirect:/admin/featureList";
+        Optional<Feature> existing = featureRepository.findById(id);
+        if (existing.isPresent()) {
+            featureRepository.deleteById(id);
+            ra.addFlashAttribute("ok", "Feature deleted.");
+        } else {
+            ra.addFlashAttribute("ok", "Feature not found (maybe already deleted).");
+        }
+        return "redirect:/admin/features";
+    }
+
+    private boolean isBlank(String s) {
+        return s == null || s.trim().isEmpty();
     }
 }
