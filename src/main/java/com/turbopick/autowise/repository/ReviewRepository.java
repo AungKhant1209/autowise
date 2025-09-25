@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("delete from Review r where r.car.id = :carId")
+    void deleteByCarId(@Param("carId") Long carId);
 
 
     List<Review> findByCarIdOrderByIdDesc(Long carId);

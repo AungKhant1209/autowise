@@ -130,19 +130,14 @@
                             <a class="btn btn-sm btn-outline-secondary" th:href="@{/editCar/{id}(id=${car.id})}">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form th:id="${'del-' + car.id}"
-                                  th:action="@{/admin/cars/{id}/delete(id=${car.id})}"
-                                  method="post" class="d-none">
+                            <form th:action="@{/admin/cars/{id}/delete(id=${car.id})}" method="post" th:id="'del-'+${car.id}">
                                 <input type="hidden" th:if="${_csrf != null}"
                                        th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                        onclick="return confirm('Delete this car?');">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </form>
-
-                            <!-- The visible button can live anywhere -->
-                            <button type="submit" th:form="${'del-' + car.id}"
-                                    class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Delete this car?');">
-                                <i class="fas fa-trash"></i>
-                            </button>
                         </td>
                     </tr>
 

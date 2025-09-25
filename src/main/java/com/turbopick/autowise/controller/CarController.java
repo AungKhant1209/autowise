@@ -318,13 +318,15 @@ public class CarController {
 
         return "redirect:/admin/cars";
     }
-    // Delete
     @PostMapping("/admin/cars/{id}/delete")
-    public String deleteCar(@PathVariable Long id, RedirectAttributes ra) {
-        carService.deleteByIdWithCleanup(id);
-        ra.addFlashAttribute("msg", "Car deleted.");
-        return "redirect:/admin/cars";
+    public String deleteCar(@PathVariable long id,
+                            org.springframework.web.servlet.mvc.support.RedirectAttributes ra) {
+        boolean removed = carService.deleteByIdWithCleanup(id);
+        ra.addFlashAttribute("msg", removed ? "Car deleted" : "Car not found");
+        // Add a cache-buster to be 100% sure you see fresh list
+        return "redirect:/admin/cars?ts=" + System.currentTimeMillis();
     }
+
 
 
 }

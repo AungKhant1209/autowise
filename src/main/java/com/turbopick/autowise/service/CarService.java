@@ -12,6 +12,7 @@ import com.turbopick.autowise.repository.CarTypeRepository;
 import com.turbopick.autowise.repository.FeatureRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +39,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class CarService {
+    @Autowired
+    private ReviewRepository reviewRepository;
     private final CarRepository carRepository;
     private final CarBrandRepository carBrandRepository;
     private final CarTypeRepository carTypeRepository;
@@ -82,16 +85,19 @@ public class CarService {
         return dto;
     }
     @Transactional
-    public void deleteByIdWithCleanup(Long id) {
-        carRepository.findById(id).ifPresent(car -> {
-            // Clear ManyToMany to remove join rows first
-            if (car.getFeatures() != null) {
-                car.getFeatures().clear();
-                carRepository.save(car); // flush join-table changes
-            }
-            // Now delete the car (will cascade @OneToMany reviews, and remove @ElementCollection images)
-            carRepository.delete(car);
-        });
+    public boolean deleteByIdWithCleanup(long id) {
+        if (!carRepository.existsById(id)) return false;
+
+        // 1) delete children that reference the car
+        reviewRepository.deleteByCarId(id);     // reviews
+        carRepository.deleteCarFeatures(id);    // many-to-many join
+        carRepository.deleteCarImages(id);      // element-collection
+
+        // 2) delete parent
+        carRepository.hardDeleteCar(id);
+
+        // 3) optional verification
+        return !carRepository.existsById(id);
     }
 
 

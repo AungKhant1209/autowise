@@ -12,6 +12,18 @@ import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Long>, JpaSpecificationExecutor<Car> {
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "DELETE FROM car_feature WHERE car_id = :id", nativeQuery = true)
+    void deleteCarFeatures(@Param("id") long id);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "DELETE FROM car_images WHERE car_id = :id", nativeQuery = true)
+    void deleteCarImages(@Param("id") long id);
+
+    // final parent delete
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "DELETE FROM car WHERE id = :id", nativeQuery = true)
+    void hardDeleteCar(@Param("id") long id);
 
 
 

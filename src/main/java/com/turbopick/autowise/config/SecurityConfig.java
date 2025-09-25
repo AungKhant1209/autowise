@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/login","/compare", "/register", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico"
                 ).permitAll()
-                .requestMatchers(HttpMethod.POST, "/admin/cars/*/delete").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/admin/cars/*/delete").hasRole("ADMIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN")   // Only ADMIN can access /admin paths
                 .requestMatchers("/user/**").hasRole("USER")     // Only USER can access user-specific paths (if needed)
                 .anyRequest().authenticated()  // All other requests require authentication
