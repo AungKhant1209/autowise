@@ -1,4 +1,3 @@
-<!-- src/main/resources/templates/admin/featureList.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{admin/fragments/header :: adminHead('Features – List')}"></head>
@@ -6,13 +5,15 @@
 <div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
 
 <div class="container mt-4">
-    <h2 class="mb-3">Features</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Features</h2>
+        <!-- FIX: link to the create form -->
+        <a class="btn btn-primary" th:href="@{/admin/featureCreate}">
+            <i class="fas fa-plus-circle"></i> New Feature
+        </a>
+    </div>
 
     <div th:if="${ok}" class="alert alert-success" th:text="${ok}"></div>
-
-    <div class="mb-3">
-
-    </div>
 
     <div class="table-responsive">
         <table class="table table-sm table-striped align-middle">
@@ -26,17 +27,20 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="f : ${featureList}">
+            <!-- FIX: controller sets model attribute name 'features' -->
+            <tr th:each="f : ${features}">
                 <td th:text="${f.id}">1</td>
                 <td th:text="${f.name}">Airbags</td>
                 <td th:text="${f.category}">Safety</td>
                 <td th:text="${f.description}">Front & side airbags</td>
                 <td>
-                    <a th:href="@{|/admin/featureList/${f.id}/edit|}" class="btn btn-sm btn-outline-secondary">
+                    <!-- FIX: edit link must be /admin/features/{id}/edit -->
+                    <a th:href="@{|/admin/features/${f.id}/edit|}" class="btn btn-sm btn-outline-secondary">
                         <i class="fas fa-edit"></i>
                     </a>
 
-                    <form th:action="@{|/admin/featureList/${f.id}/delete|}" method="post"
+                    <!-- FIX: delete action must be /admin/features/{id}/delete -->
+                    <form th:action="@{|/admin/features/${f.id}/delete|}" method="post"
                           class="d-inline" onsubmit="return confirm('Delete this feature?')">
                         <input type="hidden" th:if="${_csrf != null}"
                                th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -46,7 +50,8 @@
                     </form>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(featureList)}">
+
+            <tr th:if="${#lists.isEmpty(features)}">
                 <td colspan="5" class="text-center text-muted">No features yet.</td>
             </tr>
             </tbody>

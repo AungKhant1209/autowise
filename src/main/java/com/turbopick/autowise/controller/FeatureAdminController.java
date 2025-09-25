@@ -9,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
-@RequestMapping("/admin/featureList")
+@RequestMapping("/admin")
 public class FeatureAdminController {
 
     private final FeatureService featureService;
@@ -19,43 +21,65 @@ public class FeatureAdminController {
         this.featureService = featureService;
     }
 
-    // LIST
-    @GetMapping
+    /** Shared list for the category <select> */
+    @ModelAttribute("featureCategories")
+    public List<String> featureCategories() {
+        return List.of("Safety", "Comfort & Convenience", "Interior");
+    }
+
+    // ===== LIST =====
+    @GetMapping("/featureList")
     public String list(Model model) {
         model.addAttribute("features", featureService.findAll());
         return "admin/featureList";
     }
 
-    // EDIT form
-    @GetMapping("/{id}/edit")
+    // ===== CREATE (form) =====
+    @GetMapping("/featureCreate")
+    public String createForm(Model model) {
+        model.addAttribute("feature", new Feature());
+        return "admin/featureCreate";
+    }
+
+    // ===== CREATE (submit) =====
+    @PostMapping("/features")
+    public String createSubmit(@Valid @ModelAttribute("feature") Feature form,
+                               BindingResult result,
+                               RedirectAttributes ra,
+                               Model model) {
+        if (result.hasErrors()) {
+            return "admin/featureCreate";
+        }
+        featureService.save(form);
+        ra.addFlashAttribute("ok", "Feature created.");
+        return "redirect:/admin/featureList";
+    }
+
+    // ===== EDIT (form) =====
+    @GetMapping("/features/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
         model.addAttribute("feature", featureService.findByIdOrThrow(id));
         return "admin/featureEdit";
     }
 
-    // EDIT submit
-    @PostMapping("/{id}/edit")
+    // ===== EDIT (submit) =====
+    @PostMapping("/features/{id}/edit")
     public String editSubmit(@PathVariable Long id,
                              @Valid @ModelAttribute("feature") Feature form,
                              BindingResult result,
                              RedirectAttributes ra,
                              Model model) {
-        try {
-            if (!result.hasErrors()) {
-                form.setId(id);          // ensure we update
-                featureService.save(form);
-                ra.addFlashAttribute("ok", "Feature updated.");
-                return "redirect:/admin/featureList";
-            }
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            result.rejectValue("name", "invalid", ex.getMessage());
+        if (result.hasErrors()) {
+            return "admin/featureEdit";
         }
-        model.addAttribute("feature", form);
-        return "admin/featureEdit";
+        form.setId(id); // ensure update
+        featureService.save(form);
+        ra.addFlashAttribute("ok", "Feature updated.");
+        return "redirect:/admin/featureList";
     }
 
-    // DELETE
-    @PostMapping("/{id}/delete")
+    // ===== DELETE =====
+    @PostMapping("/features/{id}/delete")
     public String delete(@PathVariable Long id, RedirectAttributes ra) {
         featureService.deleteById(id);
         ra.addFlashAttribute("ok", "Feature deleted.");

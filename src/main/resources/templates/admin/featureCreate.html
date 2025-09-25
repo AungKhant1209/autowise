@@ -1,90 +1,70 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Feature Register</title>
-    <!-- If you have a shared head fragment, keep this; otherwise remove -->
-    <div th:replace="~{admin/fragments/header :: adminHead('Features – Create')}"></div>
-    <!-- Or include your CSS directly
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    -->
-</head>
+<head th:replace="~{admin/fragments/header :: adminHead('Feature – Create')}"></head>
 <body>
-
-<!-- Admin Navbar -->
+<!-- FIX: pass 'features' so the nav highlights correct section -->
 <div th:replace="~{admin/fragments/navbartwo :: adminNavbar('features')}"></div>
 
-<div class="container mt-5 pt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
+<div class="container my-4" style="max-width:720px;">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Register New Feature</h5>
+            <a th:href="@{/admin/featureList}" class="btn btn-sm btn-outline-secondary">Back</a>
+        </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Register New Feature</h5>
+        <div class="card-body">
+            <!-- FIX: action must be /admin/features -->
+            <form th:action="@{/admin/features}" th:object="${feature}" method="post">
+                <input type="hidden" th:if="${_csrf != null}"
+                       th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
+                <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+                    <ul class="mb-0">
+                        <li th:each="e : ${#fields.errors()}" th:text="${e}">Error</li>
+                    </ul>
                 </div>
 
-                <div class="card-body">
-                    <!-- Bind to a model attribute 'feature' (Feature entity or DTO) -->
-                    <form th:action="@{/admin/featureCreate}" th:object="${feature}" method="post">
+                <div class="form-group">
+                    <label for="name">Feature Name <span class="text-danger">*</span></label>
+                    <input id="name" type="text" class="form-control"
+                           th:field="*{name}" placeholder="e.g., Blindspot Warning" required>
+                    <small class="text-danger" th:errors="*{name}"></small>
+                </div>
 
-                        <!-- CSRF -->
-                        <input type="hidden" th:if="${_csrf != null}"
-                               th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <div class="form-group">
+                    <label for="category">Category <span class="text-danger">*</span></label>
+                    <select id="category" class="form-control" th:field="*{category}" required>
+                        <option value="" th:if="${#strings.isEmpty(*{category})}" disabled selected>
+                            Select a category
+                        </option>
+                        <option value="Safety">Safety</option>
+                        <option value="Comfort & Convenience">Comfort &amp; Convenience</option>
+                        <option value="Interior">Interior</option>
+                    </select>
+                    <small class="text-danger" th:errors="*{category}"></small>
+                </div>
 
-                        <!-- Global error summary -->
-                        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                            <strong>Please fix the errors below.</strong>
-                        </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" class="form-control"
+                              th:field="*{description}" rows="3"
+                              placeholder="Optional details about this feature…"
+                              maxlength="500"></textarea>
+                    <small class="text-danger" th:errors="*{description}"></small>
+                </div>
 
-                        <!-- Name -->
-                        <div class="form-group">
-                            <label for="name">Feature Name <span class="text-danger">*</span></label>
-                            <input id="name" type="text" class="form-control" th:field="*{name}" placeholder="e.g., Blindspot Warning" required>
-                            <small class="text-danger" th:errors="*{name}"></small>
-                        </div>
-
-                        <!-- Category -->
-                        <!-- Category (fixed choices) -->
-                        <div class="form-group">
-                            <label for="category">Category <span class="text-danger">*</span></label>
-                            <select id="category" class="form-control" th:field="*{category}" required>
-                                <!-- Placeholder shows only when no value yet -->
-                                <option value="" th:if="${#strings.isEmpty(*{category})}" disabled selected>
-                                    Select a category
-                                </option>
-                                <option th:value="'Safety'">Safety</option>
-                                <option th:value="'Comfort & Convenience'">Comfort &amp; Convenience</option>
-                                <option th:value="'Interior'">Interior</option>
-                            </select>
-                            <small class="text-danger" th:errors="*{category}"></small>
-                        </div>
-
-                        <!-- Description -->
-                        <div class="form-group">
-                            <label for="name">Description <span class="text-danger">*</span></label>
-                            <input id="description" type="text" class="form-control" th:field="*{description}" placeholder="e.g., Blindspot Warning" required>
-                            <small class="text-danger" th:errors="*{description}"></small>
-                        </div>
-
-                        <div class="d-flex justify-content-end">
-                            <a th:href="@{/admin/featureList}" class="btn btn-light mr-2">Cancel</a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Feature
-                            </button>
-                        </div>
-
-            <!-- Optional success flash -->
-            <div class="alert alert-success mt-3" th:if="${msg != null}" th:text="${msg}"></div>
-
-
+                <div class="d-flex justify-content-end">
+                    <!-- FIX: cancel should go to list page -->
+                    <a th:href="@{/admin/featureList}" class="btn btn-light mr-2">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Feature
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<!-- Scripts (if not included in header fragment) -->
-<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script> -->
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
 </body>
 </html>
